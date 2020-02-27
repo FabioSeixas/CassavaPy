@@ -29,4 +29,6 @@ Two modes for irrigation are possible:
         1) reg (list of lists of int): A big list containing all irrigation schedules. Inside each small list, the user must define the DAP's for each irrigation event. The intervals between two irrigation events can be flexible.
         2) laminas (list of lists of int): A big list containing small lists. Inside each small list, each element is the water depth for the corresponding irrigation event in 'reg'. Can be an integer (what means the same amount of water for all irrigation events) or a list of integers with the same length as the corresponding small list in 'reg'.
 
+Execution
 
+    'set_planting' method must be used before 'set_irrigation'. The latter uses the date information provided by 'set_planting' to set the irrigation dates.
