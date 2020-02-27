@@ -83,7 +83,7 @@ class Test(unittest.TestCase):
                                   ["93020", "7"]]])
 
     def test_plantharvest_fix(self):
-        self.filex = classes.FileX("cruz", "CRUZ9101", ["irf", 'phf'])
+        self.filex = classes.FileX("cruz", "CRUZ9101", 'phf')
 
         # Planting
         self.n_plant = 3
@@ -110,7 +110,7 @@ class Test(unittest.TestCase):
                                  [3, 3]])
 
     def test_plantharvest_notfix(self):
-        self.filex = classes.FileX("cruz", "CRUZ9101", "irf")
+        self.filex = classes.FileX("cruz", "CRUZ9101")
 
         # Planting
         self.n_plant = 3
@@ -132,15 +132,76 @@ class Test(unittest.TestCase):
         self.filex.set_tratmatrix()
 
         np.testing.assert_equal(self.filex._tratmatrix,
-                                [[[1, 1],
-                                  [1, 2],
-                                  [1, 3]],
-                                 [[2, 1],
-                                  [2, 2],
-                                  [2, 3]],
-                                 [[3, 1],
-                                  [3, 2],
-                                  [3, 3]]])
+                                [[1, 1],
+                                 [1, 2],
+                                 [1, 3],
+                                 [2, 1],
+                                 [2, 2],
+                                 [2, 3],
+                                 [3, 1],
+                                 [3, 2],
+                                 [3, 3]])
+
+    def test_set_tratmatrix(self):
+        self.filex = classes.FileX("cruz", "CRUZ9101", "irf")
+        self.filex.p_from = date.fromisoformat('1992-12-30')
+
+        # Planting
+        self.n_plant = 2
+        self.p_from = '1992-12-30'
+        self.p_by = 25
+
+        self.filex.set_planting(self.n_plant,
+                                self.p_from, self.p_by)
+
+        # Harvest
+        self.n_harvest = 3
+        self.h_from = '1993-01-01'
+        self.h_by = 60
+
+        self.filex.set_harvest(self.n_harvest,
+                               self.h_from, self.h_by)
+
+        # Irrigation
+        n_irrig = 5
+        from_irrig = 0
+        by_irrig = 60
+
+        laminas = [10, 20, 40, 50, 10]
+
+        self.filex.set_irrigation(n_irrig=n_irrig, from_irrig=from_irrig, by_irrig=by_irrig, laminas=laminas)
+
+        # Test 1
+        self.filex.set_tratmatrix()
+
+        np.testing.assert_equal(self.filex._tratmatrix,
+                                [[1, 1, 1],
+                                 [1, 2, 1],
+                                 [1, 3, 1],
+                                 [2, 1, 1],
+                                 [2, 2, 1],
+                                 [2, 3, 1]])
+
+        # Test 2
+        self.filex = classes.FileX("cruz", "CRUZ9101", ["phf", "irf"])
+        self.filex.p_from = date.fromisoformat('1992-12-30')
+
+        self.n_plant = 3
+
+        self.filex.set_planting(self.n_plant,
+                                self.p_from, self.p_by)
+
+        self.filex.set_harvest(self.n_harvest,
+                               self.h_from, self.h_by)
+
+        self.filex.set_irrigation(n_irrig=n_irrig, from_irrig=from_irrig, by_irrig=by_irrig, laminas=laminas)
+
+        self.filex.set_tratmatrix()
+
+        np.testing.assert_equal(self.filex._tratmatrix,
+                                [[1, 1, 1],
+                                 [2, 2, 1],
+                                 [3, 3, 1]])
 
 
 if __name__ == "__main__":

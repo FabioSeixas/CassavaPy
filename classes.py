@@ -7,7 +7,7 @@ from dependencias import exp_functions as exp
 
 class FileX:
 
-    def __init__(self, filename, exp_name, design):
+    def __init__(self, filename, exp_name, design = "NULL"):
         self._filename = filename
         self._exp_name = exp_name
         self._design = design
