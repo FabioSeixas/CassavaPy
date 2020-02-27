@@ -32,3 +32,9 @@ Two modes for irrigation are possible:
 Execution
 
     'set_planting' method must be used before 'set_irrigation'. The latter uses the date information provided by 'set_planting' to set the irrigation dates.
+
+    About 'reg_dict':
+        With 'irf':
+            If no dict is passed to 'set_irrigation' method, the defined irrigation schedule will be setted to all treatments.
+
+

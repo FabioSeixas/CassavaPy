@@ -40,7 +40,9 @@ class FileX:
     def set_genotype(self, genotype):
         self._genotype = genotype
 
-    def set_irrigation(self, n_irrig="NULL", from_irrig="NULL", by_irrig="NULL", reg="NULL", laminas="NULL", dict="NULL"):
+    def set_irrigation(self, n_irrig="NULL", from_irrig="NULL", by_irrig="NULL", reg="NULL", laminas="NULL", reg_dict="NULL"):
+
+        self._reg_dict = reg_dict
 
         if "irf" in self._design:
 
@@ -75,9 +77,9 @@ class FileX:
         else:
             self._tratmatrix = exp.not_fix_PlantHarv(self._planting, self._harvest)
 
-        if "IRRF" in self._design:
+        if "irf" in self._design:
 
-            self._detailsMatrix = np.array((self._detailsMatrix, self._irrig))
+            self._tratmatrix = exp.trat_insert_irrig_irf(self._reg_dict, self._tratmatrix)
 
         if "IRNF" in self._design:
             self._detailsMatrix = np.array((self._detailsMatrix, self._irrig))

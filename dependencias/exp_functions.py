@@ -94,9 +94,10 @@ def not_fix_PlantHarv(planting, harvest):
 
     matrix = []
     for i, plant_date in enumerate(planting):
-        temp = [[i + 1, n + 1] for n, harv in enumerate(harvest)]
-        matrix.append(temp)
-    return np.asarray(matrix)
+        for n, harv in enumerate(harvest):
+            temp = [i + 1, n + 1]
+            matrix.append(temp)
+    return matrix
 
 
 def lamina_irrig(regs, laminas):
@@ -146,3 +147,17 @@ def add_laminas_nf(reg, laminas):
             result[i] = np.column_stack((value, laminas[i]))
 
     return result
+
+
+def trat_insert_irrig_irf(dicionario, previus_matrix):
+
+    if dicionario == "NULL":
+
+        new_matrix = []
+        for i, part in enumerate(previus_matrix):
+            part.append(1)
+            new_matrix.append(part)
+
+        return new_matrix
+
+    # if dicionario
