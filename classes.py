@@ -4,6 +4,7 @@ import numpy as np
 
 from dependencias import exp_functions as exp
 
+
 class FileX:
 
     def __init__(self, filename, exp_name, design):
@@ -16,7 +17,7 @@ class FileX:
 
         dates = []
         for i in range(n_plant):
-            dates.append(self.p_from + td(days = p_by * i))
+            dates.append(self.p_from + td(days=p_by * i))
 
         self._planting = [date.strftime("%y%j") for date in dates]
 
@@ -25,7 +26,7 @@ class FileX:
 
         dates = []
         for i in range(n_harvest):
-            dates.append(h_from + td(days = h_by * i))
+            dates.append(h_from + td(days=h_by * i))
 
         self._harvest = [date.strftime("%y%j") for date in dates]
 
@@ -39,7 +40,7 @@ class FileX:
     def set_genotype(self, genotype):
         self._genotype = genotype
 
-    def set_irrigation(self, n_irrig = "NULL", from_irrig = "NULL", by_irrig = "NULL", reg = "NULL", laminas = "NULL", dict = "NULL"):
+    def set_irrigation(self, n_irrig="NULL", from_irrig="NULL", by_irrig="NULL", reg="NULL", laminas="NULL", dict="NULL"):
 
         if "irf" in self._design:
 
@@ -65,15 +66,12 @@ class FileX:
 
             self._irrig = exp.add_laminas_nf(self._irrig, laminas)
 
+    def set_tratmatrix(self):
 
-    def details_matrix(self):
+        if "phf" in self._design:
 
-        if "CF" in self._design:
+            self._tratmatrix = exp.fix_PlantHarv(self._planting, self._harvest)
 
-            try:
-                self._detailsMatrix = exp.fix_PlantHarv(self._planting, self._harvest)
-            except:
-                raise ValueError("Provavelmente o número de datas de plantio e colheita não estão iguais")
         else:
             self._detailsMatrix = exp.not_fix_PlantHarv(self._planting, self._harvest)
 
@@ -83,4 +81,3 @@ class FileX:
 
         if "IRNF" in self._design:
             self._detailsMatrix = np.array((self._detailsMatrix, self._irrig))
-

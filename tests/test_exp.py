@@ -3,12 +3,14 @@ import unittest
 from datetime import date
 import numpy as np
 
+# DEPOS: Adicionar testes de 'raiseError'!
+
 
 class Test(unittest.TestCase):
 
     def setUp(self):
         self.filex = classes.FileX("cruz", "CRUZ9101", "irf")
-        #self.filex.p_from = date.fromisoformat('1992-12-30')
+        self.filex.p_from = date.fromisoformat('1992-12-30')
 
     def test_planting(self):
         self.n_plant = 3
@@ -56,9 +58,13 @@ class Test(unittest.TestCase):
         self.filex = classes.FileX("cruz", "CRUZ9101", "irnf")
         self.filex.p_from = date.fromisoformat('1992-12-30')
 
-        reg = [[0, 4, 6, 10, 11], [3, 5, 7, 9], [1, 5, 21]]
+        reg = [[0, 4, 6, 10, 11],
+               [3, 5, 7, 9],
+               [1, 5, 21]]
 
-        laminas = [5, [10, 20, 30, 40], 7]
+        laminas = [5,
+                   [10, 20, 30, 40],
+                   7]
 
         self.filex.set_irrigation(reg=reg, laminas=laminas)
 
@@ -75,6 +81,33 @@ class Test(unittest.TestCase):
                                  [["92366", "7"],
                                   ["93004", "7"],
                                   ["93020", "7"]]])
+
+    def test_plantharvest_fix(self):
+        self.filex = classes.FileX("cruz", "CRUZ9101", ["irf", 'phf'])
+
+        # Planting
+        self.n_plant = 3
+        self.p_from = '1992-12-30'
+        self.p_by = 25
+
+        self.filex.set_planting(self.n_plant,
+                                self.p_from, self.p_by)
+
+        # Harvest
+        self.n_harvest = 3
+        self.h_from = '1993-01-01'
+        self.h_by = 60
+
+        self.filex.set_harvest(self.n_harvest,
+                               self.h_from, self.h_by)
+
+        # Test
+        self.filex.set_tratmatrix()
+
+        np.testing.assert_equal(self.filex._tratmatrix,
+                                [[1, 1],
+                                 [2, 2],
+                                 [3, 3]])
 
 
 if __name__ == "__main__":

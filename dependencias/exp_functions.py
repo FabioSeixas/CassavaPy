@@ -3,6 +3,7 @@ import math
 from datetime import date
 from datetime import timedelta as td
 
+
 def format_name(x):
 
     if len(str(x)) > 2:
@@ -19,59 +20,31 @@ def format_date(x):
         x = "0" + str(x)
     return x
 
-def event_date(event_day, pdate):
-
-    ddd = int(str(event_day + pdate)[2:6])
-    yy = int(str(event_day + pdate)[:2])
-
-    if ddd / 365 > 1:
-        new_ddd = ddd - 365 * (math.floor(ddd / 365))
-        new_ddd = format_date(new_ddd)
-        new_year = yy + (math.floor(ddd / 365))
-        return int(str(new_year) + str(new_ddd))
-
-    return (event_day + pdate)
-
-def seq_date(numero, data_from, data_by):
-
-    seq_data = [data_from, ]
-    for i in range(numero - 1):
-        seq_data.append(seq_data[i] + data_by)
-
-        ddd = int(str(seq_data[i + 1])[2:6])
-        yy = int(str(seq_data[i + 1])[:2])
-
-        if ddd / 365 > 1:
-            new_ddd = ddd - 365 * (math.floor(ddd / 365))
-            new_ddd = format_date(new_ddd)
-            new_year = yy + (math.floor(ddd / 365))
-            seq_data[i + 1] = int(str(new_year) + str(new_ddd))
-
-    return seq_data
-
 
 def seq_data_irrig(numero, dap_from, dap_by, inicio):
 
-    dates = [inicio + td(days = dap_from), ]
+    dates = [inicio + td(days=dap_from), ]
     for i in range(numero - 1):
-        dates.append(dates[i] + td(days = dap_by))
+        dates.append(dates[i] + td(days=dap_by))
 
     return [date.strftime("%y%j") for date in dates]
+
 
 def seq_data_irrig_nf(DAP_list, inicio):
 
     date_list = []
     for i, DAP in enumerate(DAP_list):
-        date_list.append(inicio + td(days = DAP))
+        date_list.append(inicio + td(days=DAP))
 
     return [date.strftime("%y%j") for date in date_list]
+
 
 def treatments_matrix(n_plant, n_harvest, reg_dic):
     n_trat = np.array(list(range(n_plant * n_harvest + 1))[1:])
     plant = np.repeat(list(range(n_plant + 1)[1:]), n_harvest)
 
     # Irrig:
-    irrig = np.arange((n_plant * n_harvest), dtype = int)
+    irrig = np.arange((n_plant * n_harvest), dtype=int)
 
     for n in n_trat:
         if n in reg_dic.keys():
@@ -97,7 +70,7 @@ def irrigacao(pdates, regs, regs_mm, t_matrix):
 
     irrig_mm = np.empty_like(regs)
     for n in range(len(regs_mm)):
-         irrig_mm[n] = np.array(regs_mm[n])
+        irrig_mm[n] = np.array(regs_mm[n])
 
     final = list()
     for n in range(len(pdates_i)):
@@ -110,9 +83,12 @@ def irrigacao(pdates, regs, regs_mm, t_matrix):
 
     return final
 
+
 def fix_PlantHarv(planting, harvest):
-    x = np.array((planting, harvest))
-    return np.column_stack(x)
+    if len(planting) != len(harvest):
+        raise ValueError("\n\n Quantidade de datas de plantio e colheita não correspondem \n")
+    return [[i + 1, i + 1] for i, n in enumerate(planting)]
+
 
 def not_fix_PlantHarv(planting, harvest):
 
@@ -122,6 +98,7 @@ def not_fix_PlantHarv(planting, harvest):
         matrix.append(temp)
     return np.asarray(matrix)
 
+
 def lamina_irrig(regs, laminas):
 
     lam_final = regs
@@ -130,8 +107,8 @@ def lamina_irrig(regs, laminas):
 
     return lam_final
 
-def check_input_irnf(reg, laminas):
 
+def check_input_irnf(reg, laminas):
     ''' Essa função vai checar os inputs necessários para a irrigação no modo 'irnf'.
     '''
 
@@ -148,6 +125,7 @@ def check_input_irnf(reg, laminas):
             except:
                 raise ValueError(f"\n\n  Checagem dos Inputs encontrou um ERRO: \n  Comprimento do {i + 1}º elemento de 'reg' e 'laminas' não correspondem.\n")
 
+
 def add_laminas(reg, laminas):
 
     if isinstance(laminas, int):
@@ -157,6 +135,7 @@ def add_laminas(reg, laminas):
 
     return result
 
+
 def add_laminas_nf(reg, laminas):
 
     result = reg
@@ -164,9 +143,6 @@ def add_laminas_nf(reg, laminas):
         if isinstance(laminas[i], int):
             result[i] = np.column_stack((value, np.repeat(laminas[i], len(value))))
         else:
-           result[i] = np.column_stack((value, laminas[i]))
+            result[i] = np.column_stack((value, laminas[i]))
 
     return result
-
-
-
