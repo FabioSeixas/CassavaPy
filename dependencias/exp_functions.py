@@ -94,7 +94,7 @@ def not_fix_PlantHarv(planting, harvest):
 
     matrix = []
     for i, plant_date in enumerate(planting):
-        temp = [[plant_date, harv] for n, harv in enumerate(harvest)]
+        temp = [[i + 1, n + 1] for n, harv in enumerate(harvest)]
         matrix.append(temp)
     return np.asarray(matrix)
 

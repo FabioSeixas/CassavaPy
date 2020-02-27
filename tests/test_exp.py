@@ -109,6 +109,39 @@ class Test(unittest.TestCase):
                                  [2, 2],
                                  [3, 3]])
 
+    def test_plantharvest_notfix(self):
+        self.filex = classes.FileX("cruz", "CRUZ9101", "irf")
+
+        # Planting
+        self.n_plant = 3
+        self.p_from = '1992-12-30'
+        self.p_by = 25
+
+        self.filex.set_planting(self.n_plant,
+                                self.p_from, self.p_by)
+
+        # Harvest
+        self.n_harvest = 3
+        self.h_from = '1993-01-01'
+        self.h_by = 60
+
+        self.filex.set_harvest(self.n_harvest,
+                               self.h_from, self.h_by)
+
+        # Test
+        self.filex.set_tratmatrix()
+
+        np.testing.assert_equal(self.filex._tratmatrix,
+                                [[[1, 1],
+                                  [1, 2],
+                                  [1, 3]],
+                                 [[2, 1],
+                                  [2, 2],
+                                  [2, 3]],
+                                 [[3, 1],
+                                  [3, 2],
+                                  [3, 3]]])
+
 
 if __name__ == "__main__":
     unittest.main()

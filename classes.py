@@ -73,7 +73,7 @@ class FileX:
             self._tratmatrix = exp.fix_PlantHarv(self._planting, self._harvest)
 
         else:
-            self._detailsMatrix = exp.not_fix_PlantHarv(self._planting, self._harvest)
+            self._tratmatrix = exp.not_fix_PlantHarv(self._planting, self._harvest)
 
         if "IRRF" in self._design:
 
