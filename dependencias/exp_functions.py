@@ -178,4 +178,24 @@ def trat_insert_irrig_irf(dicionario, previus_matrix):
 
         return new_matrix
 
-#def trat_insert_irrig_irnf(dicionario, previus_matrix):
+
+def return_irrig(index_trat, dicionario):
+    for k, v in dicionario.items():
+        try:
+            if index_trat in v:
+                return k
+        except:
+            if index_trat == v:
+                return k
+    return 0
+
+
+def trat_insert_irrig_irnf(dicionario, previus_matrix):
+    new_matrix = []
+
+    for i, trat in enumerate(previus_matrix):
+        print(f' tratamento {i + 1} com irrigacao {return_irrig(i + 1, dicionario)}')
+        trat.append(return_irrig(i + 1, dicionario))
+        new_matrix.append(trat)
+
+    return new_matrix

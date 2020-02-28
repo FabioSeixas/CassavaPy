@@ -7,12 +7,16 @@ from dependencias import exp_functions as exp
 
 class FileX:
 
+    _filename = None
+    _exp_name = None
+    _design = None
+
     def __init__(self, filename, exp_name, design="NULL"):
         self._filename = filename
         self._exp_name = exp_name
         self._design = design
 
-        if "irf" and "irnf" in self._design:
+        if "irf" in self._design and "irnf" in self._design:
             raise AttributeError("\n\n Não é possível definir 'design' como 'irf' e 'irnf' ao mesmo tempo \n")
 
     def set_planting(self, n_plant, p_from, p_by):
@@ -85,4 +89,4 @@ class FileX:
             self._tratmatrix = exp.trat_insert_irrig_irf(self._reg_dict, self._tratmatrix)
 
         if "irnf" in self._design:
-            self._tratmatrix = trat_insert_irrig_irnf(self._reg_dict, self._tratmatrix)
+            self._tratmatrix = exp.trat_insert_irrig_irnf(self._reg_dict, self._tratmatrix)
