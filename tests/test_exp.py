@@ -182,6 +182,19 @@ class Test(unittest.TestCase):
                                  [2, 2, 1],
                                  [2, 3, 1]])
 
+        # Teste 1.1
+        self.filex.set_irrigation(n_irrig=n_irrig, from_irrig=from_irrig, by_irrig=by_irrig, laminas=laminas, reg_dict=[1, 6])
+
+        self.filex.set_tratmatrix()
+
+        np.testing.assert_equal(self.filex._tratmatrix,
+                                [[1, 1, 1],
+                                 [1, 2, 0],
+                                 [1, 3, 0],
+                                 [2, 1, 0],
+                                 [2, 2, 0],
+                                 [2, 3, 1]])
+
         # Test 2
         self.filex = classes.FileX("cruz", "CRUZ9101", ["phf", "irf"])
         self.filex.p_from = date.fromisoformat('1992-12-30')
@@ -202,6 +215,30 @@ class Test(unittest.TestCase):
                                 [[1, 1, 1],
                                  [2, 2, 1],
                                  [3, 3, 1]])
+
+        # Test 3
+        self.filex.set_irrigation(n_irrig=n_irrig, from_irrig=from_irrig, by_irrig=by_irrig, laminas=laminas, reg_dict=[1, 3])
+
+        self.filex.set_tratmatrix()
+
+        np.testing.assert_equal(self.filex._tratmatrix,
+                                [[1, 1, 1],
+                                 [2, 2, 0],
+                                 [3, 3, 1]])
+
+        # Teste 4
+        self.filex.set_irrigation(n_irrig=n_irrig, from_irrig=from_irrig, by_irrig=by_irrig, laminas=laminas, reg_dict=[])
+
+        self.filex.set_tratmatrix()
+
+        np.testing.assert_equal(self.filex._tratmatrix,
+                                [[1, 1, 0],
+                                 [2, 2, 0],
+                                 [3, 3, 0]])
+
+    def test_error(self):
+
+        self.assertRaises(AttributeError, classes.FileX("cruz", "CRUZ9101", ["phf", "irf", "irnf"]))
 
 
 if __name__ == "__main__":

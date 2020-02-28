@@ -35,6 +35,8 @@ Execution
 
     About 'reg_dict':
         With 'irf':
-            If no dict is passed to 'set_irrigation' method, the defined irrigation schedule will be setted to all treatments.
+            1) A list of int must be passed. Each element of the list correspond to a treatment that will receive the irrigation schedule defined. Of treatment 'n' is not in the list, this treatment will be rainfed.
+            2) If no list is passed to 'set_irrigation' method, the defined irrigation schedule will be setted to all treatments.
+
 
 

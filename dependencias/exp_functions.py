@@ -151,13 +151,31 @@ def add_laminas_nf(reg, laminas):
 
 def trat_insert_irrig_irf(dicionario, previus_matrix):
 
+    new_matrix = []
+
     if dicionario == "NULL":
 
-        new_matrix = []
         for i, part in enumerate(previus_matrix):
             part.append(1)
             new_matrix.append(part)
 
         return new_matrix
 
-    # if dicionario
+    if isinstance(dicionario, dict):
+        raise TypeError("\n\n Com design 'irf', 'reg_dic' deve ser uma lista \n")
+
+    else:
+        try:
+            for i, part in enumerate(previus_matrix):
+                if i + 1 in dicionario:
+                    part.append(1)
+                    new_matrix.append(part)
+                else:
+                    part.append(0)
+                    new_matrix.append(part)
+        except:
+            raise ValueError("\n\n Erro na inserção da coluna irrigação na matrix de tratamentos a partir do dicionario \n")
+
+        return new_matrix
+
+#def trat_insert_irrig_irnf(dicionario, previus_matrix):
