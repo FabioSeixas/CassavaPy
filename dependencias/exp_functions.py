@@ -6,12 +6,9 @@ from datetime import timedelta as td
 
 def format_name(x):
 
-    if len(str(x)) > 2:
-        return x
-
-    while len(str(x)) != 2:
+    while len(str(x)) < 3:
         x = "0" + str(x)
-    return x
+    return str(x)
 
 
 def format_date(x):
@@ -37,51 +34,6 @@ def seq_data_irrig_nf(DAP_list, inicio):
         date_list.append(inicio + td(days=DAP))
 
     return [date.strftime("%y%j") for date in date_list]
-
-
-def treatments_matrix(n_plant, n_harvest, reg_dic):
-    n_trat = np.array(list(range(n_plant * n_harvest + 1))[1:])
-    plant = np.repeat(list(range(n_plant + 1)[1:]), n_harvest)
-
-    # Irrig:
-    irrig = np.arange((n_plant * n_harvest), dtype=int)
-
-    for n in n_trat:
-        if n in reg_dic.keys():
-            irrig[n - 1] = reg_dic[n]
-        else:
-            irrig[n - 1] = 0
-
-    harvest = np.array(list(range(n_harvest + 1)[1:]) * n_plant)
-
-    return np.column_stack((n_trat, plant, irrig, harvest))
-
-
-def irrigacao(pdates, regs, regs_mm, t_matrix):
-
-    pdates_i = np.empty_like(regs)
-    for n in range(len(regs)):
-        plantio = t_matrix[list(t_matrix[:, 2]).index(n + 1), 1] - 1
-        pdates_i[n] = np.repeat(pdates[plantio], len(regs[n]))
-
-    irrig = np.empty_like(regs)
-    for n in range(len(regs)):
-        irrig[n] = np.array(regs[n])
-
-    irrig_mm = np.empty_like(regs)
-    for n in range(len(regs_mm)):
-        irrig_mm[n] = np.array(regs_mm[n])
-
-    final = list()
-    for n in range(len(pdates_i)):
-        final.append(np.stack((pdates_i[n], irrig[n], irrig_mm[n])))
-
-    for n in range(len(pdates_i)):
-        for i in range(final[n].shape[1]):
-            final[n][1, i] = event_date(final[n][1, i], final[n][0, i])
-        final[n] = final[n][1:]
-
-    return final
 
 
 def fix_PlantHarv(planting, harvest):
@@ -211,6 +163,17 @@ def insert_all_rainfed(previus_matrix):
     for i, trat in enumerate(previus_matrix):
 
         trat.append(0)
+        new_matrix.append(trat)
+
+    return new_matrix
+
+
+def set_tratnames(tratmatrix, prefix):
+    new_matrix = []
+
+    for i, trat in enumerate(tratmatrix):
+
+        trat.insert(0, prefix + format_name(i + 1))
         new_matrix.append(trat)
 
     return new_matrix

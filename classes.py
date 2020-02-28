@@ -70,7 +70,7 @@ class FileX:
 
             self._irrig = exp.add_laminas_nf(self._irrig, laminas)
 
-    def set_tratmatrix(self):
+    def set_tratmatrix(self, tnames_prefix):
 
         if "phf" in self._design:
 
@@ -88,6 +88,8 @@ class FileX:
 
         else:
             self._tratmatrix = exp.insert_all_rainfed(self._tratmatrix)
+
+        self._tratmatrix = exp.set_tratnames(self._tratmatrix, tnames_prefix)
 
 
 class Experimental(FileX):
