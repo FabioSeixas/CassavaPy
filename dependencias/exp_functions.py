@@ -191,11 +191,26 @@ def return_irrig(index_trat, dicionario):
 
 
 def trat_insert_irrig_irnf(dicionario, previus_matrix):
+
+    if not isinstance(dicionario, dict):
+        raise TypeError("\n\n Com design 'irnf', 'reg_dic' deve ser um dicionário \n")
+
     new_matrix = []
 
     for i, trat in enumerate(previus_matrix):
-        print(f' tratamento {i + 1} com irrigacao {return_irrig(i + 1, dicionario)}')
+
         trat.append(return_irrig(i + 1, dicionario))
+        new_matrix.append(trat)
+
+    return new_matrix
+
+
+def insert_all_rainfed(previus_matrix):
+    new_matrix = []
+
+    for i, trat in enumerate(previus_matrix):
+
+        trat.append(0)
         new_matrix.append(trat)
 
     return new_matrix

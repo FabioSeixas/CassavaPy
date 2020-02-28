@@ -7,10 +7,6 @@ from dependencias import exp_functions as exp
 
 class FileX:
 
-    _filename = None
-    _exp_name = None
-    _design = None
-
     def __init__(self, filename, exp_name, design="NULL"):
         self._filename = filename
         self._exp_name = exp_name
@@ -69,7 +65,6 @@ class FileX:
                 for i, DAP_list in enumerate(reg):
 
                     self._irrig[i] = exp.seq_data_irrig_nf(DAP_list, self.p_from)
-
             except:
                 print("\nERRO: Não foi possível definir irrigação no modo 'irnf'.\n")
 
@@ -88,5 +83,14 @@ class FileX:
 
             self._tratmatrix = exp.trat_insert_irrig_irf(self._reg_dict, self._tratmatrix)
 
-        if "irnf" in self._design:
+        elif "irnf" in self._design:
             self._tratmatrix = exp.trat_insert_irrig_irnf(self._reg_dict, self._tratmatrix)
+
+        else:
+            self._tratmatrix = exp.insert_all_rainfed(self._tratmatrix)
+
+
+class Experimental(FileX):
+
+    def write_file(self):
+        print("\n Escrevendo arquivo ... \n")
