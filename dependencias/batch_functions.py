@@ -69,13 +69,35 @@ def write_experimental(final_list):
                 file.write(space(str(i + 1)))
                 file.write("      1      0      1      0\n")
 
+def write_seasonal(final_list):
+    with open("C:/DSSAT47/Seasonal/DSSBatch.v47", mode="w") as file:
+
+        # Head
+        file.write("$BATCH(SEASONAL) \n\n")
+        file.write("@FILEX                                                                                        TRTNO     RP     SQ     OP     CO \n")
+
+        # Simulations
+        for file_name, n_trat in final_list:
+            for i in range(int(n_trat)):
+                file.write("C:\\DSSAT47\\SEASONAL\\")
+                file.write(file_name)
+                file.write(".SNX")
+                file.write("                                                                 ")
+                file.write(space(str(i + 1)))
+                file.write("      1      0      1      0\n")
 
 def run_batch(mode="exp"):
 
     if mode == "exp":
+
+        print("\n Rodando Simulações do DSSAT no modo 'Experimental' \n")
+
         subprocess.run("C:\\DSSAT47\\DSCSM047.EXE CSYCA047 B DSSBatch.v47", shell=True, cwd="C:/DSSAT47/Cassava")
 
     elif mode == "seas":
+
+        print("\n Rodando Simulações do DSSAT no modo 'Seasonal' \n")
+
         subprocess.run("C:\\DSSAT47\\DSCSM047.EXE CSYCA047 B DSSBatch.v47", shell=True, cwd="C:/DSSAT47/Seasonal")
     else:
         raise ValueError(f" Valor '{mode}' não reconhecido para o argumento 'mode'. ")
