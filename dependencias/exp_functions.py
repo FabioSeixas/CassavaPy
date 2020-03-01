@@ -39,7 +39,12 @@ def seq_data_irrig_nf(DAP_list, inicio):
 def fix_PlantHarv(planting, harvest):
     if len(planting) != len(harvest):
         raise ValueError("\n\n Quantidade de datas de plantio e colheita não correspondem \n")
-    return [[i + 1, i + 1] for i, n in enumerate(planting)]
+
+    tratmatrix = [[i + 1, i + 1] for i, n in enumerate(planting)]
+
+    assert len(tratmatrix) < 100, "Quantidade de tratamentos ultrapassa o valor máximo (99)."
+
+    return tratmatrix
 
 
 def not_fix_PlantHarv(planting, harvest):
@@ -49,6 +54,9 @@ def not_fix_PlantHarv(planting, harvest):
         for n, harv in enumerate(harvest):
             temp = [i + 1, n + 1]
             matrix.append(temp)
+
+    assert len(matrix) < 100, "Quantidade de tratamentos ultrapassa o valor máximo (99)."
+
     return matrix
 
 
@@ -61,7 +69,7 @@ def lamina_irrig(regs, laminas):
     return lam_final
 
 
-def check_input_irnf(reg, laminas):
+def check_input_irnf(reg, laminas, reg_dict):
     ''' Essa função vai checar os inputs necessários para a irrigação no modo 'irnf'.
     '''
 
@@ -72,21 +80,33 @@ def check_input_irnf(reg, laminas):
 
         if isinstance(laminas[i], int):
             next
+
+        elif len(laminas[i]) == 1:
+            laminas[i] = laminas[i][0]
+
         else:
             try:
                 np.column_stack((n, laminas[i]))
             except:
                 raise ValueError(f"\n\n  Checagem dos Inputs encontrou um ERRO: \n  Comprimento do {i + 1}º elemento de 'reg' e 'laminas' não correspondem.\n")
 
+    if not isinstance(reg_dict, dict):
+        raise TypeError("\n\n Com design 'irnf', 'reg_dic' deve ser um dicionário \n")
+
+    for k, v in reg_dict.items():
+        if k > len(reg):
+            raise AssertionError(f' No dicionário há referencia ao planejamento de irrigação nº {k}, no entanto apenas {len(reg)} planejamentos de irrigação foram definidos.')
+
 
 def add_laminas(reg, laminas):
 
     if isinstance(laminas, int):
-        result = np.column_stack((reg, np.repeat(laminas, len(reg))))
+        temp = np.repeat(laminas, len(reg))
+        result = np.column_stack((reg, temp))
     else:
         result = np.column_stack((reg, laminas))
 
-    return result
+    return [result.tolist(), ]
 
 
 def add_laminas_nf(reg, laminas):
@@ -143,9 +163,6 @@ def return_irrig(index_trat, dicionario):
 
 
 def trat_insert_irrig_irnf(dicionario, previus_matrix):
-
-    if not isinstance(dicionario, dict):
-        raise TypeError("\n\n Com design 'irnf', 'reg_dic' deve ser um dicionário \n")
 
     new_matrix = []
 
