@@ -1,8 +1,10 @@
 from datetime import date
 from datetime import timedelta as td
 import numpy as np
+import re
 
 from dependencias import exp_functions as exp
+from dependencias import write_functions as w_file
 
 
 class FileX:
@@ -37,8 +39,8 @@ class FileX:
         sim_start = date.fromisoformat(sim_start)
         self._sim_start = sim_start.strftime("%y%j")
 
-    def set_field(self, field):
-        self._field = field
+    def set_field(self, code_id, soil_id):
+        self._field = code_id, soil_id
 
     def set_genotype(self, genotype):
         self._genotype = genotype
@@ -54,11 +56,11 @@ class FileX:
             try:
                 self._irrig = exp.add_laminas(self._irrig, laminas)
             except:
-                raise ValueError("\n\n ERRO: Comprimento de 'laminas' não e igual a 1. Quantidade de eventos de irrigação e comprimento de 'laminas' diferem.\n")
+                raise ValueError("\n\n ERRO: Comprimento de 'laminas' não é igual a 1. Quantidade de eventos de irrigação e comprimento de 'laminas' diferem.\n")
 
         if "irnf" in self._design:
 
-            exp.check_input_irnf(reg, laminas)
+            exp.check_input_irnf(reg, laminas, self._reg_dict)
 
             try:
                 self._irrig = reg
@@ -95,4 +97,34 @@ class FileX:
 class Experimental(FileX):
 
     def write_file(self):
-        print("\n Escrevendo arquivo ... \n")
+
+        with open(f"C:/DSSAT47/Cassava/{self._filename}.CSX", mode="w") as file:
+
+            # Head
+            w_file.write_head(file, self._filename, self._exp_name)
+
+            # Treatments
+            w_file.write_treatments(file, self._tratmatrix)
+
+            # Cultivar
+            w_file.write_cultivars(file, self._genotype)
+
+            # Fields
+            w_file.write_field(file, self._field)
+
+            # Initial Conditions
+            w_file.write_initial_conditions(file, self._sim_start)
+
+            # Planting
+            w_file.write_planting(file, self._planting)
+
+            # Irrigation
+            w_file.write_irrigation(file, self._irrig)
+
+            # Harvest
+            w_file.write_harvest(file, self._harvest)
+
+            # Controls
+            w_file.write_controls(file, self._sim_start)
+
+        print(f'\n Arquivo "{self._filename}.CSX" disponível em C:/DSSAT47/Cassava')
