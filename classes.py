@@ -128,3 +128,39 @@ class Experimental(FileX):
             w_file.write_controls(file, self._sim_start)
 
         print(f'\n Arquivo "{self._filename}.CSX" disponível em C:/DSSAT47/Cassava')
+
+
+class Seasonal(FileX):
+
+    def write_file(self):
+
+        with open(f"C:/DSSAT47/Seasonal/{self._filename}.SNX", mode="w") as file:
+
+            # Head
+            w_file.write_head(file, self._filename, self._exp_name, mode="SN")
+
+            # Treatments
+            w_file.write_treatments(file, self._tratmatrix)
+
+            # Cultivar
+            w_file.write_cultivars(file, self._genotype)
+
+            # Fields
+            w_file.write_field(file, self._field)
+
+            # Initial Conditions
+            w_file.write_initial_conditions(file, self._sim_start)
+
+            # Planting
+            w_file.write_planting(file, self._planting)
+
+            # Irrigation
+            w_file.write_irrigation(file, self._irrig)
+
+            # Harvest
+            w_file.write_harvest(file, self._harvest)
+
+            # Controls
+            w_file.write_controls(file, self._sim_start, reps=30)
+
+        print(f'\n Arquivo "{self._filename}.SNX" disponível em C:/DSSAT47/Seasonal')
