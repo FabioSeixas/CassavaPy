@@ -26,6 +26,14 @@ def write_batch(files, mode="exp"):
 
         print("\n Batch file disponível em C:/DSSAT47/Cassava/DSSBatch.v47. \n")
 
+    elif "seas" in [mode]:
+        write_seasonal(final_list)
+
+        print("\n Batch file disponível em C:/DSSAT47/Seasonal/DSSBatch.v47. \n")
+
+    else:
+        raise ValueError(f" Valor '{mode}' não reconhecido para o argumento 'mode'. ")
+
 
 def count_treatments(file):
 
@@ -63,4 +71,11 @@ def write_experimental(final_list):
 
 
 def run_batch(mode="exp"):
-    subprocess.run("C:\\DSSAT47\\DSCSM047.EXE CSYCA047 B DSSBatch.v47", shell=True, cwd="C:/DSSAT47/Cassava")
+
+    if mode == "exp":
+        subprocess.run("C:\\DSSAT47\\DSCSM047.EXE CSYCA047 B DSSBatch.v47", shell=True, cwd="C:/DSSAT47/Cassava")
+
+    elif mode == "seas":
+        subprocess.run("C:\\DSSAT47\\DSCSM047.EXE CSYCA047 B DSSBatch.v47", shell=True, cwd="C:/DSSAT47/Seasonal")
+    else:
+        raise ValueError(f" Valor '{mode}' não reconhecido para o argumento 'mode'. ")
