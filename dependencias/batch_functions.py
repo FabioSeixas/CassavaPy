@@ -1,3 +1,4 @@
+
 import numpy as np
 import subprocess
 import re
@@ -88,12 +89,7 @@ def write_seasonal(final_list):
                 file.write("      1      0      1      0\n")
 
 
-def run_batch(mode="exp"):
-
-    dic = {"exp": ["Experimental",
-                   "Cassava"],
-           "seas": ["Seasonal",
-                    "Seasonal"]}
+def run_batch(mode="exp")
 
     if any(item in [mode] for item in dic):
 
