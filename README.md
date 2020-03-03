@@ -43,3 +43,12 @@ Execution
 
 
 
+
+
+Seasonal
+
+    For Seasonal mode, the weather station must exist. That is, beyond the ".WTH" files in "DSSAT47/Weather", it must exist the ".CLI" file in "DSSAT47/Weather/Climate".
+
+    ERROR: "Floating divide by zero" - Desactivate nitrogen calculations
+
+    On my computer (win 7): if the simulation start date is in the year before the planting date year, the simulation crash!
