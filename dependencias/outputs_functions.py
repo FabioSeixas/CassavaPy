@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import subprocess
 import re
 import shutil
 import sys
@@ -38,29 +39,33 @@ def get_outputs(dir, mode="exp"):
     except:
         pass
 
+    print(f' \n Rodando extração de Outputs \n')
+    extract_outputs(dir=dir)
+
+    print(f' \n Processo Finalizado. \n Ouputs em "{dir}".')
+
 
 def n_trat_out_file(file):
     pattern = re.compile("@")
     ind = []
-    for i, line in enumerate(open(f"C:/DSSAT47/Cassava/{file}.OUT")):
+    for i, line in enumerate(open(f"C:/DSSAT47/Cassava/{file}")):
         for match in re.finditer(pattern, line):
             ind.append(str(i + 1))
-    return len(ind)
+    return len(ind), ind
 
 
-def extract_outputs():
+def extract_outputs(dir):
 
     # Rodar script R
-    files = ["PlantGro", "Weather", "PlantGrf", "PlantGr2", "SoilWat", "ET"]  # Deixar PlantGro no início da lista porque esse output contém uma informação (DAP x DAS) que nem todas possuem.
+    files = ["PlantGro.OUT", "Weather.OUT", "PlantGrf.OUT", "PlantGr2.OUT", "SoilWat.OUT", "ET.OUT"]  # Deixar PlantGro no início da lista porque esse output contém uma informação (DAP x DAS) que nem todas possuem.
 
     for file in files:
 
-        # Número de tratamentos por arquivo
-        trat_total = n_trat_out_file()
-        # Pegar os índices das tabelas
-        index = functions.index_tables(file)
+        # Número de tratamentos por arquivo e índices das tabelas
+        trat_total, index = n_trat_out_file(file)
+
         # Criar tabelas de resultados no R
-        functions.run_R(index, file, trat_total)
+        run_R(index, file, trat_total)
 
     # Gerar Gráficos no R
     lista = []
@@ -70,4 +75,29 @@ def extract_outputs():
             if entry.name not in ["auxiliar.csv", "yieldFinal.csv"]:
                 lista.append(entry.name)
 
-    functions.plot_R(trat_total, lista)
+    plot_R(trat_total, lista)
+
+
+def run_R(index, file, trat):
+
+    print(f'\n Processando "{file}".\n')
+    # Executável do R:
+    r = "C:\\Program Files\\R\\R-3.6.1\\bin\\Rscript.exe"
+
+    # Definir comando cmd
+    cmd = [r, "main.R"] + [str(trat), ] + index + [file, ]
+
+    # Rodar Script R
+    subprocess.run(cmd, shell=True)
+
+
+def plot_R(trat, lista):
+
+    print(f'\n Criando gráficos das {trat} simulações\n')
+
+    r = "C:\\Program Files\\R\\R-3.6.1\\bin\\Rscript.exe"
+
+    # Definir comando cmd
+    cmd = [r, "dependencias/r_plot.R"] + [str(trat), ] + lista
+
+    subprocess.run(cmd, shell=True)
