@@ -8,6 +8,7 @@ args = commandArgs(trailingOnly = TRUE)
 n_trat = as.numeric(args[1])
 index = as.numeric(args[2:(n_trat + 1)])
 file = args[n_trat + 2]
+mode = args[n_trat + 3]
 
 
 # Esse loop vai pegar o resultado de cada simulação
@@ -16,7 +17,7 @@ file = args[n_trat + 2]
 for(i in 1:(length(index))){
 
   # Read the Output file
-  x = read.table(paste0("C:/DSSAT47/Cassava/", file),
+  x = read.table(paste0("C:/DSSAT47/", mode, "/", file),
                  skip = index[i] - 1,
                  sep = "",
                  nrows = nrow_fun(index, i,
@@ -26,7 +27,7 @@ for(i in 1:(length(index))){
                  fill = T,
                  comment.char = "")
 
-  name = read.table(paste0("C:/DSSAT47/Cassava/", file),
+  name = read.table(paste0("C:/DSSAT47/", mode, "/", file),
 
                     skip = (index[i] - identify_out(file)) + 5,
                     nrows = 1)

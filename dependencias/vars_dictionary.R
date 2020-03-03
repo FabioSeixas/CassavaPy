@@ -2,8 +2,8 @@
 # Para uso nos gráficos
 
 # OBS: Alguns nomes de variáveis estão com '.x' no final
-# Acontece que no join the todas as variáveis, algumas são
-# repetidas, e o R coloca esse '.x' para não ficarem
+# Acontece que no join de todas as variáveis, algumas são
+# repetidas e o R coloca esse '.x' para não ficarem
 # colunas com mesmo nome.
 # Se o padrão se manter, não há problema.
 
@@ -22,7 +22,7 @@ c(# 1) Distribuição da disponibilidade de água ao longo do ano
   "ETAA" = "Evapotranspiration (mm/d)",
   "LAID.x" = "Leaf Area Index",
   "AWAD" = expression(Assimilate~Production~kg~ha^{-1}~day^{-1}),
-  
+
   # 3) Distribuição de Raízes e Água no Perfil
   "RL1D" = "Root Density in Soil Layer 1",
   "RL2D" = "Root Density in Soil Layer 2",
@@ -34,7 +34,7 @@ c(# 1) Distribuição da disponibilidade de água ao longo do ano
   "SW3D" = "Soil Water in Layer 3 (mm)",
   "SW4D" = "Soil Water in Layer 4 (mm)",
   "SW5D" = "Soil Water in Layer 5 (mm)",
-  
+
   # 4) Produção
   "RWAD" = expression(Root~Weight~kg[dm]~ha^{-1}),
   "CWAD" = expression(Tops~Weight~kg[dm]~ha^{-1}),
