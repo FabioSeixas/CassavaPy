@@ -18,7 +18,7 @@ def write_batch(files, mode="exp"):
     n_trats = []
 
     for file in files:
-        n_trats.append(count_treatments(file))
+        n_trats.append(count_treatments(file, mode=mode))
 
     final_list = np.column_stack((files, n_trats)).tolist()
 
@@ -36,13 +36,18 @@ def write_batch(files, mode="exp"):
         raise ValueError(f" Valor '{mode}' não reconhecido para o argumento 'mode'. ")
 
 
-def count_treatments(file):
+def count_treatments(file, mode="exp"):
+
+    dic = {"exp": ["Cassava",
+                   "CSX"],
+           "seas": ["Seasonal",
+                    "SNX"]}
 
     pattern_trat = re.compile("TREATMENTS")
     pattern_gen = re.compile("CULTIVARS")
     ind = []
 
-    for i, line in enumerate(open(f"C:/DSSAT47/Cassava/{file}.CSX")):
+    for i, line in enumerate(open(f"C:/DSSAT47/{dic[mode][0]}/{file}.{dic[mode][1]}")):
 
         for match in re.finditer(pattern_trat, line):
             ind.append(i + 1)
@@ -89,7 +94,12 @@ def write_seasonal(final_list):
                 file.write("      1      0      1      0\n")
 
 
-def run_batch(mode="exp")
+def run_batch(mode="exp"):
+
+    dic = {"exp": ["Experimental",
+                   "Cassava"],
+           "seas": ["Seasonal",
+                    "Seasonal"]}
 
     if any(item in [mode] for item in dic):
 

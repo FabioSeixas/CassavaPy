@@ -37,24 +37,27 @@ def get_outputs(dir, mode="exp"):
     try:
         os.mkdir(dir)
     except:
-        pass
+        raise ValueError(f"\n Não foi possível criar diretório '{dir}'. ")
 
     print(f' \n Rodando extração de Outputs \n')
-    extract_outputs(dir=dir)
+    extract_outputs(dir=dir, mode=mode)
 
     print(f' \n Processo Finalizado. \n Ouputs em "{dir}".')
 
 
-def n_trat_out_file(file):
+def n_trat_out_file(file, mode):
     pattern = re.compile("@")
     ind = []
-    for i, line in enumerate(open(f"C:/DSSAT47/Cassava/{file}")):
+    for i, line in enumerate(open(f"C:/DSSAT47/{mode}/{file}")):
         for match in re.finditer(pattern, line):
             ind.append(str(i + 1))
     return len(ind), ind
 
 
-def extract_outputs(dir):
+def extract_outputs(dir, mode):
+
+    dic = {"exp": "Cassava",
+           "seas": "Seasonal"}
 
     # Rodar script R
     files = ["PlantGro.OUT", "Weather.OUT", "PlantGrf.OUT", "PlantGr2.OUT", "SoilWat.OUT", "ET.OUT"]  # Deixar PlantGro no início da lista porque esse output contém uma informação (DAP x DAS) que nem todas possuem.
@@ -62,10 +65,10 @@ def extract_outputs(dir):
     for file in files:
 
         # Número de tratamentos por arquivo e índices das tabelas
-        trat_total, index = n_trat_out_file(file)
+        trat_total, index = n_trat_out_file(file, mode=dic[mode])
 
         # Criar tabelas de resultados no R
-        run_R(index, file, trat_total)
+        run_R(index, file, trat_total, mode=dic[mode])
 
     # Gerar Gráficos no R
     lista = []
@@ -78,14 +81,14 @@ def extract_outputs(dir):
     plot_R(trat_total, lista)
 
 
-def run_R(index, file, trat):
+def run_R(index, file, trat, mode):
 
     print(f'\n Processando "{file}".\n')
     # Executável do R:
     r = "C:\\Program Files\\R\\R-3.6.1\\bin\\Rscript.exe"
 
     # Definir comando cmd
-    cmd = [r, "main.R"] + [str(trat), ] + index + [file, ]
+    cmd = [r, "main.R"] + [str(trat), ] + index + [file, ] + [mode]
 
     # Rodar Script R
     subprocess.run(cmd, shell=True)
