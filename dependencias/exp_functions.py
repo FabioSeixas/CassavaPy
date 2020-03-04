@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from itertools import chain
 from datetime import date
 from datetime import timedelta as td
 
@@ -41,6 +42,60 @@ def seq_data_irrig_nf(DAP_list, inicio):
         date_list.append(inicio + td(days=DAP))
 
     return [date.strftime("%y%j") for date in date_list]
+
+
+def seq_data_irrig_nf2(reg, trat_irrig, pdates, design, hdates):
+
+    for k, v in trat_irrig.items():
+        if isinstance(v, int):
+            trat_irrig[k] = [v, ]
+
+    irrigated_treatments = []
+    for trat in chain.from_iterable(trat_irrig.values()):
+        irrigated_treatments.append(trat)
+
+    new_trat_irrig = []
+
+    if "phf" in design:
+
+        seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg)
+    else:
+        for trat_n in irrigated_treatments:
+            pdate = math.ceil(trat_n / len(hdates))
+            n_reg = return_irrig(index_trat=trat_n, dicionatio=trat_irrig)
+            dates_list = seq_data_irrig_nf(reg[n_reg], pdates[pdate])
+            if dates_list not in new_trat_irrig:
+                new_trat_irrig.append(dates_list)
+
+    return new_trat_irrig
+
+
+def seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg):
+
+    trat_dates = {}
+    reg_acum = []
+
+    for i, pdate in enumerate(pdates):
+
+        if (i + 1) in irrigated_treatments:
+            n_reg = return_irrig(index_trat=i + 1, dicionario=trat_irrig)
+            dates_list = seq_data_irrig_nf(reg[n_reg - 1], pdates[i])
+            if trat_dates.__contains__(n_reg):
+                trat_dates[len(trat_irrig) + 1] = dates_list
+                to_update_trat_irrig = {(len(trat_irrig) + 1): i + 1}
+                for v in trat_irrig.values():
+                    if isinstance(v, int):
+                        continue
+                    if (i + 1) in v:
+                        v.remove(i + 1)
+                trat_irrig.update(to_update_trat_irrig)
+            else:
+                trat_dates[n_reg] = dates_list
+
+            print(f'\n Data de plantio numero: {i + 1}')
+            print(f'\n Trat_irrig: {trat_irrig}')
+            for k, v in trat_dates.items():
+                print(f' Trat Dates: {k, v}')
 
 
 def fix_PlantHarv(planting, harvest):
