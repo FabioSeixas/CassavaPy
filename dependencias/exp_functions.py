@@ -18,16 +18,7 @@ def format_date(x):
     return x
 
 
-def seq_data_irrig(numero, dap_from, dap_by, inicio):
-
-    dates = [inicio + td(days=dap_from), ]
-    for i in range(numero - 1):
-        dates.append(dates[i] + td(days=dap_by))
-
-    return [date.strftime("%y%j") for date in dates]
-
-
-def seq_data_irrig2(numero, dap_from, dap_by, pdates):
+def seq_data_irrig(numero, dap_from, dap_by, pdates):
 
     dates_list = []
     for i, date in enumerate(pdates):
@@ -110,23 +101,12 @@ def check_input_irnf(reg, laminas, reg_dict):
 
 def add_laminas(reg, laminas):
 
-    if isinstance(laminas, int):
-        temp = np.repeat(laminas, len(reg))
-        result = np.column_stack((reg, temp))
-    else:
-        result = np.column_stack((reg, laminas))
-
-    return [result.tolist(), ]
-
-
-def add_laminas2(reg, laminas):
-
     reg
     for i, irrig_dates in enumerate(reg):
 
         irrig_dates = [date.strftime("%y%j") for date in irrig_dates]
 
-        if isinstance(laminas, int):
+        if isinstance(laminas, int) or len(laminas) == 1:
             extended_laminas = np.repeat(laminas, len(irrig_dates))
             reg[i] = np.column_stack((irrig_dates, extended_laminas)).tolist()
         else:
