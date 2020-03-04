@@ -18,12 +18,18 @@ def format_date(x):
     return x
 
 
-def seq_data_irrig(numero, dap_from, dap_by, pdates):
+def seq_data_irrig(numero, dap_from, dap_by, pdates, trat_list):
 
     dates_list = []
-    for i, date in enumerate(pdates):
-        dates = [date + td(days=dap_by) * n for n in range(numero)]
-        dates_list.append(dates)
+    if trat_list != "NULL":
+        for i, date in enumerate(pdates):
+            if (i + 1) in trat_list:
+                dates = [date + td(days=dap_by) * n for n in range(numero)]
+                dates_list.append(dates)
+    else:
+        for i, date in enumerate(pdates):
+            dates = [date + td(days=dap_by) * n for n in range(numero)]
+            dates_list.append(dates)
 
     return dates_list
 
