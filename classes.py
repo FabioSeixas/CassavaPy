@@ -24,7 +24,8 @@ class FileX:
         for i in range(n_plant):
             dates.append(self.p_from + td(days=p_by * i))
 
-        self._planting = [date.strftime("%y%j") for date in dates]
+        self._planting = dates
+        #self._planting = [date.strftime("%y%j") for date in dates]
 
     def set_harvest(self, n_harvest, h_from, h_by):
         h_from = date.fromisoformat(h_from)

@@ -27,6 +27,16 @@ def seq_data_irrig(numero, dap_from, dap_by, inicio):
     return [date.strftime("%y%j") for date in dates]
 
 
+def seq_data_irrig2(numero, dap_from, dap_by, pdates):
+
+    dates_list = []
+    for i, date in enumerate(pdates):
+        dates = [date + td(days=dap_by) * n for n in range(numero)]
+        dates_list.append(dates)
+
+    return dates_list
+
+
 def seq_data_irrig_nf(DAP_list, inicio):
 
     date_list = []
@@ -107,6 +117,22 @@ def add_laminas(reg, laminas):
         result = np.column_stack((reg, laminas))
 
     return [result.tolist(), ]
+
+
+def add_laminas2(reg, laminas):
+
+    reg
+    for i, irrig_dates in enumerate(reg):
+
+        irrig_dates = [date.strftime("%y%j") for date in irrig_dates]
+
+        if isinstance(laminas, int):
+            extended_laminas = np.repeat(laminas, len(irrig_dates))
+            reg[i] = np.column_stack((irrig_dates, extended_laminas)).tolist()
+        else:
+            reg[i] = np.column_stack((irrig_dates, laminas)).tolist()
+
+    return reg
 
 
 def add_laminas_nf(reg, laminas):
