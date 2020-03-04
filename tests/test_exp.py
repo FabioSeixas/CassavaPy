@@ -59,14 +59,6 @@ class Test_basic_FileX_NULL(unittest.TestCase):
                                h_from='1993-01-01',
                                h_by=60)
 
-    def test_planting(self):
-        expected = ["92365", "93024", "93049", "93074"]
-        self.assertEqual(self.filex._planting, expected)
-
-    def test_harvest(self):
-        expected = ["93001", "93061", "93121"]
-        self.assertEqual(self.filex._harvest, expected)
-
     def test_tratmatrix(self):
         self.filex.set_tratmatrix("BA")
 
@@ -111,13 +103,19 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
         self.filex.set_irrigation(n_irrig=5,
                                   from_irrig=0,
                                   by_irrig=60,
-                                  laminas=15)  # Same water depth to all irrigation events
+                                  laminas=15,
+                                  trat_irrig=[1, 3])  # Same water depth to all irrigation events
 
         expected = [[["92365", "15"],
                      ["93059", "15"],
                      ["93119", "15"],
                      ["93179", "15"],
-                     ["93239", "15"]]]
+                     ["93239", "15"]],
+                    [["93049", "15"],
+                     ["93109", "15"],
+                     ["93169", "15"],
+                     ["93229", "15"],
+                     ["93289", "15"]]]
 
         np.testing.assert_equal(self.filex._irrig, expected)
 
@@ -126,13 +124,19 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
         self.filex.set_irrigation(n_irrig=5,
                                   from_irrig=0,
                                   by_irrig=60,
-                                  laminas=[10, 20, 40, 50, 10])
+                                  laminas=[10, 20, 40, 50, 10],
+                                  trat_irrig=[1, 3])
 
         expected = [[["92365", "10"],
                      ["93059", "20"],
                      ["93119", "40"],
                      ["93179", "50"],
-                     ["93239", "10"]]]
+                     ["93239", "10"]],
+                    [["93049", "10"],
+                     ["93109", "20"],
+                     ["93169", "40"],
+                     ["93229", "50"],
+                     ["93289", "10"]]]
 
         np.testing.assert_equal(self.filex._irrig, expected)
 
@@ -145,14 +149,15 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
             self.filex.set_irrigation(n_irrig=5,
                                       from_irrig=0,
                                       by_irrig=60,
-                                      laminas=[10, 20, 40, 50])
+                                      laminas=[10, 20, 40, 50],
+                                      trat_irrig=[1, 3])
 
-    def test_tratmatrix_with_no_regdict(self):
+    def test_tratmatrix_with_no_trat_irrig(self):
         self.filex.set_irrigation(n_irrig=5,
                                   from_irrig=0,
                                   by_irrig=60,
                                   laminas=[10, 20, 40, 50, 10],
-                                  reg_dict="NULL")  # "NULL" is the Default
+                                  trat_irrig="NULL")  # "NULL" is the Default
 
         self.filex.set_tratmatrix("BA")
 
@@ -163,12 +168,12 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
         np.testing.assert_equal(self.filex._tratmatrix,
                                 expected)
 
-    def test_tratmatrix_with_regdict(self):
+    def test_tratmatrix_with_trat_irrig(self):
         self.filex.set_irrigation(n_irrig=5,
                                   from_irrig=0,
                                   by_irrig=60,
                                   laminas=[10, 20, 40, 50, 10],
-                                  reg_dict=[1, 3])  # Apply the irrigation to treatments one and three
+                                  trat_irrig=[1, 3])  # Apply the irrigation to treatments one and three
 
         self.filex.set_tratmatrix("BA")
 
@@ -184,7 +189,7 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
                                   from_irrig=0,
                                   by_irrig=60,
                                   laminas=[10, 20, 40, 50, 10],
-                                  reg_dict=[1, 3, 5, 10, 15])
+                                  trat_irrig=[1, 3, 5, 10, 15])
 
         self.filex.set_tratmatrix("BA")
 
@@ -200,7 +205,7 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
                                   from_irrig=0,
                                   by_irrig=60,
                                   laminas=[10, 20, 40, 50, 10],
-                                  reg_dict=[5, 10, 15])
+                                  trat_irrig=[5, 10, 15])
 
         self.filex.set_tratmatrix("BA")
 
@@ -216,7 +221,7 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
                                   from_irrig=0,
                                   by_irrig=60,
                                   laminas=[10, 20, 40, 50, 10],
-                                  reg_dict={1: [1, 2, 3]})
+                                  trat_irrig={1: [1, 2, 3]})
 
         with self.assertRaises(TypeError):
             self.filex.set_tratmatrix("BA")
@@ -249,7 +254,7 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
     def test_irrigation_one_lamina(self):
         self.filex.set_irrigation(reg=self.reg,
                                   laminas=[11, 22, 33],
-                                  reg_dict={1: 3, 2: 1, 3: 2})
+                                  trat_irrig={1: 3, 2: 1, 3: 2})
 
         expected = [[["92365", "11"], ["93004", "11"], ["93009", "11"], ["93014", "11"], ["93019", "11"], ["93024", "11"], ["93029", "11"]],
                     [["92365", "22"], ["93009", "22"], ["93019", "22"], ["93029", "22"], ["93039", "22"]],
@@ -262,7 +267,7 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
                                   laminas=[[10, 11, 10, 11, 10, 11, 12],
                                            [5, 6, 7, 5, 6],
                                            [10, 12, 11, 10, 14, 13]],
-                                  reg_dict={1: 3, 2: 1, 3: 2})
+                                  trat_irrig={1: 3, 2: 1, 3: 2})
 
         expected = [[["92365", "10"], ["93004", "11"], ["93009", "10"], ["93014", "11"], ["93019", "10"], ["93024", "11"], ["93029", "12"]],
                     [["92365", "5"], ["93009", "6"], ["93019", "7"], ["93029", "5"], ["93039", "6"]],
@@ -275,7 +280,7 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
                                   laminas=[10,
                                            [5],
                                            [10, 12, 11, 10, 14, 13]],
-                                  reg_dict={1: 3, 2: 1, 3: 2})
+                                  trat_irrig={1: 3, 2: 1, 3: 2})
 
         expected = [[["92365", "10"], ["93004", "10"], ["93009", "10"], ["93014", "10"], ["93019", "10"], ["93024", "10"], ["93029", "10"]],
                     [["92365", "5"], ["93009", "5"], ["93019", "5"], ["93029", "5"], ["93039", "5"]],
@@ -290,23 +295,23 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
                                       laminas=[[10, 11, 10, 11, 10, 11, 12],
                                                [5, 6, 7, 5, 6],
                                                [10, 12, 11, 10, 14, 13, 15]],  # One more than 'reg'
-                                      reg_dict={1: 3, 2: 1, 3: 2})
+                                      trat_irrig={1: 3, 2: 1, 3: 2})
 
-    def test_irrigation_reg_dict_ERROR(self):
+    def test_irrigation_trat_irrig_ERROR(self):
 
         with self.assertRaises(AssertionError):
             self.filex.set_irrigation(reg=self.reg,
                                       laminas=[[10, 11, 10, 11, 10, 11, 12],
                                                [5, 6, 7, 5, 6],
                                                [10, 12, 11, 10, 14, 13]],
-                                      reg_dict={4: 3, 2: 1, 3: 2})
+                                      trat_irrig={4: 3, 2: 1, 3: 2})
 
     def test_irrigation_tratmatrix(self):
         self.filex.set_irrigation(reg=self.reg,
                                   laminas=[[10, 11, 10, 11, 10, 11, 12],
                                            [5, 6, 7, 5, 6],
                                            [10, 12, 11, 10, 14, 13]],
-                                  reg_dict={1: 3, 2: 1, 3: 2})
+                                  trat_irrig={1: 3, 2: 1, 3: 2})
 
         self.filex.set_tratmatrix("BA")
 
@@ -322,7 +327,7 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
                                   laminas=[[10, 11, 10, 11, 10, 11, 12],
                                            [5, 6, 7, 5, 6],
                                            [10, 12, 11, 10, 14, 13]],
-                                  reg_dict={1: 3, 2: 1})
+                                  trat_irrig={1: 3, 2: 1})
 
         self.filex.set_tratmatrix("BA")
 
