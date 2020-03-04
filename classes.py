@@ -46,13 +46,13 @@ class FileX:
     def set_genotype(self, genotype):
         self._genotype = genotype
 
-    def set_irrigation(self, n_irrig="NULL", from_irrig="NULL", by_irrig="NULL", reg="NULL", laminas="NULL", reg_dict="NULL"):
+    def set_irrigation(self, laminas, n_irrig="NULL", from_irrig="NULL", by_irrig="NULL", reg="NULL", trat_irrig="NULL"):
 
-        self._reg_dict = reg_dict
+        self._trat_irrig = trat_irrig
 
         if "irf" in self._design:
 
-            self._irrig = exp.seq_data_irrig(n_irrig, from_irrig, by_irrig, self._planting)
+            self._irrig = exp.seq_data_irrig(n_irrig, from_irrig, by_irrig, self._planting, self._trat_irrig)
 
             try:
                 self._irrig = exp.add_laminas(self._irrig, laminas)
@@ -61,7 +61,7 @@ class FileX:
 
         if "irnf" in self._design:
 
-            exp.check_input_irnf(reg, laminas, self._reg_dict)
+            exp.check_input_irnf(reg, laminas, self._trat_irrig)
 
             try:
                 self._irrig = reg
@@ -84,10 +84,10 @@ class FileX:
 
         if "irf" in self._design:
 
-            self._tratmatrix = exp.trat_insert_irrig_irf(self._reg_dict, self._tratmatrix)
+            self._tratmatrix = exp.trat_insert_irrig_irf(self._trat_irrig, self._tratmatrix)
 
         elif "irnf" in self._design:
-            self._tratmatrix = exp.trat_insert_irrig_irnf(self._reg_dict, self._tratmatrix)
+            self._tratmatrix = exp.trat_insert_irrig_irnf(self._trat_irrig, self._tratmatrix)
 
         else:
             self._tratmatrix = exp.insert_all_rainfed(self._tratmatrix)
