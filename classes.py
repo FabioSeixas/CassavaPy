@@ -52,7 +52,7 @@ class FileX:
 
         if "irf" in self._design:
 
-            self._irrig = exp.seq_data_irrig(n_irrig, from_irrig, by_irrig, self.p_from)
+            self._irrig = exp.seq_data_irrig(n_irrig, from_irrig, by_irrig, self._planting)
 
             try:
                 self._irrig = exp.add_laminas(self._irrig, laminas)
@@ -162,6 +162,6 @@ class Seasonal(FileX):
             w_file.write_harvest(file, self._harvest)
 
             # Controls
-            w_file.write_controls(file, self._sim_start, reps=30, mode = "seas")
+            w_file.write_controls(file, self._sim_start, reps=30, mode="seas")
 
         print(f'\n Arquivo "{self._filename}.SNX" disponível em C:/DSSAT47/Seasonal')
