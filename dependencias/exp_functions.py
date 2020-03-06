@@ -77,6 +77,7 @@ def set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, la
 
             level = next(levels_iter)
             date_irrig[pdate_n] = level
+
             try:
                 date = pdates[pdate_n - 1]
             except:
@@ -186,9 +187,16 @@ def lamina_irrig(regs, laminas):
     return lam_final
 
 
-def check_input_irnf(reg, laminas, trat_irrig):
+def check_input_irnf(reg, laminas, trat_irrig, pdates, design, hdates):
     ''' Essa função vai checar os inputs necessários para a irrigação no modo 'irnf'.
     '''
+
+    if "phf" in design:
+        if len(hdates) != len(pdates):
+            raise ValueError(" Com design 'phf' o número de datas de plantio de colheita devem ser iguais")
+        max_n_trat = len(pdates)
+    else:
+        max_n_trat = len(hdates) * len(pdates)
 
     for k, v in trat_irrig.items():
         if isinstance(v, int):
@@ -219,8 +227,8 @@ def check_input_irnf(reg, laminas, trat_irrig):
             raise AssertionError(f' No dicionário há referencia ao planejamento de irrigação nº {k}, no entanto apenas {len(reg)} planejamentos de irrigação foram definidos.')
 
         for trat in chain(v):
-            if trat > 10:
-                raise IndexError(f' No dicionário há referencia ao tratamento {trat}, que não está definido. ')
+            if trat > max_n_trat:
+                raise IndexError(f' No dicionário há referencia ao tratamento {trat}, no entanto, só foram definidos {max_n_trat} tratamentos. ')
 
     return trat_irrig
 
