@@ -52,7 +52,7 @@ class FileX:
 
         if "irf" in self._design:
 
-            self._irrig, self._trat_irrig = exp.set_irrig_levels_irf(n_irrig, from_irrig, by_irrig, self._planting, self._trat_irrig, laminas, self._design)
+            self._irrig, self._trat_irrig = exp.set_irrig_levels_irf(n_irrig, from_irrig, by_irrig, self._planting, self._trat_irrig, laminas, self._design, self._harvest)
 
         if "irnf" in self._design:
 

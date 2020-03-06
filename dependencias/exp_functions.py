@@ -3,6 +3,7 @@ import math
 from itertools import chain
 from datetime import date
 from datetime import timedelta as td
+from collections import defaultdict as ddic
 
 
 def format_name(x):
@@ -19,7 +20,7 @@ def format_date(x):
     return x
 
 
-def set_irrig_levels_irf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, design):
+def set_irrig_levels_irf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, design, hdates):
 
     if "phf" in design:
 
@@ -27,7 +28,7 @@ def set_irrig_levels_irf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, 
 
     else:
 
-        return set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas)
+        return set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, hdates)
 
 
 def set_irrig_levels_irf_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas):
@@ -61,21 +62,32 @@ def set_irrig_levels_irf_phf(n_irrig, dap_from, dap_by, pdates, trat_list, lamin
     return irrig_levels, trat_irrig
 
 
-def set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas):
+def set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, hdates):
 
     irrig_levels = {}
-    trat_irrig = {}
+    trat_irrig = ddic(list)
+    date_irrig = {}
+    levels_iter = iter(range(len(trat_list) + 1)[1:])
 
     for i, trat in enumerate(trat_list):
 
-        pdate_n = math.ceil(trat / len(pdates))
+        pdate_n = math.ceil(trat / len(hdates))
 
-        if pdate_n not in irrig_levels:
+        if pdate_n not in date_irrig.keys():
 
-            date = pdates[pdate_n - 1]
+            level = next(levels_iter)
+            date_irrig[pdate_n] = level
+            try:
+                date = pdates[pdate_n - 1]
+            except:
+                raise IndexError(" 'trat_list' contém tratamentos além dos definidos. \n ")
+
             dates = [date + td(days=dap_by) * n for n in range(n_irrig)]
-            irrig_levels[pdate_n] = add_laminas(dates, laminas)
-            trat_irrig
+            irrig_levels[level] = add_laminas(dates, laminas)
+
+        trat_irrig[level].append(trat)
+
+    return irrig_levels, trat_irrig
 
 
 def dates_according_to_planting(DAP_list, inicio):
