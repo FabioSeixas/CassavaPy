@@ -19,23 +19,32 @@ def format_date(x):
     return x
 
 
-def seq_data_irrig(numero, dap_from, dap_by, pdates, trat_list):
+def set_irrig_levels_irf(numero, dap_from, dap_by, pdates, trat_list, laminas):
 
-    dates_list = []
+    irrig_levels = []
     if trat_list != "NULL":
+
         for i, date in enumerate(pdates):
+
             if (i + 1) in trat_list:
+
                 dates = [date + td(days=dap_by) * n for n in range(numero)]
-                dates_list.append(dates)
+                dates = [date.strftime("%y%j") for date in dates]
+                irrig = add_laminas(dates, laminas)
+                irrig_levels.append(irrig)
+
     else:
         for i, date in enumerate(pdates):
+
             dates = [date + td(days=dap_by) * n for n in range(numero)]
-            dates_list.append(dates)
+            dates = [date.strftime("%y%j") for date in dates]
+            irrig = add_laminas(dates, laminas)
+            irrig_levels.append(irrig)
 
-    return dates_list
+    return irrig_levels
 
 
-def seq_data_irrig_nf(DAP_list, inicio):
+def dates_according_to_planting(DAP_list, inicio):
 
     date_list = []
     for i, DAP in enumerate(DAP_list):
@@ -44,7 +53,7 @@ def seq_data_irrig_nf(DAP_list, inicio):
     return [date.strftime("%y%j") for date in date_list]
 
 
-def seq_data_irrig_nf2(reg, trat_irrig, pdates, design, hdates, laminas):
+def set_irrig_levels_irnf(reg, trat_irrig, pdates, design, hdates, laminas):
 
     for k, v in trat_irrig.items():
         if isinstance(v, int):
@@ -58,33 +67,32 @@ def seq_data_irrig_nf2(reg, trat_irrig, pdates, design, hdates, laminas):
 
     if "phf" in design:
 
-        seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas)
+        irrig_levels, trat_irrig = seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas)
     else:
         for trat_n in irrigated_treatments:
             pdate = math.ceil(trat_n / len(hdates))
             n_reg = return_irrig(index_trat=trat_n, dicionatio=trat_irrig)
-            dates_list = seq_data_irrig_nf(reg[n_reg], pdates[pdate])
+            dates_list = dates_according_to_planting(reg[n_reg], pdates[pdate])
             if dates_list not in new_trat_irrig:
                 new_trat_irrig.append(dates_list)
 
-    return new_trat_irrig
+    return irrig_levels, trat_irrig
 
 
-def seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas):
+def set_irrig_levels_and_new_trat_irrig(pdates, irrigated_treatments, trat_irrig, reg, laminas):
 
-    trat_dates = {}
-    reg_acum = []
+    irrig_levels = {}
 
     for i, pdate in enumerate(pdates):
 
         # If a irrigation schedule was applied for the plant date:
         if (i + 1) in irrigated_treatments:
             n_reg = return_irrig(index_trat=i + 1, dicionario=trat_irrig)
-            dates_list = seq_data_irrig_nf(reg[n_reg - 1], pdates[i])
+            dates_list = dates_according_to_planting(reg[n_reg - 1], pdates[i])
 
             # Put the treatment(w specific plant date) on a new irrigation schedule
-            if trat_dates.__contains__(n_reg):
-                trat_dates[len(trat_irrig) + 1] = add_laminas(dates_list, laminas[n_reg - 1])
+            if irrig_levels.__contains__(n_reg):
+                irrig_levels[len(trat_irrig) + 1] = add_laminas(dates_list, laminas[n_reg - 1])
                 to_update_trat_irrig = {(len(trat_irrig) + 1): i + 1}
 
                 for v in trat_irrig.values():
@@ -97,7 +105,9 @@ def seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas
                 trat_irrig.update(to_update_trat_irrig)
 
             else:
-                trat_dates[n_reg] = add_laminas(dates_list, laminas[n_reg - 1])
+                irrig_levels[n_reg] = add_laminas(dates_list, laminas[n_reg - 1])
+
+    return irrig_levels, trat_irrig
 
 
 def fix_PlantHarv(planting, harvest):
@@ -170,7 +180,10 @@ def add_laminas(irrig_dates, laminas):
         return np.column_stack((irrig_dates, extended_laminas)).tolist()
 
     else:
-        return np.column_stack((irrig_dates, laminas)).tolist()
+        try:
+            return np.column_stack((irrig_dates, laminas)).tolist()
+        except:
+            raise ValueError("\n\n ERRO: Comprimento de 'laminas' não é igual a 1. Quantidade de eventos de irrigação e comprimento de 'laminas' diferem.\n")
 
 
 def add_laminas_nf(reg, laminas):

@@ -25,7 +25,7 @@ class FileX:
             dates.append(self.p_from + td(days=p_by * i))
 
         self._planting = dates
-        #self._planting = [date.strftime("%y%j") for date in dates]
+        self._planting_julian = [date.strftime("%y%j") for date in dates]
 
     def set_harvest(self, n_harvest, h_from, h_by):
         h_from = date.fromisoformat(h_from)
@@ -52,26 +52,15 @@ class FileX:
 
         if "irf" in self._design:
 
-            self._irrig = exp.seq_data_irrig(n_irrig, from_irrig, by_irrig, self._planting, self._trat_irrig)
-
-            try:
-                self._irrig = exp.add_laminas(self._irrig, laminas)
-            except:
-                raise ValueError("\n\n ERRO: Comprimento de 'laminas' não é igual a 1. Quantidade de eventos de irrigação e comprimento de 'laminas' diferem.\n")
+            self._irrig = exp.set_irrig_levels_irf(n_irrig, from_irrig, by_irrig, self._planting, self._trat_irrig, laminas)
 
         if "irnf" in self._design:
 
             exp.check_input_irnf(reg, laminas, self._trat_irrig)
 
-            try:
-                self._irrig = reg
-                for i, DAP_list in enumerate(reg):
+            #set_irrig_levels_irnf(reg, trat_irrig, self._planting, self._trat_irrig, self._harvest, laminas)
 
-                    self._irrig[i] = exp.seq_data_irrig_nf(DAP_list, self.p_from)
-            except:
-                print("\nERRO: Não foi possível definir irrigação no modo 'irnf'.\n")
-
-            self._irrig = exp.add_laminas_nf(self._irrig, laminas)
+            #self._irrig = exp.add_laminas_nf(self._irrig, laminas)
 
     def set_tratmatrix(self, tnames_prefix):
 
