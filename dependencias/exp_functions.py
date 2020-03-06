@@ -44,7 +44,7 @@ def seq_data_irrig_nf(DAP_list, inicio):
     return [date.strftime("%y%j") for date in date_list]
 
 
-def seq_data_irrig_nf2(reg, trat_irrig, pdates, design, hdates):
+def seq_data_irrig_nf2(reg, trat_irrig, pdates, design, hdates, laminas):
 
     for k, v in trat_irrig.items():
         if isinstance(v, int):
@@ -58,7 +58,7 @@ def seq_data_irrig_nf2(reg, trat_irrig, pdates, design, hdates):
 
     if "phf" in design:
 
-        seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg)
+        seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas)
     else:
         for trat_n in irrigated_treatments:
             pdate = math.ceil(trat_n / len(hdates))
@@ -70,32 +70,34 @@ def seq_data_irrig_nf2(reg, trat_irrig, pdates, design, hdates):
     return new_trat_irrig
 
 
-def seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg):
+def seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas):
 
     trat_dates = {}
     reg_acum = []
 
     for i, pdate in enumerate(pdates):
 
+        # If a irrigation schedule was applied for the plant date:
         if (i + 1) in irrigated_treatments:
             n_reg = return_irrig(index_trat=i + 1, dicionario=trat_irrig)
             dates_list = seq_data_irrig_nf(reg[n_reg - 1], pdates[i])
+
+            # Put the treatment(w specific plant date) on a new irrigation schedule
             if trat_dates.__contains__(n_reg):
-                trat_dates[len(trat_irrig) + 1] = dates_list
+                trat_dates[len(trat_irrig) + 1] = add_laminas(dates_list, laminas[n_reg - 1])
                 to_update_trat_irrig = {(len(trat_irrig) + 1): i + 1}
+
                 for v in trat_irrig.values():
+
                     if isinstance(v, int):
                         continue
                     if (i + 1) in v:
                         v.remove(i + 1)
-                trat_irrig.update(to_update_trat_irrig)
-            else:
-                trat_dates[n_reg] = dates_list
 
-            print(f'\n Data de plantio numero: {i + 1}')
-            print(f'\n Trat_irrig: {trat_irrig}')
-            for k, v in trat_dates.items():
-                print(f' Trat Dates: {k, v}')
+                trat_irrig.update(to_update_trat_irrig)
+
+            else:
+                trat_dates[n_reg] = add_laminas(dates_list, laminas[n_reg - 1])
 
 
 def fix_PlantHarv(planting, harvest):
@@ -160,20 +162,15 @@ def check_input_irnf(reg, laminas, reg_dict):
             raise AssertionError(f' No dicionário há referencia ao planejamento de irrigação nº {k}, no entanto apenas {len(reg)} planejamentos de irrigação foram definidos.')
 
 
-def add_laminas(reg, laminas):
+def add_laminas(irrig_dates, laminas):
 
-    reg
-    for i, irrig_dates in enumerate(reg):
+    if isinstance(laminas, int) or len(laminas) == 1:
 
-        irrig_dates = [date.strftime("%y%j") for date in irrig_dates]
+        extended_laminas = np.repeat(laminas, len(irrig_dates))
+        return np.column_stack((irrig_dates, extended_laminas)).tolist()
 
-        if isinstance(laminas, int) or len(laminas) == 1:
-            extended_laminas = np.repeat(laminas, len(irrig_dates))
-            reg[i] = np.column_stack((irrig_dates, extended_laminas)).tolist()
-        else:
-            reg[i] = np.column_stack((irrig_dates, laminas)).tolist()
-
-    return reg
+    else:
+        return np.column_stack((irrig_dates, laminas)).tolist()
 
 
 def add_laminas_nf(reg, laminas):
