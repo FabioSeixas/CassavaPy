@@ -256,6 +256,22 @@ class Test_basic_FileX_irf(unittest.TestCase):
                      ["93059", "15"],
                      ["93119", "15"],
                      ["93179", "15"],
+                     ["93239", "15"]]}
+
+        np.testing.assert_equal(self.filex._irrig, expected)
+
+    def test_irrigation_one_lamina_irf_two_schedules(self):
+
+        self.filex.set_irrigation(n_irrig=5,
+                                  from_irrig=0,
+                                  by_irrig=60,
+                                  laminas=15,  # Same water depth to all irrigation events
+                                  trat_irrig=[1, 4])
+
+        expected = {1: [["92365", "15"],
+                     ["93059", "15"],
+                     ["93119", "15"],
+                     ["93179", "15"],
                      ["93239", "15"]],
                     2: [["93049", "15"],
                      ["93109", "15"],
@@ -264,6 +280,7 @@ class Test_basic_FileX_irf(unittest.TestCase):
                      ["93289", "15"]]}
 
         np.testing.assert_equal(self.filex._irrig, expected)
+
 
 
 class Test_basic_FileX_phf_irnf(unittest.TestCase):

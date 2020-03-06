@@ -83,9 +83,10 @@ def set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, la
                 raise IndexError(" 'trat_list' contém tratamentos além dos definidos. \n ")
 
             dates = [date + td(days=dap_by) * n for n in range(n_irrig)]
+            dates = [date.strftime("%y%j") for date in dates]
             irrig_levels[level] = add_laminas(dates, laminas)
 
-        trat_irrig[level].append(trat)
+        trat_irrig[date_irrig.get(pdate_n)].append(trat)
 
     return irrig_levels, trat_irrig
 
@@ -100,10 +101,6 @@ def dates_according_to_planting(DAP_list, inicio):
 
 
 def set_irrig_levels_irnf(reg, trat_irrig, pdates, design, hdates, laminas):
-
-    for k, v in trat_irrig.items():
-        if isinstance(v, int):
-            trat_irrig[k] = [v, ]
 
     irrigated_treatments = []
     for trat in chain.from_iterable(trat_irrig.values()):
@@ -131,7 +128,7 @@ def set_irrig_levels_and_new_trat_irrig(pdates, irrigated_treatments, trat_irrig
 
     for i, pdate in enumerate(pdates):
 
-        # If a irrigation schedule was applied for the plant date:
+        # If the irrigation schedule was applied for the plant date:
         if (i + 1) in irrigated_treatments:
             n_reg = return_irrig(index_trat=i + 1, dicionario=trat_irrig)
             dates_list = dates_according_to_planting(reg[n_reg - 1], pdates[i])
@@ -139,7 +136,7 @@ def set_irrig_levels_and_new_trat_irrig(pdates, irrigated_treatments, trat_irrig
             # Put the treatment(w specific plant date) on a new irrigation schedule
             if irrig_levels.__contains__(n_reg):
                 irrig_levels[len(trat_irrig) + 1] = add_laminas(dates_list, laminas[n_reg - 1])
-                to_update_trat_irrig = {(len(trat_irrig) + 1): i + 1}
+                to_update_trat_irrig = {(len(trat_irrig) + 1): [i + 1]}
 
                 for v in trat_irrig.values():
 
@@ -189,9 +186,13 @@ def lamina_irrig(regs, laminas):
     return lam_final
 
 
-def check_input_irnf(reg, laminas, reg_dict):
+def check_input_irnf(reg, laminas, trat_irrig):
     ''' Essa função vai checar os inputs necessários para a irrigação no modo 'irnf'.
     '''
+
+    for k, v in trat_irrig.items():
+        if isinstance(v, int):
+            trat_irrig[k] = [v, ]
 
     if len(reg) != len(laminas):
         raise ValueError("\n\n Checagem dos Inputs encontrou um ERRO: Comprimentos de 'regs' e 'laminas' diferem.\n")
@@ -210,12 +211,18 @@ def check_input_irnf(reg, laminas, reg_dict):
             except:
                 raise ValueError(f"\n\n  Checagem dos Inputs encontrou um ERRO: \n  Comprimento do {i + 1}º elemento de 'reg' e 'laminas' não correspondem.\n")
 
-    if not isinstance(reg_dict, dict):
+    if not isinstance(trat_irrig, dict):
         raise TypeError("\n\n Com design 'irnf', 'reg_dic' deve ser um dicionário \n")
 
-    for k, v in reg_dict.items():
+    for k, v in trat_irrig.items():
         if k > len(reg):
             raise AssertionError(f' No dicionário há referencia ao planejamento de irrigação nº {k}, no entanto apenas {len(reg)} planejamentos de irrigação foram definidos.')
+
+        for trat in chain(v):
+            if trat > 10:
+                raise IndexError(f' No dicionário há referencia ao tratamento {trat}, que não está definido. ')
+
+    return trat_irrig
 
 
 def add_laminas(irrig_dates, laminas):
