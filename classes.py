@@ -52,15 +52,13 @@ class FileX:
 
         if "irf" in self._design:
 
-            self._irrig = exp.set_irrig_levels_irf(n_irrig, from_irrig, by_irrig, self._planting, self._trat_irrig, laminas)
+            self._irrig, self._trat_irrig = exp.set_irrig_levels_irf(n_irrig, from_irrig, by_irrig, self._planting, self._trat_irrig, laminas, self._design)
 
         if "irnf" in self._design:
 
             exp.check_input_irnf(reg, laminas, self._trat_irrig)
 
-            #set_irrig_levels_irnf(reg, trat_irrig, self._planting, self._trat_irrig, self._harvest, laminas)
-
-            #self._irrig = exp.add_laminas_nf(self._irrig, laminas)
+            self._irrig, self._trat_irrig = exp.set_irrig_levels_irnf(reg, self._trat_irrig, self._planting, self._design, self._harvest, laminas)
 
     def set_tratmatrix(self, tnames_prefix):
 

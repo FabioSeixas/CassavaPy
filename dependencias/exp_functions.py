@@ -19,29 +19,63 @@ def format_date(x):
     return x
 
 
-def set_irrig_levels_irf(numero, dap_from, dap_by, pdates, trat_list, laminas):
+def set_irrig_levels_irf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, design):
 
-    irrig_levels = []
+    if "phf" in design:
+
+        return set_irrig_levels_irf_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas)
+
+    else:
+
+        return set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas)
+
+
+def set_irrig_levels_irf_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas):
+
+    irrig_levels = {}
+    trat_irrig = {}
+    levels_iter = iter(range(len(trat_list) + 1)[1:])
+
     if trat_list != "NULL":
 
         for i, date in enumerate(pdates):
 
             if (i + 1) in trat_list:
 
-                dates = [date + td(days=dap_by) * n for n in range(numero)]
+                dates = [date + td(days=dap_by) * n for n in range(n_irrig)]
                 dates = [date.strftime("%y%j") for date in dates]
                 irrig = add_laminas(dates, laminas)
-                irrig_levels.append(irrig)
-
+                level = next(levels_iter)
+                irrig_levels[level] = irrig
+                trat_irrig[level] = i + 1
     else:
         for i, date in enumerate(pdates):
 
-            dates = [date + td(days=dap_by) * n for n in range(numero)]
+            dates = [date + td(days=dap_by) * n for n in range(n_irrig)]
             dates = [date.strftime("%y%j") for date in dates]
             irrig = add_laminas(dates, laminas)
-            irrig_levels.append(irrig)
+            level = next(levels_iter)
+            irrig_levels[level] = irrig
+            trat_irrig[level] = i + 1
 
-    return irrig_levels
+    return irrig_levels, trat_irrig
+
+
+def set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas):
+
+    irrig_levels = {}
+    trat_irrig = {}
+
+    for i, trat in enumerate(trat_list):
+
+        pdate_n = math.ceil(trat / len(pdates))
+
+        if pdate_n not in irrig_levels:
+
+            date = pdates[pdate_n - 1]
+            dates = [date + td(days=dap_by) * n for n in range(n_irrig)]
+            irrig_levels[pdate_n] = add_laminas(dates, laminas)
+            trat_irrig
 
 
 def dates_according_to_planting(DAP_list, inicio):
@@ -67,7 +101,7 @@ def set_irrig_levels_irnf(reg, trat_irrig, pdates, design, hdates, laminas):
 
     if "phf" in design:
 
-        irrig_levels, trat_irrig = seq_date_irrig_nf_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas)
+        irrig_levels, trat_irrig = set_irrig_levels_and_new_trat_irrig(pdates, irrigated_treatments, trat_irrig, reg, laminas)
     else:
         for trat_n in irrigated_treatments:
             pdate = math.ceil(trat_n / len(hdates))
