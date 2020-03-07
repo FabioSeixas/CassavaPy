@@ -81,7 +81,7 @@ def set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, la
             try:
                 date = pdates[pdate_n - 1]
             except:
-                raise IndexError(" 'trat_list' contém tratamentos além dos definidos. \n ")
+                raise IndexError(" 'trat_irrig' contém tratamentos além dos definidos. \n ")
 
             dates = [date + td(days=dap_by) * n for n in range(n_irrig)]
             dates = [date.strftime("%y%j") for date in dates]
@@ -156,7 +156,7 @@ def set_irrig_levels_and_new_trat_irrig(pdates, irrigated_treatments, trat_irrig
 
 def fix_PlantHarv(planting, harvest):
     if len(planting) != len(harvest):
-        raise ValueError("\n\n Quantidade de datas de plantio e colheita não correspondem \n")
+        raise ValueError(" Com design 'phf' o número de datas de plantio de colheita devem ser iguais")
 
     tratmatrix = [[i + 1, i + 1] for i, n in enumerate(planting)]
 
@@ -198,10 +198,6 @@ def check_input_irnf(reg, laminas, trat_irrig, pdates, design, hdates):
     else:
         max_n_trat = len(hdates) * len(pdates)
 
-    for k, v in trat_irrig.items():
-        if isinstance(v, int):
-            trat_irrig[k] = [v, ]
-
     if len(reg) != len(laminas):
         raise ValueError("\n\n Checagem dos Inputs encontrou um ERRO: Comprimentos de 'regs' e 'laminas' diferem.\n")
 
@@ -223,10 +219,14 @@ def check_input_irnf(reg, laminas, trat_irrig, pdates, design, hdates):
         raise TypeError("\n\n Com design 'irnf', 'reg_dic' deve ser um dicionário \n")
 
     for k, v in trat_irrig.items():
+
+        if isinstance(v, int):
+            trat_irrig[k] = list([v])
+
         if k > len(reg):
             raise AssertionError(f' No dicionário há referencia ao planejamento de irrigação nº {k}, no entanto apenas {len(reg)} planejamentos de irrigação foram definidos.')
 
-        for trat in chain(v):
+        for trat in chain(trat_irrig[k]):
             if trat > max_n_trat:
                 raise IndexError(f' No dicionário há referencia ao tratamento {trat}, no entanto, só foram definidos {max_n_trat} tratamentos. ')
 
