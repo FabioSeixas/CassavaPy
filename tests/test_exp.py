@@ -139,7 +139,21 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
 
         np.testing.assert_equal(self.filex._irrig, expected)
 
-    def test_irrigation_dont_match(self):
+
+    def test_irrigation_trat_irrig(self):
+
+        self.filex.set_irrigation(n_irrig=5,
+                                  from_irrig=0,
+                                  by_irrig=60,
+                                  laminas=[10, 20, 40, 50, 10],
+                                  trat_irrig=[1, 3])
+
+        expected = {1: 1,
+                    2: 3}
+
+        np.testing.assert_equal(self.filex._trat_irrig, expected)
+
+    def test_irrigation_laminas_dont_match(self):
         '''n_irrig = 5
            len(laminas) = 4.
            '''
@@ -260,6 +274,19 @@ class Test_basic_FileX_irf(unittest.TestCase):
 
         np.testing.assert_equal(self.filex._irrig, expected)
 
+
+    def test_irrigation_trat_irrig_one_lamina_irf(self):
+
+        self.filex.set_irrigation(n_irrig=5,
+                                  from_irrig=0,
+                                  by_irrig=60,
+                                  laminas=15,  # Same water depth to all irrigation events
+                                  trat_irrig=[1, 3])
+
+        expected = {1: [1, 3]}
+
+        np.testing.assert_equal(self.filex._trat_irrig, expected)
+
     def test_irrigation_one_lamina_irf_two_schedules(self):
 
         self.filex.set_irrigation(n_irrig=5,
@@ -282,6 +309,18 @@ class Test_basic_FileX_irf(unittest.TestCase):
         np.testing.assert_equal(self.filex._irrig, expected)
 
 
+    def test_irrigation_trat_irrig_one_lamina_irf_two_schedules(self):
+
+        self.filex.set_irrigation(n_irrig=5,
+                                  from_irrig=0,
+                                  by_irrig=60,
+                                  laminas=15,  # Same water depth to all irrigation events
+                                  trat_irrig=[1, 3, 4, 5, 6])
+
+        expected = {1: [1, 3],
+                    2: [4, 5, 6]}
+
+        np.testing.assert_equal(self.filex._trat_irrig, expected)
 
 class Test_basic_FileX_phf_irnf(unittest.TestCase):
     '''3 datas de plantio
@@ -331,6 +370,20 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
         np.testing.assert_equal(self.filex._irrig, expected)
 
     def test_irrigation_more_laminas_irnf_2(self):
+        self.filex.set_irrigation(reg=self.reg,
+                                  laminas=[10,
+                                           [5],
+                                           [10, 12, 11, 10, 14, 13]],
+                                  trat_irrig={1: [1, 2], 2: 3})
+
+        expected = {1: [1],
+                    2: [3],
+                    3: [2]}
+
+        np.testing.assert_equal(self.filex._trat_irrig, expected)
+
+
+    def test_irrigation_trat_irrig_more_laminas_irnf(self):
         self.filex.set_irrigation(reg=self.reg,
                                   laminas=[10,
                                            [5],
