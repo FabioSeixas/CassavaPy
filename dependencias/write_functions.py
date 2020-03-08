@@ -81,10 +81,8 @@ def write_irrigation(file, irrigation):
     #             file.write(f"{i + 10} {irr_event[0]} IR005    {space(irr_event[1])} \n")
     for i, irrig_sch in irrigation.items():
         file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n{space(i)}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
-        print(irrig_sch)
+
         for date_event, water in irrig_sch:
-            print(date_event)
-            print(water)
             file.write(f"{space(i)} {date_event} IR005    {space(water)} \n")
 
 

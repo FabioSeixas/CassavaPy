@@ -104,7 +104,10 @@ class Experimental(FileX):
             w_file.write_planting(file, self._planting_julian)
 
             # Irrigation
-            w_file.write_irrigation(file, self._irrig)
+            try:
+                w_file.write_irrigation(file, self._irrig)
+            except:
+                pass
 
             # Harvest
             w_file.write_harvest(file, self._harvest)
@@ -140,7 +143,10 @@ class Seasonal(FileX):
             w_file.write_planting(file, self._planting_julian)
 
             # Irrigation
-            w_file.write_irrigation(file, self._irrig)
+            try:
+                w_file.write_irrigation(file, self._irrig)
+            except:
+                pass
 
             # Harvest
             w_file.write_harvest(file, self._harvest)
