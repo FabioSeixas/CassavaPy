@@ -65,20 +65,27 @@ def write_planting(file, planting):
 def write_irrigation(file, irrigation):
     file.write("\n*IRRIGATION AND WATER MANAGEMENT\n")
 
-    if len(irrigation) <= 9:
-        for i, irrig_sch in enumerate(irrigation):
-            file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n {i + 1}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
-            for q, irr_event in enumerate(irrig_sch):
-                file.write(f" {i + 1} {irr_event[0]} IR005    {space(irr_event[1])} \n")
-    else:
-        for i, irrig_sch in enumerate(irrigation[:9]):
-            file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n {i + 1}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
-            for q, irr_event in enumerate(irrig_sch):
-                file.write(f" {i + 1} {irr_event[0]} IR005    {space(irr_event[1])} \n")
-        for i, irrig_sch in enumerate(irrigation[9:]):
-            file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n{i + 10}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
-            for q, irr_event in enumerate(irrig_sch):
-                file.write(f"{i + 10} {irr_event[0]} IR005    {space(irr_event[1])} \n")
+    # if len(irrigation) <= 9:
+    #     for i, irrig_sch in enumerate(irrigation):
+    #         file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n {i + 1}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
+    #         for q, irr_event in enumerate(irrig_sch):
+    #             file.write(f" {i + 1} {irr_event[0]} IR005    {space(irr_event[1])} \n")
+    # else:
+    #     for i, irrig_sch in enumerate(irrigation[:9]):
+    #         file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n {i + 1}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
+    #         for q, irr_event in enumerate(irrig_sch):
+    #             file.write(f" {i + 1} {irr_event[0]} IR005    {space(irr_event[1])} \n")
+    #     for i, irrig_sch in enumerate(irrigation[9:]):
+    #         file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n{i + 10}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
+    #         for q, irr_event in enumerate(irrig_sch):
+    #             file.write(f"{i + 10} {irr_event[0]} IR005    {space(irr_event[1])} \n")
+    for i, irrig_sch in irrigation.items():
+        file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n{space(i)}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
+        print(irrig_sch)
+        for date_event, water in irrig_sch:
+            print(date_event)
+            print(water)
+            file.write(f"{space(i)} {date_event} IR005    {space(water)} \n")
 
 
 def write_harvest(file, harvest):
