@@ -446,6 +446,75 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
         np.testing.assert_equal(self.filex._tratmatrix,
                                 expected)
 
+class Test_basic_FileX_irnf_no_phf(unittest.TestCase):
+
+    '''3 datas de plantio
+       3 datas de colheita
+       design: "irnf"
+
+       '''
+    def setUp(self):
+        self.filex = classes.FileX("cruz", "CRUZ9101", ["irnf"])
+
+        self.filex.set_planting(n_plant=3,
+                                    p_from='1992-12-30',
+                                    p_by=25)
+
+        self.filex.set_harvest(n_harvest=3,
+                                   h_from='1993-01-01',
+                                   h_by=60)
+
+        self.reg = [[0, 5, 10, 15, 20, 25, 30],
+                    [0, 10, 20, 30, 40],
+                    [10, 20, 30, 40, 50, 60]]
+
+    def test_irrigation_one_lamina_irnf_no_phf(self):
+        self.filex.set_irrigation(reg=self.reg,
+                                  laminas=[11, 22, 33],
+                                  trat_irrig={1: 3, 2: 1, 3: 2})
+
+        expected = {1: [["92365", "11"], ["93004", "11"], ["93009", "11"], ["93014", "11"], ["93019", "11"], ["93024", "11"], ["93029", "11"]],
+                    2: [["92365", "22"], ["93009", "22"], ["93019", "22"], ["93029", "22"], ["93039", "22"]],
+                    3: [["93009", "33"], ["93019", "33"], ["93029", "33"], ["93039", "33"], ["93049", "33"], ["93059", "33"]]}
+
+        np.testing.assert_equal(self.filex._irrig, expected)
+
+    def test_irrigation_trat_irrig_one_lamina_irnf_no_phf(self):
+        self.filex.set_irrigation(reg=self.reg,
+                                  laminas=[11, 22, 33],
+                                  trat_irrig={1: 3, 2: 1, 3: 2})
+
+        expected = {1: [3],
+                        2: [1],
+                        3: [2]}
+
+        np.testing.assert_equal(self.filex._trat_irrig, expected)
+
+    def test_irrigation_trat_irrig_complex_irnf_no_phf(self):
+        self.filex.set_irrigation(reg=self.reg,
+                                  laminas=[11, 22, 33],
+                                  trat_irrig={1: [9, 3, 5], 2: [1,4,8], 3: [2,6,7]})
+
+        expected = {1: [3], 2: [1], 3: [2], 4: [5], 5: [4], 6:[6], 7:[9], 8:[8], 9:[7]}
+
+        np.testing.assert_equal(self.filex._trat_irrig, expected)
+
+
+    def test_irrigation_complex_irnf_no_phf(self):
+        self.filex.set_irrigation(reg=self.reg,
+                                  laminas=[11, 22, 33],
+                                  trat_irrig={1: [3, 5], 2: [8], 3: [4]})
+
+        expected = {1: [["92365", "11"], ["93004", "11"], ["93009", "11"], ["93014", "11"], ["93019", "11"], ["93024", "11"], ["93029", "11"]],
+                    4: [["93049", "22"], ["93059", "22"], ["93069", "22"], ["93079", "22"], ["93089", "22"]],
+                    3: [['93034', '33'], ['93044', '33'], ['93054', '33'], ['93064', '33'], ['93074', '33'], ['93084', '33']],
+                    2: [['93024', '11'], ['93029', '11'], ['93034', '11'], ['93039', '11'], ['93044', '11'], ['93049', '11'], ['93054', '11']]}
+
+        np.testing.assert_equal(self.filex._irrig, expected)
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
