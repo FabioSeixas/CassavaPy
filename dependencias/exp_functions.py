@@ -22,6 +22,15 @@ def format_date(x):
 
 def set_irrig_levels_irf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, design, hdates):
 
+    # Controls
+    if not isinstance(trat_list, list):
+        raise TypeError("Com design 'irf' o argumento 'trat_irrig' deve ser uma lista")
+
+    for trat in trat_list:
+        if trat_list.count(trat) > 1:
+            raise ValueError(f" O tratamento {trat} aparece mais de uma vez em 'trat_irrig'. ")
+
+    # Execute
     if "phf" in design:
 
         return set_irrig_levels_irf_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas)
@@ -107,18 +116,18 @@ def set_irrig_levels_irnf(reg, trat_irrig, pdates, design, hdates, laminas):
     for trat in chain.from_iterable(trat_irrig.values()):
         irrigated_treatments.append(trat)
 
+    for trat in irrigated_treatments:
+        if irrigated_treatments.count(trat) > 1:
+            raise ValueError(f" O tratamento {trat} aparece mais de uma vez em 'trat_irrig'. ")
+
     new_trat_irrig = []
 
     if "phf" in design:
 
         irrig_levels, trat_irrig = set_irrig_levels_and_new_trat_irrig(pdates, irrigated_treatments, trat_irrig, reg, laminas)
     else:
-        for trat_n in irrigated_treatments:
-            pdate = math.ceil(trat_n / len(hdates))
-            n_reg = return_irrig(index_trat=trat_n, dicionatio=trat_irrig)
-            dates_list = dates_according_to_planting(reg[n_reg], pdates[pdate])
-            if dates_list not in new_trat_irrig:
-                new_trat_irrig.append(dates_list)
+
+        irrig_levels, trat_irrig = set_irrig_levels_and_new_trat_irrig_no_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas, hdates)
 
     return irrig_levels, trat_irrig
 
@@ -150,6 +159,53 @@ def set_irrig_levels_and_new_trat_irrig(pdates, irrigated_treatments, trat_irrig
 
             else:
                 irrig_levels[n_reg] = add_laminas(dates_list, laminas[n_reg - 1])
+
+    return irrig_levels, trat_irrig
+
+
+def set_irrig_levels_and_new_trat_irrig_no_phf(pdates, irrigated_treatments, trat_irrig, reg, laminas, hdates):
+
+    total_n_trat = len(pdates) * len(hdates)
+    irrig_levels = {}
+    new_trat_irrig = ddic(list)
+    date_irrig = ddic(list)
+    levels_iter = iter(range(len(total_n_trat) + 1)[1:])
+
+    # for k, v in trat_irrig.items():
+    #    n_pdates = [math.ceil(trat / len(hdates)) for trat in chain([v])]
+
+    for number_trat in range(total_n_trat + 1)[1:]:
+
+        if (number_trat) in irrigated_treatments:
+
+            # number_trat corresponding pdate
+            pdate_n = math.ceil(trat / len(hdates))
+
+            # number_trat corresponding irrigation schedule
+            n_reg = return_irrig(index_trat=number_trat, dicionario=trat_irrig)
+
+            if pdate_n not in date_irrig.keys():
+
+                # Update date_irrig
+                level = next(levels_iter)
+                date_irrig[pdate_n].append(level)
+
+                # Set irrig_levels
+                reg_index = n_reg - 1
+                dates_list = dates_according_to_planting(reg[reg_index], pdates[pdate_n - 1])
+                irrig_levels[level] = add_laminas(dates_list, laminas[reg_index])
+
+            if n_reg not in date_irrig.get(pdate_n):
+
+                level = next(levels_iter)
+                date_irrig[pdate_n].append(level)
+
+                # Set irrig_levels
+                reg_index = n_reg - 1
+                dates_list = dates_according_to_planting(reg[reg_index], pdates[pdate_n - 1])
+                irrig_levels[level] = add_laminas(dates_list, laminas[reg_index])
+
+            new_trat_irrig[level].append(number_trat)
 
     return irrig_levels, trat_irrig
 
@@ -216,7 +272,7 @@ def check_input_irnf(reg, laminas, trat_irrig, pdates, design, hdates):
                 raise ValueError(f"\n\n  Checagem dos Inputs encontrou um ERRO: \n  Comprimento do {i + 1}º elemento de 'reg' e 'laminas' não correspondem.\n")
 
     if not isinstance(trat_irrig, dict):
-        raise TypeError("\n\n Com design 'irnf', 'reg_dic' deve ser um dicionário \n")
+        raise TypeError("\n\n Com design 'irnf', 'trat_irrig' deve ser um dicionário \n")
 
     for k, v in trat_irrig.items():
 
