@@ -25,19 +25,26 @@ def format_date(x):
 def set_irrig_levels_irf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, design, hdates):
 
     # Controls
-    if not isinstance(trat_list, list):
+    if isinstance(trat_list, dict):
         raise TypeError("Com design 'irf' o argumento 'trat_irrig' deve ser uma lista")
 
-    for trat in trat_list:
-        if trat_list.count(trat) > 1:
-            raise ValueError(f" O tratamento {trat} aparece mais de uma vez em 'trat_irrig'. ")
+    if trat_list != "NULL":
+        for trat in trat_list:
+            if trat_list.count(trat) > 1:
+                raise ValueError(f" O tratamento {trat} aparece mais de uma vez em 'trat_irrig'. ")
 
     # Execute
     if "phf" in design:
 
+        if trat_list == "NULL":
+            trat_list = [x for x in range(len(pdates) + 1)[1:]]
+
         return set_irrig_levels_irf_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas)
 
     else:
+
+        if trat_list == "NULL":
+            trat_list = [x for x in range((len(pdates) * len(hdates)) + 1)[1:]]
 
         return set_irrig_levels_irf_no_phf(n_irrig, dap_from, dap_by, pdates, trat_list, laminas, hdates)
 
@@ -59,7 +66,7 @@ def set_irrig_levels_irf_phf(n_irrig, dap_from, dap_by, pdates, trat_list, lamin
                 irrig = add_laminas(dates, laminas)
                 level = next(levels_iter)
                 irrig_levels[level] = irrig
-                trat_irrig[level] = i + 1
+                trat_irrig[level] = [i + 1]
     else:
         for i, date in enumerate(pdates):
 
@@ -68,7 +75,7 @@ def set_irrig_levels_irf_phf(n_irrig, dap_from, dap_by, pdates, trat_list, lamin
             irrig = add_laminas(dates, laminas)
             level = next(levels_iter)
             irrig_levels[level] = irrig
-            trat_irrig[level] = i + 1
+            trat_irrig[level] = [i + 1]
 
     return irrig_levels, trat_irrig
 
@@ -305,36 +312,6 @@ def add_laminas_nf(reg, laminas):
     return result
 
 
-def trat_insert_irrig_irf(dicionario, previus_matrix):
-
-    new_matrix = []
-
-    if dicionario == "NULL":
-
-        for i, part in enumerate(previus_matrix):
-            part.append(1)
-            new_matrix.append(part)
-
-        return new_matrix
-
-    if isinstance(dicionario, dict):
-        raise TypeError("\n\n Com design 'irf', 'reg_dic' deve ser uma lista \n")
-
-    else:
-        try:
-            for i, part in enumerate(previus_matrix):
-                if i + 1 in dicionario:
-                    part.append(1)
-                    new_matrix.append(part)
-                else:
-                    part.append(0)
-                    new_matrix.append(part)
-        except:
-            raise ValueError("\n\n Erro na inserção da coluna irrigação na matrix de tratamentos a partir do dicionario \n")
-
-        return new_matrix
-
-
 def return_irrig(index_trat, dicionario):
     for k, v in dicionario.items():
         try:
@@ -346,7 +323,7 @@ def return_irrig(index_trat, dicionario):
     return 0
 
 
-def trat_insert_irrig_irnf(dicionario, previus_matrix):
+def trat_insert_irrig(dicionario, previus_matrix):
 
     new_matrix = []
 

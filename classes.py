@@ -69,12 +69,9 @@ class FileX:
         else:
             self._tratmatrix = exp.not_fix_PlantHarv(self._planting, self._harvest)
 
-        if "irf" in self._design:
+        if "irf" in self._design or "irnf" in self._design:
 
-            self._tratmatrix = exp.trat_insert_irrig_irf(self._trat_irrig, self._tratmatrix)
-
-        elif "irnf" in self._design:
-            self._tratmatrix = exp.trat_insert_irrig_irnf(self._trat_irrig, self._tratmatrix)
+            self._tratmatrix = exp.trat_insert_irrig(self._trat_irrig, self._tratmatrix)
 
         else:
             self._tratmatrix = exp.insert_all_rainfed(self._tratmatrix)
