@@ -1,9 +1,11 @@
-import numpy as np
-import math
-from itertools import chain
+from itertools import chain, groupby
 from datetime import date
 from datetime import timedelta as td
 from collections import defaultdict as ddic
+from operator import itemgetter
+
+import numpy as np
+import math
 
 
 def format_name(x):
@@ -169,45 +171,33 @@ def set_irrig_levels_and_new_trat_irrig_no_phf(pdates, irrigated_treatments, tra
     irrig_levels = {}
     new_trat_irrig = ddic(list)
     date_irrig = ddic(list)
-    levels_iter = iter(range(len(total_n_trat) + 1)[1:])
 
-    # for k, v in trat_irrig.items():
-    #    n_pdates = [math.ceil(trat / len(hdates)) for trat in chain([v])]
+    new_trat_irrig = ddic(dict)
+    lista = []
+    for k, v in trat_irrig.items():
 
-    for number_trat in range(total_n_trat + 1)[1:]:
+        if isinstance(v, int):
+            trat_irrig[k] = list([v])
 
-        if (number_trat) in irrigated_treatments:
+        for n in chain(trat_irrig[k]):
+            lista.append({"reg": k, "trat": n, "pdate": math.ceil(n / len(hdates))})
 
-            # number_trat corresponding pdate
-            pdate_n = math.ceil(trat / len(hdates))
+    sorted_lista = sorted(lista, key=itemgetter('pdate'))
 
-            # number_trat corresponding irrigation schedule
-            n_reg = return_irrig(index_trat=number_trat, dicionario=trat_irrig)
+    levels_iter = iter(range(total_n_trat + 1)[1:])
+    for key, group in groupby(sorted_lista, key=lambda x: x["pdate"]):
+        for key, group in groupby(group, key=lambda x: x["reg"]):
 
-            if pdate_n not in date_irrig.keys():
+            dics = [x for x in list(group)]
 
-                # Update date_irrig
-                level = next(levels_iter)
-                date_irrig[pdate_n].append(level)
+            reg_index, pdate_index = [dics[0][x] - 1 for x in ["reg", "pdate"]]
+            dates_list = dates_according_to_planting(reg[reg_index], pdates[pdate_index])
 
-                # Set irrig_levels
-                reg_index = n_reg - 1
-                dates_list = dates_according_to_planting(reg[reg_index], pdates[pdate_n - 1])
-                irrig_levels[level] = add_laminas(dates_list, laminas[reg_index])
+            current_level = next(levels_iter)
+            irrig_levels[current_level] = add_laminas(dates_list, laminas[reg_index])
+            new_trat_irrig[current_level] = [x["trat"] for x in dics]
 
-            if n_reg not in date_irrig.get(pdate_n):
-
-                level = next(levels_iter)
-                date_irrig[pdate_n].append(level)
-
-                # Set irrig_levels
-                reg_index = n_reg - 1
-                dates_list = dates_according_to_planting(reg[reg_index], pdates[pdate_n - 1])
-                irrig_levels[level] = add_laminas(dates_list, laminas[reg_index])
-
-            new_trat_irrig[level].append(number_trat)
-
-    return irrig_levels, trat_irrig
+    return irrig_levels, new_trat_irrig
 
 
 def fix_PlantHarv(planting, harvest):
