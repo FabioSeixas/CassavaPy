@@ -148,8 +148,8 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
                                   laminas=[10, 20, 40, 50, 10],
                                   trat_irrig=[1, 3])
 
-        expected = {1: 1,
-                    2: 3}
+        expected = {1: [1],
+                    2: [3]}
 
         np.testing.assert_equal(self.filex._trat_irrig, expected)
 
