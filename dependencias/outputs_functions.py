@@ -9,46 +9,8 @@ import os
 
 from . import output_functions_dependencies as dep
 
-def get_outputs(dir, mode="exp", out_files = None, trats = None):
 
-    dir = Path(dir) / 'Outputs'
-
-    # Diretório de Ouputs já existe
-    if dir.exists():
-        with os.scandir(dir) as entries:
-            if any(entries):
-                print(f"\n Diretório '{dir}' não vazio. \n Deseja encerrar a função (N) ou deixar que a execução delete os arquivos em {dir} automaticamente (Y) ?")
-                x = input()
-                if x == "N" or x == "n":
-                    print("\n Execução interrompida.")
-                    sys.exit()
-                elif x == "Y" or x == "y":
-                    print(f"\n Arquivos em '{dir}' deletados. \n Executando função.")
-                    shutil.rmtree(dir)
-                else:
-                    print("\n Valor inválido. Escolha 'N' ou 'Y'.")
-                    sys.exit()
-
-            else:
-                print(f' \n Diretório {dir} vazio e disponível para uso. ')
-                shutil.rmtree(dir)
-
-    # Diretório de Ouputs não existe
-    else:
-        print(f'\n Diretório "{dir}" criado.')
-
-    try:
-        os.mkdir(dir)
-    except:
-        raise ValueError(f"\n Não foi possível criar diretório '{dir}'. ")
-
-    print(f' \n Rodando extração de Outputs \n')
-    extract_outputs(dir=dir, mode=mode)
-
-    print(f' \n Processo Finalizado. \n Ouputs em "{dir}".')
-
-
-def extract_outputs(dir, mode):
+def get_outputs(dir, mode = "exp"):
 
     if mode == "exp":
 
@@ -69,7 +31,6 @@ def extract_outputs(dir, mode):
                                    on = ["Date", "Trat_n"])
 
         all_outputs.sort_values(by = ["Trat_n", "Date"], inplace = True)
-        all_outputs.to_csv("testetodas.csv")
 
     elif mode == "seas":
 
@@ -146,26 +107,3 @@ def ET(index, dir):
 
     return dep.from_file_to_dataframe(index, dir, heading, colspecs, "ET")
 
-def plot_R(trat, lista):
-
-    print(f'\n Criando gráficos das {trat} simulações\n')
-
-    r = "C:\\Program Files\\R\\R-3.6.1\\bin\\Rscript.exe"
-
-    # Definir comando cmd
-    cmd = [r, "dependencias/r_plot.R"] + [str(trat), ] + lista
-
-    subprocess.run(cmd, shell=True)
-
-
-def run_R(index, file, trat, mode):
-
-    print(f'\n Processando "{file}".\n')
-    # Executável do R:
-    r = "C:\\Program Files\\R\\R-3.6.1\\bin\\Rscript.exe"
-
-    # Definir comando cmd
-    cmd = [r, "main.R"] + [str(trat), ] + index + [file, ] + [mode]
-
-    # Rodar Script R
-    subprocess.run(cmd, shell=True)
