@@ -7,7 +7,7 @@ import sys
 import os
 
 
-def get_outputs(dir, mode="exp"):
+def get_outputs(dir, mode="exp", out_files = None, trats = None):
 
     dir = Path(dir) / 'Outputs'
 
@@ -29,6 +29,7 @@ def get_outputs(dir, mode="exp"):
 
             else:
                 print(f' \n Diretório {dir} vazio e disponível para uso. ')
+                shutil.rmtree(dir)
 
     # Diretório de Ouputs não existe
     else:
@@ -59,26 +60,37 @@ def extract_outputs(dir, mode):
     dic = {"exp": "Cassava",
            "seas": "Seasonal"}
 
-    # Rodar script R
-    files = ["PlantGro.OUT", "Weather.OUT", "PlantGrf.OUT", "PlantGr2.OUT", "SoilWat.OUT", "ET.OUT"]  # Deixar PlantGro no início da lista porque esse output contém uma informação (DAP x DAS) que nem todas possuem.
+    if mode == "exp":
 
-    for file in files:
+        files = ["PlantGro.OUT",] #"Weather.OUT", "PlantGrf.OUT", "PlantGr2.OUT", "SoilWat.OUT", "ET.OUT"]  # Deixar PlantGro no início da lista porque esse output contém uma informação (DAP x DAS) que nem todas possuem.
 
-        # Número de tratamentos por arquivo e índices das tabelas
-        trat_total, index = n_trat_out_file(file, mode=dic[mode])
+        for file in files:
 
-        # Criar tabelas de resultados no R
-        run_R(index, file, trat_total, mode=dic[mode])
+            # Número de tratamentos por arquivo e índices das tabelas
+            trat_total, index = n_trat_out_file(file, mode=dic[mode])
+
+            # Criar tabelas de resultados no R
+            file_out = extract_by_file(index, file, trat_total)
+
+    elif mode == "seas":
+
+        diretorio = 'C:/DSSAT47/Seasonal'
+
+        file_out = extract_seasonal(diretorio)
+
+    else:
+        raise ValueError(f' Valor {mode} não reconhecido para o argumento "mode".')
+
 
     # Gerar Gráficos no R
-    lista = []
+    #lista = []
 
-    with os.scandir(dir) as entries:
-        for entry in entries:
-            if entry.name not in ["auxiliar.csv", "yieldFinal.csv"]:
-                lista.append(entry.name)
+    #with os.scandir(dir) as entries:
+    #    for entry in entries:
+    #        if entry.name not in ["auxiliar.csv", "yieldFinal.csv"]:
+    #            lista.append(entry.name)
 
-    plot_R(trat_total, lista)
+    #plot_R(trat_total, lista)
 
 
 def run_R(index, file, trat, mode):
@@ -92,6 +104,24 @@ def run_R(index, file, trat, mode):
 
     # Rodar Script R
     subprocess.run(cmd, shell=True)
+
+def extract_by_file(index, file, trat):
+
+    print(f'\n Processando "{file}".\n')
+
+    dir = "C:/DSSAT47/Cassava"
+
+    return {"PlantGro.OUT": lambda: PlantGro(index, trat, dir),
+            "Weather.OUT": lambda: Weather(index, trat, dir),
+            "PlantGrf.OUT": lambda: PlantGrf(index, trat, dir),
+            "PlantGr2.OUT": lambda: PlantGr2(index, trat, dir),
+            "SoilWat.OUT": lambda: SoilWat(index, trat, dir),
+            "ET.OUT": lambda: ET(index, trat, dir),
+            }.get(file)()
+
+
+def PlantGro(index, trat, dir):
+    print("PlantGro acionado!")
 
 
 def plot_R(trat, lista):
