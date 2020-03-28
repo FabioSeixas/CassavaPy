@@ -10,6 +10,20 @@ from dependencias import write_functions as w_file
 class FileX:
 
     def __init__(self, filename, exp_name, design="NULL"):
+        """
+        Init a Filex instance.
+
+        Args:
+            filename: the filename before the extension "".CSX"". Usually DSSAT uses four letters followed by four numbers.
+
+            exp_name: Experiment name.
+
+            design: Control argument for experiment design purpose. For planting-harvest control, "phf" (planting-harvest fixed) can be passed. For irrigation control, "irf" or "irnf" can be passed (not both). Default is "NULL", meaning rainfed and not fixed planting-harvest experiment. For the meaning of each of these, see documentation.
+
+        Returns:
+            A FileX instance.
+        """
+
         self._filename = filename
         self._exp_name = exp_name
         self._design = design
@@ -18,6 +32,14 @@ class FileX:
             raise AttributeError("\n\n Não é possível definir 'design' como 'irf' e 'irnf' ao mesmo tempo \n")
 
     def set_planting(self, n_plant, p_from, p_by):
+        """
+        Not optional method to define planting dates. It uses date sequence logic.
+
+        Args:
+            n_plant: number of planting dates (int)
+
+        """
+
         self.p_from = date.fromisoformat(p_from)
 
         dates = []
@@ -152,6 +174,6 @@ class Seasonal(FileX):
             w_file.write_harvest(file, self._harvest)
 
             # Controls
-            w_file.write_controls(file, self._sim_start, reps=30, mode="seas")
+            w_file.write_controls(file, self._sim_start, reps=32, mode="seas")
 
         print(f'\n Arquivo "{self._filename}.SNX" disponível em C:/DSSAT47/Seasonal')

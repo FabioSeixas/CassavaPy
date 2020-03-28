@@ -10,7 +10,7 @@ import os
 from . import output_functions_dependencies as dep
 
 
-def get_outputs(dir, mode = "exp"):
+def get_outputs(mode = "exp"):
 
     if mode == "exp":
 
@@ -30,13 +30,13 @@ def get_outputs(dir, mode = "exp"):
             all_outputs = pd.merge(all_outputs, file_out, how = "outer",
                                    on = ["Date", "Trat_n"])
 
-        all_outputs.sort_values(by = ["Trat_n", "Date"], inplace = True)
+        return all_outputs.sort_values(by = ["Trat_n", "Date"])
 
     elif mode == "seas":
 
         diretorio = 'C:/DSSAT47/Seasonal'
 
-        file_out = extract_seasonal(diretorio)
+        return extract_seasonal(diretorio)
 
     else:
         raise ValueError(f' Valor {mode} não reconhecido para o argumento "mode".')
@@ -68,9 +68,9 @@ def PlantGro(index, dir):
 
 def Weather(index, dir):
 
-    heading = ["Year", "DOY", "PRED", "DAYLD", "SRAD", "CLDD", "TMXD", "TMND", "TAVD", "TDWD", "WDSD"]
+    heading = ["Year", "DOY", "DAS", "PRED", "DAYLD", "SRAD", "CLDD", "TMXD", "TMND", "TAVD", "TDWD", "WDSD"]
 
-    colspecs = [(1,5), (6, 9), (17, 22), (24, 29), (39, 43), (53, 57), (60, 64), (67, 71), (74, 78), (88, 92), (109, 113)]
+    colspecs = [(1,5), (6, 9), (11, 15), (17, 22), (24, 29), (39, 43), (53, 57), (60, 64), (67, 71), (74, 78), (88, 92), (109, 113)]
 
     return dep.from_file_to_dataframe(index, dir, heading, colspecs, "Weather")
 
@@ -106,4 +106,11 @@ def ET(index, dir):
     colspecs = [(1,5), (6, 9), (47, 52), (95, 100), (103, 108)]
 
     return dep.from_file_to_dataframe(index, dir, heading, colspecs, "ET")
+
+def extract_seasonal(dir):
+
+    data = pd.read_fwf(f'{dir}/Summary.OUT',
+                           skiprows = 3)
+
+    return dep.set_dates_seasonal(data)
 

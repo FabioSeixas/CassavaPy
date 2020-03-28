@@ -17,11 +17,13 @@ mode = args[n_trat + 3]
 for(i in 1:(length(index))){
 
   # Read the Output file
+
+  number_rows = nrow_fun(index, i, file)
+
   x = read.table(paste0("C:/DSSAT47/", mode, "/", file),
                  skip = index[i] - 1,
                  sep = "",
-                 nrows = nrow_fun(index, i,
-                                  file),
+                 nrows = number_rows,
                  header = T,
                  na.strings = "",
                  fill = T,
@@ -36,6 +38,21 @@ for(i in 1:(length(index))){
 
 
   if((stringr::str_remove(file,".OUT")) == "PlantGro"){
+
+    # Armengue para arrumar a coluna de Yield:
+    if(number_rows >= 0){
+      x = dplyr::mutate(x, HWAD = readr::read_fwf(paste0("C:/DSSAT47/", mode, "/", file),
+                                                skip = index[i],
+                                                n_max = nrow_fun(index, i, file),
+                                                col_positions = readr::fwf_cols("HWAD" = c(112, 117)))[[1]])
+    }
+    else{
+      x = dplyr::mutate(x, HWAD = readr::read_fwf(paste0("C:/DSSAT47/", mode, "/", file),
+                                                skip = index[i],
+                                                n_max = nrow(x),
+                                                col_positions = readr::fwf_cols("HWAD" = c(112, 117)))[[1]])
+    }
+
 
     # Dado que esse é o primeiro arquivo .OUT a ser processado por esse
     # script (defini isso em ''main.py''), o presente loop vai ser
