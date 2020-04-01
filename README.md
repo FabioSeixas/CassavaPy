@@ -6,7 +6,7 @@ A simple module to write, run and get outputs from DSSAT-Manihot model.
 
 ### Why CassavaPy?
 
-Apart from get hands dirty with OOP, the aim of this module was to make my life easier during my master degree. 
+Apart from get hands dirty with OOP, the aim of this module is to make my life easier during my master degree. 
 I did not found nothing that answer my needs, so I decided to make it myself.
 
 Since [my work](https://github.com/FabioSeixas/MasterResearch) is with irrigation and planting dates, the focus of CassavaPy is there.
@@ -28,7 +28,7 @@ Since [my work](https://github.com/FabioSeixas/MasterResearch) is with irrigatio
 
 * For Seasonal
 * For Experimental
-* More than one .EXP or .SNX for Batch File 
+* More than one .EXP or .SNX file by Batch 
 
 3. **Run Batch Files**
 
@@ -38,6 +38,7 @@ Since [my work](https://github.com/FabioSeixas/MasterResearch) is with irrigatio
 
 ### How CassavaPy should be improved in the future?
 
+##### Documentation, please? I'm planning to do it soon... 
 ##### Make possible to change **Initial Conditions**
 ##### Make possible to put more than one **Field**, **Genotype** and **Simulation Controls** by file.
 ##### Improve the "Get Ouputs" part
