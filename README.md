@@ -1,6 +1,6 @@
 # CassavaPy
 
-A simple module to write, run and get outputs from DSSAT-Manihot model.
+A simple module to write files, run simulations and get outputs from DSSAT-Manihot model.
 
 ---
 
@@ -20,7 +20,7 @@ Since [my work](https://github.com/FabioSeixas/MasterResearch) is with irrigatio
 * Planting Dates
 * Harvest Dates
 * Irrigation
-* Field (Soild and Weather Station) - **One by File**
+* Field (Soil and Weather Station) - **One by File**
 * Simulation Start Date (.EXP files) - **One by File** - a parameter from Simulation Controls
 * Genotype - **One by File**
 
@@ -38,10 +38,13 @@ Since [my work](https://github.com/FabioSeixas/MasterResearch) is with irrigatio
 
 ### How CassavaPy should be improved in the future?
 
-##### Documentation, please? I'm planning to do it soon... 
-##### Make possible to change **Initial Conditions**
-##### Make possible to put more than one **Field**, **Genotype** and **Simulation Controls** by file.
-##### Improve the "Get Ouputs" part
+**Documentation, please? I'm planning to do it soon...** 
+
+**Allows to change Initial Conditions.**
+
+**Allows to put more than one *Field*, *Genotype* and *Simulation Controls* by file.**
+
+**Improve the "Get Ouputs" part.**
 
 ---
 
