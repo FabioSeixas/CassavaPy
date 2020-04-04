@@ -3,8 +3,8 @@ from datetime import timedelta as td
 import numpy as np
 import re
 
-from dependencias import exp_functions as exp
-from dependencias import write_functions as w_file
+from utils import exp_functions as exp
+from utils import write_functions as w_file
 
 
 class FileX:
@@ -18,7 +18,12 @@ class FileX:
 
             exp_name: Experiment name.
 
-            design: Control argument for experiment design purpose. For planting-harvest control, "phf" (planting-harvest fixed) can be passed. For irrigation control, "irf" or "irnf" can be passed (not both). Default is "NULL", meaning rainfed and not fixed planting-harvest experiment. For the meaning of each of these, see documentation.
+            design: Control argument for experiment design purpose. For
+            planting-harvest control, "phf" (planting-harvest fixed) can be
+            passed. For irrigation control, "irf" or "irnf" can be passed (not
+            both). Default is "NULL", meaning rainfed and not fixed
+            planting-harvest experiment. For the meaning of each of these, see
+            documentation.
 
         Returns:
             A FileX instance.
@@ -33,11 +38,18 @@ class FileX:
 
     def set_planting(self, n_plant, p_from, p_by):
         """
-        Not optional method to define planting dates. It uses date sequence logic.
+        Required method. Used to define planting dates. It uses date
+        sequence logic.
 
         Args:
-            n_plant: number of planting dates (int)
+            n_plant: number of planting dates (integer)
+            p_from: The start date of the sequence. Must be a string
+            ("01-05-2020").
+            p_by: Interval between one date and the next of the sequence
+            (integer).
 
+        Return:
+            A
         """
 
         self.p_from = date.fromisoformat(p_from)
@@ -47,7 +59,15 @@ class FileX:
             dates.append(self.p_from + td(days=p_by * i))
 
         self._planting = dates
-        self._planting_julian = [date.strftime("%y%j") for date in dates]
+
+        # Little modification for 'december 31' (subtract one day).
+        # Julian convertion sometimes fails and simulation crashes.
+        self._planting = [(my_date - td(days=1))
+                          if (my_date.month == 12 and my_date.day == 31)
+                          else my_date
+                          for my_date in self._planting]
+
+        self._planting_julian = [date.strftime("%y%j") for date in self._planting]
 
     def set_harvest(self, n_harvest, h_from, h_by):
         h_from = date.fromisoformat(h_from)

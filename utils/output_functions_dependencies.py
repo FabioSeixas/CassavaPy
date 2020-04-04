@@ -32,10 +32,14 @@ def from_file_to_dataframe(index, dir, heading, colspecs, out_file):
 
     for i, index_value in enumerate(index):
 
+        print("Começou 'read_fwf'")
+
         data = pd.read_fwf(f'{dir}/{out_file}.OUT',
                            skiprows = int(index_value),
                            names = heading,
                            colspecs = colspecs)
+
+        print("Terminou 'read_fwf'")
 
         data = custom_remove_na(data)
 
