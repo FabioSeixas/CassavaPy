@@ -20,7 +20,7 @@ def get_outputs(mode = "exp"):
 
         for file in files:
 
-            # Número de tratamentos por arquivo e índices das tabelas
+            # Índices das tabelas
             index = dep.n_trat_out_file(file)
 
             # Criar tabelas de resultados
