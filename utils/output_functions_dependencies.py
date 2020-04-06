@@ -3,6 +3,8 @@ import pandas as pd
 import datetime
 import re
 
+from tqdm import tqdm
+
 
 def custom_remove_na(data):
 
@@ -30,25 +32,27 @@ def from_file_to_dataframe(index, dir, heading, colspecs, out_file):
 
     all_treataments = pd.DataFrame()
 
-    for i, index_value in enumerate(index):
+    with tqdm(iterable = index) as pbar:
 
-        print(f'Progress: {int((i / len(index)) * 100)}%')
+        for i, index_value in enumerate(index):
 
-        data = pd.read_fwf(f'{dir}/{out_file}.OUT',
-                           skiprows = int(index_value),
-                           names = heading,
-                           colspecs = colspecs)
+            data = pd.read_fwf(f'{dir}/{out_file}.OUT',
+                               skiprows = int(index_value),
+                               names = heading,
+                               colspecs = colspecs)
 
-        data = custom_remove_na(data)
+            data = custom_remove_na(data)
 
-        data["Date"] = [make_date(x, y) for x, y in zip(data["Year"], data["DOY"])]
+            data["Date"] = [make_date(x, y) for x, y in zip(data["Year"], data["DOY"])]
 
-        data.drop(columns = ["Year", "DOY"], inplace = True)
+            data.drop(columns = ["Year", "DOY"], inplace = True)
 
-        data["Trat_n"] = i + 1
+            data["Trat_n"] = i + 1
 
-        all_treataments = pd.concat([all_treataments, data],
-                                    ignore_index = True)
+            all_treataments = pd.concat([all_treataments, data],
+                                        ignore_index = True)
+
+            pbar.update()
 
     return all_treataments
 
