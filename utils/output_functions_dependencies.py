@@ -47,7 +47,9 @@ def from_file_to_dataframe(index, dir, heading, colspecs, out_file):
 
             data.drop(columns = ["Year", "DOY"], inplace = True)
 
-            data["Trat_n"] = i + 1
+            data["Trat_n"] = i + 1      # Note that 'Trat_n' is an simulation index for the entire Batch file.
+                                        # That means if you run more than one Batch file, you will end with
+                                        # more than one index lists.
 
             all_treataments = pd.concat([all_treataments, data],
                                         ignore_index = True)
