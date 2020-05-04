@@ -15,7 +15,7 @@ Since [my work](https://github.com/FabioSeixas/MasterResearch) is with irrigatio
 
 ### What CassavaPy can do?
 
-1. **Create Experimental and Seasonal files changing:**
+1. **Create Experimental and Seasonal files and change the following:**
 
 * Planting Dates
 * Harvest Dates
@@ -38,7 +38,7 @@ Since [my work](https://github.com/FabioSeixas/MasterResearch) is with irrigatio
 
 ### How CassavaPy should be improved in the future?
 
-**1) Documentation, please? I'm planning to do it soon...**
+**1) Documentation, please? Yes, I'm planning to do it soon...**
 
 **2) Allows to change Initial Conditions.**
 

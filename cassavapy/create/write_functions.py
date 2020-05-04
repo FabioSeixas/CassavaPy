@@ -65,20 +65,6 @@ def write_planting(file, planting):
 def write_irrigation(file, irrigation):
     file.write("\n*IRRIGATION AND WATER MANAGEMENT\n")
 
-    # if len(irrigation) <= 9:
-    #     for i, irrig_sch in enumerate(irrigation):
-    #         file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n {i + 1}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
-    #         for q, irr_event in enumerate(irrig_sch):
-    #             file.write(f" {i + 1} {irr_event[0]} IR005    {space(irr_event[1])} \n")
-    # else:
-    #     for i, irrig_sch in enumerate(irrigation[:9]):
-    #         file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n {i + 1}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
-    #         for q, irr_event in enumerate(irrig_sch):
-    #             file.write(f" {i + 1} {irr_event[0]} IR005    {space(irr_event[1])} \n")
-    #     for i, irrig_sch in enumerate(irrigation[9:]):
-    #         file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n{i + 10}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
-    #         for q, irr_event in enumerate(irrig_sch):
-    #             file.write(f"{i + 10} {irr_event[0]} IR005    {space(irr_event[1])} \n")
     for i, irrig_sch in irrigation.items():
         file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n{space(i)}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
 
@@ -100,12 +86,12 @@ def write_harvest(file, harvest):
             file.write(f"{i + 10} {hdate} GS000   -99   -99   -99   -99 {i + 10}\n")
 
 
-def write_controls(file, sim_start, reps=1, mode="exp"):
+def write_controls(file, sim_start, years=1, mode="exp"):
 
     dic = {"exp": ["S", sim_start],
-           "seas": ["P", "-99"]}
+           "seas": ["S", sim_start]}     # ["P", "-99"] -> to use planting date as the 'sim_start'
 
     if any(item in [mode] for item in dic):
-        file.write(f"\n*SIMULATION CONTROLS\n@N GENERAL     NYERS NREPS START SDATE RSEED SNAME.................... SMODEL\n 1 GE             {space(reps)}     1     {dic[mode][0]} {controls_space(dic[mode][1])}  2150 DEFAULT SIMULATION CONTR  CSYCA\n@N OPTIONS     WATER NITRO SYMBI PHOSP POTAS DISES  CHEM  TILL   CO2\n 1 OP              Y     N     N     N     N     N     N     N     M\n@N METHODS     WTHER INCON LIGHT EVAPO INFIL PHOTO HYDRO NSWIT MESOM MESEV MESOL\n 1 ME              M     M     E     R     S     L     R     1     G     S     2\n@N MANAGEMENT  PLANT IRRIG FERTI RESID HARVS\n 1 MA              R     R     N     N     R\n@N OUTPUTS     FNAME OVVEW SUMRY FROPT GROUT CAOUT WAOUT NIOUT MIOUT DIOUT VBOSE CHOUT OPOUT FMOPT\n 1 OU              N     Y     Y     1     Y     Y     Y     Y     Y     N     Y     N     Y     A\n\n@  AUTOMATIC MANAGEMENT\n@N PLANTING    PFRST PLAST PH2OL PH2OU PH2OD PSTMX PSTMN\n 1 PL            001   001    40   100    30    40    10\n@N IRRIGATION  IMDEP ITHRL ITHRU IROFF IMETH IRAMT IREFF\n 1 IR             30    80   100 GS000 IR001    10     1\n@N NITROGEN    NMDEP NMTHR NAMNT NCODE NAOFF\n 1 NI             30    50    25 FE001 GS000\n@N RESIDUES    RIPCN RTIME RIDEP\n 1 RE            100     1    20\n@N HARVEST     HFRST HLAST HPCNP HPCNR\n 1 HA              0   001   100     0")
+        file.write(f"\n*SIMULATION CONTROLS\n@N GENERAL     NYERS NREPS START SDATE RSEED SNAME.................... SMODEL\n 1 GE             {space(years)}     1     {dic[mode][0]} {controls_space(dic[mode][1])}  2150 DEFAULT SIMULATION CONTR  CSYCA\n@N OPTIONS     WATER NITRO SYMBI PHOSP POTAS DISES  CHEM  TILL   CO2\n 1 OP              Y     N     N     N     N     N     N     N     M\n@N METHODS     WTHER INCON LIGHT EVAPO INFIL PHOTO HYDRO NSWIT MESOM MESEV MESOL\n 1 ME              M     M     E     R     S     L     R     1     G     S     2\n@N MANAGEMENT  PLANT IRRIG FERTI RESID HARVS\n 1 MA              R     R     N     N     R\n@N OUTPUTS     FNAME OVVEW SUMRY FROPT GROUT CAOUT WAOUT NIOUT MIOUT DIOUT VBOSE CHOUT OPOUT FMOPT\n 1 OU              N     Y     Y     1     Y     Y     Y     Y     Y     N     Y     N     Y     A\n\n@  AUTOMATIC MANAGEMENT\n@N PLANTING    PFRST PLAST PH2OL PH2OU PH2OD PSTMX PSTMN\n 1 PL            001   001    40   100    30    40    10\n@N IRRIGATION  IMDEP ITHRL ITHRU IROFF IMETH IRAMT IREFF\n 1 IR             30    80   100 GS000 IR001    10     1\n@N NITROGEN    NMDEP NMTHR NAMNT NCODE NAOFF\n 1 NI             30    50    25 FE001 GS000\n@N RESIDUES    RIPCN RTIME RIDEP\n 1 RE            100     1    20\n@N HARVEST     HFRST HLAST HPCNP HPCNR\n 1 HA              0   001   100     0")
     else:
         raise ValueError(f" Valor '{mode}' não reconhecido para o argumento 'mode'. ")
