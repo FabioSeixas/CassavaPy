@@ -132,8 +132,10 @@ class FileX:
 
         Parameters
         ----------
-            genotype: str
+            genotype: list of two str
                 genotype DSSAT code (found on .CUL files)
+                The first element is the ecotype code
+                The second element is the genotype code
         """
 
         self._genotype = genotype
