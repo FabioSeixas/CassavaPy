@@ -45,7 +45,7 @@ class Experimental(FileX):
             # Controls
             w_file.write_controls(file, self._sim_start)
 
-        print(f'\n Arquivo "{self._filename}.CSX" disponível em C:/DSSAT47/Cassava')
+        print(f'\n "{self._filename}.CSX" file available at C:/DSSAT47/Cassava')
 
 
 class Seasonal(FileX):
@@ -90,4 +90,4 @@ class Seasonal(FileX):
             # Controls
             w_file.write_controls(file, self._sim_start, years=31, mode="seas")
 
-        print(f'\n Arquivo "{self._filename}.SNX" disponível em C:/DSSAT47/Seasonal')
+        print(f'\n "{self._filename}.SNX" file available at C:/DSSAT47/Seasonal')

@@ -1,5 +1,5 @@
 
-CassavaPy's documentation
+CassavaPy's
 =====================================
 
 A simple module to write files, run simulations and get outputs from DSSAT-Manihot model.
@@ -37,9 +37,18 @@ Set the necessary experimental information::
                            h_by = 30)
 
     # Genotype, Field and Simulation Start Date
-    x.set_genotype(genotype = ["UC0006", "MCol-1684"])
-    x.set_field(code_id = "BACR", soil_id = "IB00000002")
-    x.set_simulation_start('2010-05-01')
+    myInstance.set_genotype(genotype = ["UC0006", "MCol-1684"])
+    myInstance.set_field(code_id = "BACR", soil_id = "IB00000002")
+    myInstance.set_simulation_start('2010-05-01')
+
+When all is defined, set the treatment matrix::
+
+    myInstance.set_tratmatrix(tnames_prefix = "BA")
+
+And write the .EXP file::
+
+    myInstance.write_file()
+    >> myFile.CSX file available at C:/DSSAT47/Cassava
 
 Guide
 ^^^^^

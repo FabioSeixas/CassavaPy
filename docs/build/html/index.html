@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CassavaPy’s documentation &mdash; CassavaPy 0.0.1 documentation</title>
+  <title>CassavaPy’s &mdash; CassavaPy 0.0.1 documentation</title>
   
 
   
@@ -126,7 +126,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>CassavaPy’s documentation</li>
+      <li>CassavaPy’s</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -145,8 +145,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="cassavapy-s-documentation">
-<h1>CassavaPy’s documentation<a class="headerlink" href="#cassavapy-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="cassavapy-s">
+<h1>CassavaPy’s<a class="headerlink" href="#cassavapy-s" title="Permalink to this headline">¶</a></h1>
 <p>A simple module to write files, run simulations and get outputs from DSSAT-Manihot model.</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -178,9 +178,18 @@
                        <span class="n">h_by</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
 
 <span class="c1"># Genotype, Field and Simulation Start Date</span>
-<span class="n">x</span><span class="o">.</span><span class="n">set_genotype</span><span class="p">(</span><span class="n">genotype</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UC0006&quot;</span><span class="p">,</span> <span class="s2">&quot;MCol-1684&quot;</span><span class="p">])</span>
-<span class="n">x</span><span class="o">.</span><span class="n">set_field</span><span class="p">(</span><span class="n">code_id</span> <span class="o">=</span> <span class="s2">&quot;BACR&quot;</span><span class="p">,</span> <span class="n">soil_id</span> <span class="o">=</span> <span class="s2">&quot;IB00000002&quot;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">set_simulation_start</span><span class="p">(</span><span class="s1">&#39;2010-05-01&#39;</span><span class="p">)</span>
+<span class="n">myInstance</span><span class="o">.</span><span class="n">set_genotype</span><span class="p">(</span><span class="n">genotype</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UC0006&quot;</span><span class="p">,</span> <span class="s2">&quot;MCol-1684&quot;</span><span class="p">])</span>
+<span class="n">myInstance</span><span class="o">.</span><span class="n">set_field</span><span class="p">(</span><span class="n">code_id</span> <span class="o">=</span> <span class="s2">&quot;BACR&quot;</span><span class="p">,</span> <span class="n">soil_id</span> <span class="o">=</span> <span class="s2">&quot;IB00000002&quot;</span><span class="p">)</span>
+<span class="n">myInstance</span><span class="o">.</span><span class="n">set_simulation_start</span><span class="p">(</span><span class="s1">&#39;2010-05-01&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When all is defined, set the treatment matrix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span><span class="o">.</span><span class="n">set_tratmatrix</span><span class="p">(</span><span class="n">tnames_prefix</span> <span class="o">=</span> <span class="s2">&quot;BA&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And write the .EXP file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span><span class="o">.</span><span class="n">write_file</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span> <span class="n">myFile</span><span class="o">.</span><span class="n">CSX</span> <span class="n">file</span> <span class="n">available</span> <span class="n">at</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">DSSAT47</span><span class="o">/</span><span class="n">Cassava</span>
 </pre></div>
 </div>
 </div>
