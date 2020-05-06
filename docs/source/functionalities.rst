@@ -7,12 +7,12 @@ The following explanation assume knowledge about DSSAT.
 
 DSSAT allows the user to change any factor between environment, crop, genotype and management. Here, the focus is on:
 
-#. Cassava crop (and the MANIHOT model)
+#. Cassava crop (MANIHOT model)
 #. Planting dates
 #. Harvest dates
 #. Irrigation management
 
-That said, there are two ways for which a factor (gentoype, planting dates etc) can be changed:
+That said, there are two ways for which a factor (genotype, planting dates etc) can be changed:
 
 #. Inside the ``.EXP`` or ``.SNX`` files. The factor and its variable values are defined within the file. ``Planting Dates``, ``Harvest Dates`` and ``Irrigation management`` are in that category.
 
