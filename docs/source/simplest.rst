@@ -1,23 +1,7 @@
 
-*********
-CassavaPy
-*********
-
-A simple module to write files, run simulations and get outputs from DSSAT-Manihot model.
-
-
-^^^^^^^^^^^^
-Installation
-^^^^^^^^^^^^
-
-To install by pip::
-
-    pip install CassavaPy
-
-
-^^^^^^^^^^^^^^^^^^^^
+********************
 The simplest example
-^^^^^^^^^^^^^^^^^^^^
+********************
 
 Import modules::
 
@@ -60,35 +44,3 @@ And write the .EXP file::
     myInstance.write_file()
     >> myFile.CSX file available at C:/DSSAT47/Cassava
 
-
-^^^^^^^
-Contact
-^^^^^^^
-
-If you get in trouble, please feel free to contact me: linkedin_
-
-
-
-.. toctree::
-   :caption: Get Started
-   :maxdepth: 2
-   :hidden:
-
-   installing
-   simplest
-   contact
-
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Documentation
-
-    functionalities
-    design
-    irrigation
-    running
-    outputs
-
-
-
-.. _linkedin: https://www.linkedin.com/in/fabioseixas/

@@ -1,0 +1,13 @@
+
+What CassavaPy can do
+=====================
+
+The following explanation assume knowledge about DSSAT.
+
+DSSAT allows the user to change any factor between environment, crop, genotype and management. Here, the focus is on:
+
+Planting dates
+Harvest dates
+Irrigation management
+
+That said, we have two main

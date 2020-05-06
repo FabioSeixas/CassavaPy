@@ -1,5 +1,11 @@
 
+*******
 Contact
-=======
+*******
 
-If you get trouble please feel free to contact me: flscosta94@gmail.com
+
+If you get in trouble, please feel free to contact me: linkedin_
+
+.. _linkedin: https://www.linkedin.com/in/fabioseixas/
+
+

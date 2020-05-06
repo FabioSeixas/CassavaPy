@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Design &mdash; CassavaPy 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="irrigation.html" />
+    <link rel="prev" title="What CassavaPy can do" href="functionalities.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CassavaPy
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Get Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simplest.html">The simplest example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="functionalities.html">What CassavaPy can do</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#irrigation-designs">Irrigation Designs</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CassavaPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Design</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/design.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="design">
+<h1>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h1>
+<p>Each Experimental (or Seasonal) file must have a design. But what is it?</p>
+<p>Design was the solution we used to manage combinations of factors. For instance, I want to simulate  cassava production varying the cycle length. That means I have <strong>One Planting Date</strong> and <strong>n Harvest Dates</strong>. That gives us that:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Planting</p></th>
+<th class="head"><p>Harvest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Plan 1</p></td>
+<td><p>Harv 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Plan 1</p></td>
+<td><p>Harv 2</p></td>
+</tr>
+<tr class="row-even"><td><p>Plan 1</p></td>
+<td><p>Harv 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Plan 1</p></td>
+<td><p>Harv 4</p></td>
+</tr>
+</tbody>
+</table>
+<p>This is called <em>not fixed planting-harvest</em>. I will understand why soon. In <em>not fixed planting-harvest</em> setting, each planting date is combined with all harvest dates.</p>
+<p>Total number of treatments are equal to: <strong>n planting</strong> x <strong>n harvest</strong>.</p>
+<p>It is different from <em>fixed planting-harvest</em>. If I set three planting dates and three harvest dates, using the <em>fixed planting-harvest</em>, I will get:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Planting</p></th>
+<th class="head"><p>Harvest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Plan 1</p></td>
+<td><p>Harv 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Plan 2</p></td>
+<td><p>Harv 2</p></td>
+</tr>
+<tr class="row-even"><td><p>Plan 3</p></td>
+<td><p>Harv 3</p></td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, number of planting and harvest dates must match.</p>
+<p>Total number of treatments are equal to: <strong>n planting</strong>.</p>
+<p>You will have to choose what design you will use when you are creating your instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span> <span class="o">=</span> <span class="n">Experimental</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;myFile&quot;</span><span class="p">,</span>
+                          <span class="n">exp_name</span> <span class="o">=</span> <span class="s2">&quot;myExperiment&quot;</span><span class="p">,</span>
+                          <span class="n">design</span> <span class="o">=</span> <span class="s2">&quot;phf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the code above we choosed the <em>fixed planting-harvest</em> design. The <em>not fixed planting-harvest</em> is the default.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Until now, treatment number by file is limited to 99. If your simulation need more than that, you will have to “break” your treatments in more files. In the run moment, you can run all together.</p>
+</div>
+<div class="section" id="irrigation-designs">
+<h2>Irrigation Designs<a class="headerlink" href="#irrigation-designs" title="Permalink to this headline">¶</a></h2>
+<p>Designs are used for planting-harvest combinations, but also for irrigation. If you are using irrigation in your simulations, you will have to choose a design based on what you want.</p>
+<p>There is three options for irrigation designs:</p>
+<ol class="arabic simple">
+<li><p>All rainfed (default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">irf</span></code> - fixed irrigation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">irnf</span></code> - not fixed irrigation</p></li>
+</ol>
+<p><strong>Fixed irrigation</strong> means that you will set an “fixed” irrigation schedule and will choose for which treatments it will be applied. For instance:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 24%" />
+<col style="width: 21%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Treatment</p></th>
+<th class="head"><p>Planting</p></th>
+<th class="head"><p>Harvest</p></th>
+<th class="head"><p>Irrigation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Plan 1</p></td>
+<td><p>Harv 1</p></td>
+<td><p>Irrig</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Plan 2</p></td>
+<td><p>Harv 2</p></td>
+<td><p>Rainfed</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Plan 3</p></td>
+<td><p>Harv 3</p></td>
+<td><p>Irrig</p></td>
+</tr>
+</tbody>
+</table>
+<p>In the design above, treatments <strong>One</strong> and <strong>Three</strong> are receiving the same irrigation management. That means they are receiving the same amount of water in the same DAP’s (days after planting) defined by the user.</p>
+<p>By the other hand, in the <strong>Not fixed irrigation</strong> setting the user define as many irrigation schedules as he want and combine each with treatments. The following table shows the concept.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 24%" />
+<col style="width: 21%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Treatment</p></th>
+<th class="head"><p>Planting</p></th>
+<th class="head"><p>Harvest</p></th>
+<th class="head"><p>Irrigation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Plan 1</p></td>
+<td><p>Harv 1</p></td>
+<td><p>Irrig 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Plan 1</p></td>
+<td><p>Harv 2</p></td>
+<td><p>Rainfed</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Plan 2</p></td>
+<td><p>Harv 1</p></td>
+<td><p>Irrig 2</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Plan 2</p></td>
+<td><p>Harv 2</p></td>
+<td><p>Irrig 1</p></td>
+</tr>
+</tbody>
+</table>
+<p>In the design above we defined two irrigation schedules and apply the first to treatments <strong>One</strong> and <strong>Four</strong>, and the second to treatment <strong>Three</strong>. Treatments <strong>One</strong> and <strong>Four</strong> are receiving the same amount of water in the same DAP’s (days after planting) defined by the schedule 1 (<em>Irrig 1</em>). Treatment <strong>Three</strong>, however, are receiving a different irrigation management.</p>
+<p>You may be noted that in the last design (table) we used the <em>not fixed planting-harvest</em> setting with <strong>two Planting Dates</strong> and <strong>two Harvest Dates</strong>. We could use the <em>fixed planting-harvest</em> instead, with <strong>four Planting Dates</strong> and <strong>four Harvest Dates</strong>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 24%" />
+<col style="width: 21%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Treatment</p></th>
+<th class="head"><p>Planting</p></th>
+<th class="head"><p>Harvest</p></th>
+<th class="head"><p>Irrigation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Plan 1</p></td>
+<td><p>Harv 1</p></td>
+<td><p>Irrig 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Plan 2</p></td>
+<td><p>Harv 2</p></td>
+<td><p>Rainfed</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Plan 3</p></td>
+<td><p>Harv 3</p></td>
+<td><p>Irrig 2</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Plan 4</p></td>
+<td><p>Harv 4</p></td>
+<td><p>Irrig 1</p></td>
+</tr>
+</tbody>
+</table>
+<p>To reproduce the design above, write that when you are creating your instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span> <span class="o">=</span> <span class="n">Experimental</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;myFile&quot;</span><span class="p">,</span>
+                          <span class="n">exp_name</span> <span class="o">=</span> <span class="s2">&quot;myExperiment&quot;</span><span class="p">,</span>
+                          <span class="n">design</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;phf&quot;</span><span class="p">,</span> <span class="s2">&quot;irnf&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>If you are interested in the <em>fixed irrigation</em> with <em>fixed planting-harvest</em> design</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span> <span class="o">=</span> <span class="n">Experimental</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;myFile&quot;</span><span class="p">,</span>
+                          <span class="n">exp_name</span> <span class="o">=</span> <span class="s2">&quot;myExperiment&quot;</span><span class="p">,</span>
+                          <span class="n">design</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;phf&quot;</span><span class="p">,</span> <span class="s2">&quot;irf&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Or maybe <em>fixed irrigation</em> with <em>not fixed planting-harvest</em> design</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span> <span class="o">=</span> <span class="n">Experimental</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;myFile&quot;</span><span class="p">,</span>
+                          <span class="n">exp_name</span> <span class="o">=</span> <span class="s2">&quot;myExperiment&quot;</span><span class="p">,</span>
+
+                          <span class="c1"># not fixed planting-harvest is the default</span>
+                          <span class="n">design</span> <span class="o">=</span> <span class="s2">&quot;irf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="irrigation.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="functionalities.html" class="btn btn-neutral float-left" title="What CassavaPy can do" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Fabio Seixas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Contact &mdash; CassavaPy 0.0.1 documentation</title>
+  <title>What CassavaPy can do &mdash; CassavaPy 0.0.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="What CassavaPy can do" href="functionalities.html" />
-    <link rel="prev" title="The simplest example" href="simplest.html" /> 
+    <link rel="next" title="Design" href="design.html" />
+    <link rel="prev" title="Contact" href="contact.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -81,14 +81,15 @@
             
             
               <p class="caption"><span class="caption-text">Get Started</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simplest.html">The simplest example</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="functionalities.html">What CassavaPy can do</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What CassavaPy can do</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design</a></li>
 </ul>
 
             
@@ -134,13 +135,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Contact</li>
+      <li>What CassavaPy can do</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/contact.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/functionalities.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -153,9 +154,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="contact">
-<h1>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h1>
-<p>If you get in trouble, please feel free to contact me: <a class="reference external" href="https://www.linkedin.com/in/fabioseixas/">linkedin</a></p>
+  <div class="section" id="what-cassavapy-can-do">
+<h1>What CassavaPy can do<a class="headerlink" href="#what-cassavapy-can-do" title="Permalink to this headline">¶</a></h1>
+<p>The following explanation assume knowledge about DSSAT.</p>
+<p>DSSAT allows the user to change any factor between environment, crop, genotype and management. Here, the focus is on:</p>
+<ol class="arabic simple">
+<li><p>Cassava crop (and the MANIHOT model)</p></li>
+<li><p>Planting dates</p></li>
+<li><p>Harvest dates</p></li>
+<li><p>Irrigation management</p></li>
+</ol>
+<p>That said, there are two ways for which a factor (gentoype, planting dates etc) can be changed:</p>
+<ol class="arabic simple">
+<li><p>Inside the <code class="docutils literal notranslate"><span class="pre">.EXP</span></code> or <code class="docutils literal notranslate"><span class="pre">.SNX</span></code> files. The factor and its variable values are defined within the file. <code class="docutils literal notranslate"><span class="pre">Planting</span> <span class="pre">Dates</span></code>, <code class="docutils literal notranslate"><span class="pre">Harvest</span> <span class="pre">Dates</span></code> and <code class="docutils literal notranslate"><span class="pre">Irrigation</span> <span class="pre">management</span></code> are in that category.</p></li>
+<li><p>The variable factor is unique by file. You will have to make as many files as values you need to vary the factor. <code class="docutils literal notranslate"><span class="pre">Genotype</span></code>, <code class="docutils literal notranslate"><span class="pre">Field</span></code>, <code class="docutils literal notranslate"><span class="pre">Simulation</span> <span class="pre">Start</span> <span class="pre">Date</span></code>, <code class="docutils literal notranslate"><span class="pre">Simulation</span> <span class="pre">Controls</span></code> and <code class="docutils literal notranslate"><span class="pre">Initial</span> <span class="pre">Conditions</span></code> are in that category.</p></li>
+</ol>
+<p>Since setting the last factors is straightforward, here you will find how to set the first.</p>
+<p>Go to next section to read about <code class="docutils literal notranslate"><span class="pre">designs</span></code>.</p>
 </div>
 
 
@@ -166,10 +181,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="functionalities.html" class="btn btn-neutral float-right" title="What CassavaPy can do" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="design.html" class="btn btn-neutral float-right" title="Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="simplest.html" class="btn btn-neutral float-left" title="The simplest example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="contact.html" class="btn btn-neutral float-left" title="Contact" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
