@@ -10,6 +10,10 @@ def controls_space(x):
         return(f"  {x}")
     return(x)
 
+def handle_empty_space(x):
+    if int(x) > 99:
+        return ""
+    return " "
 
 def write_head(file, filename, exp_name, mode="CS"):
     exp_details = filename + mode + " " + exp_name
@@ -19,16 +23,8 @@ def write_head(file, filename, exp_name, mode="CS"):
 
 def write_treatments(file, tratmatrix):
 
-    if len(tratmatrix) <= 9:
-        for i, trat in enumerate(tratmatrix):
-            file.write(f" {i + 1} 1 1 0 {trat[0]}                      1  1  0  1  {trat[1]}  {trat[3]}  0  0  0  0  0  {trat[2]}  1\n")
-    else:
-        for i, trat in enumerate(tratmatrix[:9]):
-            file.write(f" {i + 1} 1 1 0 {trat[0]}                      1  1  0  1  {trat[1]}  {trat[3]}  0  0  0  0  0  {trat[2]}  1\n")
-
-        for i, trat in enumerate(tratmatrix[9:]):
-            file.write(f"{i + 10} 1 1 0 {trat[0]}                      1  1  0  1 {space(trat[1])} {space(trat[3])}  0  0  0  0  0 {space(trat[2])}  1\n")
-
+    for i, trat in enumerate(tratmatrix):
+        file.write(f"{space(i + 1)} 1 1 0 {trat[0]}                    {handle_empty_space(i + 1)} 1  1  0  1 {space(trat[1])} {space(trat[3])}  0  0  0  0  0 {space(trat[2])}  1\n")
 
 def write_cultivars(file, genotype):
     ''' Por enquanto só está implementado para 1 genótipo por arquivo X.
