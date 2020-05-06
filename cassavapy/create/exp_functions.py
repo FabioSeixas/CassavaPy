@@ -213,7 +213,7 @@ def fix_PlantHarv(planting, harvest):
 
     tratmatrix = [[i + 1, i + 1] for i, n in enumerate(planting)]
 
-    assert len(tratmatrix) < 100, "Quantidade de tratamentos ultrapassa o valor máximo (99)."
+    #assert len(tratmatrix) < 100, "Quantidade de tratamentos ultrapassa o valor máximo (99)."
 
     return tratmatrix
 
@@ -226,7 +226,7 @@ def not_fix_PlantHarv(planting, harvest):
             temp = [i + 1, n + 1]
             matrix.append(temp)
 
-    assert len(matrix) < 100, "Quantidade de tratamentos ultrapassa o valor máximo (99)."
+    #assert len(matrix) < 100, "Quantidade de tratamentos ultrapassa o valor máximo (99)."
 
     return matrix
 
