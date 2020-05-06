@@ -5,9 +5,12 @@ import re
 
 
 def space(x):
-    if int(x) < 10:
-        return(f" {x}")
-    return(x)
+    if int(x) > 99:
+        return f"{x}"
+
+    elif int(x) > 9:
+        return f" {x}"
+    return f"  {x}"
 
 
 def write_batch(files, mode="exp"):
@@ -71,7 +74,7 @@ def write_experimental(final_list):
                 file.write("C:\\DSSAT47\\CASSAVA\\")
                 file.write(file_name)
                 file.write(".CSX")
-                file.write("                                                                  ")
+                file.write("                                                                 ")
                 file.write(space(str(i + 1)))
                 file.write("      1      0      1      0\n")
 
@@ -89,7 +92,7 @@ def write_seasonal(final_list):
                 file.write("C:\\DSSAT47\\SEASONAL\\")
                 file.write(file_name)
                 file.write(".SNX")
-                file.write("                                                                 ")
+                file.write("                                                                ")
                 file.write(space(str(i + 1)))
                 file.write("      1      0      1      0\n")
 
