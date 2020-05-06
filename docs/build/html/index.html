@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CassavaPy &mdash; CassavaPy 0.0.1 documentation</title>
+  <title>&lt;no title&gt; &mdash; CassavaPy 0.0.1 documentation</title>
   
 
   
@@ -134,7 +134,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>CassavaPy</li>
+      <li>&lt;no title&gt;</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -153,64 +153,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="cassavapy">
-<h1>CassavaPy<a class="headerlink" href="#cassavapy" title="Permalink to this headline">¶</a></h1>
-<p>A simple module to write files, run simulations and get outputs from DSSAT-Manihot model.</p>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>To install by pip:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">CassavaPy</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="the-simplest-example">
-<h2>The simplest example<a class="headerlink" href="#the-simplest-example" title="Permalink to this headline">¶</a></h2>
-<p>Import modules:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cassavapy</span> <span class="kn">import</span> <span class="n">Experimental</span>
-</pre></div>
-</div>
-<p>Create the Experimental instance:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span> <span class="o">=</span> <span class="n">Experimental</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;myFile&quot;</span><span class="p">,</span>
-                          <span class="n">exp_name</span> <span class="o">=</span> <span class="s2">&quot;myExperiment&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Set the necessary experimental information:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Planting dates</span>
-<span class="n">myInstance</span><span class="o">.</span><span class="n">set_planting</span><span class="p">(</span><span class="n">n_plant</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-                        <span class="n">p_from</span> <span class="o">=</span> <span class="s2">&quot;2010-10-15&quot;</span><span class="p">,</span>
-                        <span class="n">p_by</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
-
-<span class="c1"># Harvest dates</span>
-<span class="n">myInstance</span><span class="o">.</span><span class="n">set_harvest</span><span class="p">(</span><span class="n">n_harvest</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-                       <span class="n">h_from</span> <span class="o">=</span> <span class="s2">&quot;2011-10-15&quot;</span><span class="p">,</span>
-                       <span class="n">h_by</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
-
-<span class="c1"># Genotype</span>
-<span class="n">myInstance</span><span class="o">.</span><span class="n">set_genotype</span><span class="p">(</span><span class="n">genotype</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UC0006&quot;</span><span class="p">,</span>
-                                    <span class="s2">&quot;MCol-1684&quot;</span><span class="p">])</span>
-
-<span class="c1"># Field</span>
-<span class="n">myInstance</span><span class="o">.</span><span class="n">set_field</span><span class="p">(</span><span class="n">code_id</span> <span class="o">=</span> <span class="s2">&quot;BACR&quot;</span><span class="p">,</span>
-                     <span class="n">soil_id</span> <span class="o">=</span> <span class="s2">&quot;IB00000002&quot;</span><span class="p">)</span>
-
-<span class="c1"># Simulation Start Date</span>
-<span class="n">myInstance</span><span class="o">.</span><span class="n">set_simulation_start</span><span class="p">(</span><span class="s1">&#39;2010-05-01&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>When all is defined, create the treatment matrix just by:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span><span class="o">.</span><span class="n">set_tratmatrix</span><span class="p">(</span><span class="n">tnames_prefix</span> <span class="o">=</span> <span class="s2">&quot;BA&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>And write the .EXP file:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myInstance</span><span class="o">.</span><span class="n">write_file</span><span class="p">()</span>
-<span class="o">&gt;&gt;</span> <span class="n">myFile</span><span class="o">.</span><span class="n">CSX</span> <span class="n">file</span> <span class="n">available</span> <span class="n">at</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">DSSAT47</span><span class="o">/</span><span class="n">Cassava</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="contact">
-<h2>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h2>
-<p>If you get in trouble, please feel free to contact me: <a class="reference external" href="https://www.linkedin.com/in/fabioseixas/">linkedin</a></p>
-<div class="toctree-wrapper compound">
+  <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Documentation</span></p>
@@ -221,8 +164,6 @@
 </ul>
 </li>
 </ul>
-</div>
-</div>
 </div>
 
 
