@@ -2,7 +2,9 @@ from datetime import date
 from datetime import timedelta as td
 import numpy as np
 
+from .soil import Soil
 from . import exp_functions as exp
+
 
 class FileX:
     """
@@ -98,25 +100,29 @@ class FileX:
 
         self._harvest = [date.strftime("%y%j") for date in dates]
 
-    def set_simulation_start(self, sim_start):
+    def set_controls(self, sim_start):
         """
-        Method to define simulation start date.
+        Method to define simulation start date and soil water available at the simulation beginning.
 
         Parameters
         ----------
             sim_start: str
                 Must be a 'dd-mm-yyyy' date ('01-05-2020').
+
         """
 
         sim_start = date.fromisoformat(sim_start)
         self._sim_start = sim_start.strftime("%y%j")
 
-    def set_field(self, code_id, soil_id):
+    def set_field(self, code_id, soil_id, water=1):
         """
         Method to define simulation field.
 
         Parameters
         ----------
+            water: int
+                Value between 0 and 1 (0% - 100%) meaning percentage of soil water
+
             code_id: str
                 DSSAT ID for the weather station (found on .WTH files)
 
@@ -124,7 +130,13 @@ class FileX:
                 DSSAT ID for the soil (found on .SOIL files)
         """
 
+        if water < 0 or water > 1:
+            raise ValueError(f"value {water} for 'water' parameter invalid")
+
         self._field = code_id, soil_id
+        self.soil_params = Soil(soil_id).params
+
+        self._water_available(water)
 
     def set_genotype(self, genotype):
         """
@@ -232,4 +244,9 @@ class FileX:
             self._tratmatrix = exp.insert_all_rainfed(self._tratmatrix)
 
         self._tratmatrix = exp.set_tratnames(self._tratmatrix, tnames_prefix)
+
+    def _water_available(self, water):
+
+        for i, w in enumerate(self.soil_params["SH2O"]):
+            self.soil_params["SH2O"][i] = round(w * water, 3) + self.soil_params["SLLL"][i]
 

@@ -28,7 +28,7 @@ class Experimental(FileX):
             w_file.write_field(file, self._field)
 
             # Initial Conditions
-            w_file.write_initial_conditions(file, self._sim_start)
+            w_file.write_initial_conditions(file, self._sim_start, self.soil_params)
 
             # Planting
             w_file.write_planting(file, self._planting_julian)
@@ -73,7 +73,7 @@ class Seasonal(FileX):
             w_file.write_field(file, self._field)
 
             # Initial Conditions
-            w_file.write_initial_conditions(file, self._sim_start)
+            w_file.write_initial_conditions(file, self._sim_start, self.soil_params)
 
             # Planting
             w_file.write_planting(file, self._planting_julian)

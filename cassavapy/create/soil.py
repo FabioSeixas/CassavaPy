@@ -7,7 +7,7 @@ class Soil(object):
     def __init__(self, soil_id):
         self.id = soil_id
         self.folder = "C:/DSSAT47/Soil/"
-        self.params = {"ICLB": [], "SH20": []}
+        self.params = {"ICBL": [], "SH2O": [], "SLLL": []}
 
         self._start()
 
@@ -57,8 +57,9 @@ class Soil(object):
                     upper = re.search("(SDUL)", l).end()
                     continue
             try:
-                self.params["ICLB"].append(int(l[depth - 2:depth]))
+                self.params["ICBL"].append(int(l[depth - 3:depth]))
+                self.params["SLLL"].append(float(l[lower - 4:lower]))
                 tot_water = float(l[upper - 4:upper]) - float(l[lower - 4:lower])
-                self.params["SH20"].append(round(tot_water, 3))
+                self.params["SH2O"].append(round(tot_water, 3))
             except:
                 pass

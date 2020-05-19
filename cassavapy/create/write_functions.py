@@ -10,10 +10,31 @@ def controls_space(x):
         return(f"  {x}")
     return(x)
 
+
 def handle_empty_space(x):
     if int(x) > 99:
         return ""
     return " "
+
+
+def spaces(x):
+    if int(x) > 99:
+        return f"{x}"
+
+    elif int(x) > 9:
+        return f" {x}"
+    return f"  {x}"
+
+
+def str_spaces(x):
+    x = str(x)[1:]
+
+    if len(x) == 4:
+        return x
+    if len(x) == 3:
+        return f' {x}'
+    raise ValueError("Checar espaçamento de 'water' nas condições iniciais")
+
 
 def write_head(file, filename, exp_name, mode="CS"):
     exp_details = filename + mode + " " + exp_name
@@ -25,6 +46,7 @@ def write_treatments(file, tratmatrix):
 
     for i, trat in enumerate(tratmatrix):
         file.write(f"{space(i + 1)} 1 1 0 {trat[0]}                    {handle_empty_space(i + 1)} 1  1  0  1 {space(trat[1])} {space(trat[3])}  0  0  0  0  0 {space(trat[2])}  1\n")
+
 
 def write_cultivars(file, genotype):
     ''' Por enquanto só está implementado para 1 genótipo por arquivo X.
@@ -38,11 +60,13 @@ def write_field(file, field):
     file.write(f"\n*FIELDS\n@L ID_FIELD WSTA....  FLSA  FLOB  FLDT  FLDD  FLDS  FLST SLTX  SLDP  ID_SOIL    FLNAME\n 1 00000001 {field[0]}       -99   -99   -99   -99   -99   -99 -99    -99  {field[1]} -99\n@L ...........XCRD ...........YCRD .....ELEV .............AREA .SLEN .FLWR .SLAS FLHST FHDUR\n 1             -99             -99       -99               -99   -99   -99   -99   -99   -99\n")
 
 
-def write_initial_conditions(file, sim_start):
+def write_initial_conditions(file, sim_start, soil):
 
     # Por enquanto está configurado apenas para 'Medium Silty Clay' - IB00000002
     file.write(f'\n*INITIAL CONDITIONS\n@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME\n 1    CS {sim_start}   -99   -99     1     1   -99   -99   -99   -99   -99   -99 -99\n@C  ICBL  SH2O  SNH4  SNO3\n')
-    file.write(f' 1     5  .244    .1   1.1\n 1    15  .244    .1   1.1\n 1    30  .244    .1   1.1\n 1    45  .265    .1   1.1\n 1    60  .265    .1   1.1\n 1    90  .322    .1   1.1\n 1   120   .22    .1   1.1\n 1   150  .268    .1   1.1\n')
+
+    for depth, water in zip(soil["ICBL"], soil["SH2O"]):
+        file.write(f' 1   {spaces(depth)}  {str_spaces(water)}    .1   1.1\n')
 
 
 def write_planting(file, planting):
