@@ -74,12 +74,12 @@ def write_planting(file, planting):
 
     if len(planting) <= 9:
         for i, pdate in enumerate(planting):
-            file.write(f" {i + 1} {pdate}   -99     1   -99     H     R    80     0     5   -99   -99   -99   -99   -99                        {pdate}\n")
+            file.write(f" {i + 1} {pdate}   -99     1   -99     H     R    80     0     5   -99   -99   -99   -99    30                        {pdate}\n")
     else:
         for i, pdate in enumerate(planting[:9]):
-            file.write(f" {i + 1} {pdate}   -99     1   -99     H     R    80     0     5   -99   -99   -99   -99   -99                        {pdate}\n")
+            file.write(f" {i + 1} {pdate}   -99     1   -99     H     R    80     0     5   -99   -99   -99   -99    30                        {pdate}\n")
         for i, pdate in enumerate(planting[9:]):
-            file.write(f"{i + 10} {pdate}   -99     1   -99     H     R    80     0     5   -99   -99   -99   -99   -99                        {pdate}\n")
+            file.write(f"{i + 10} {pdate}   -99     1   -99     H     R    80     0     5   -99   -99   -99   -99    30                        {pdate}\n")
 
 
 def write_irrigation(file, irrigation):

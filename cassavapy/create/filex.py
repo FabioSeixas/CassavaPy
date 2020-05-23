@@ -100,7 +100,7 @@ class FileX:
 
         self._harvest = [date.strftime("%y%j") for date in dates]
 
-    def set_controls(self, sim_start):
+    def set_controls(self, sim_start, years=1):
         """
         Method to define simulation start date and soil water available at the simulation beginning.
 
@@ -113,6 +113,8 @@ class FileX:
 
         sim_start = date.fromisoformat(sim_start)
         self._sim_start = sim_start.strftime("%y%j")
+
+        self.years = years
 
     def set_field(self, code_id, soil_id, water=1):
         """
@@ -247,6 +249,5 @@ class FileX:
 
     def _water_available(self, water):
 
-        for i, w in enumerate(self.soil_params["SH2O"]):
-            self.soil_params["SH2O"][i] = round(w * water, 3) + self.soil_params["SLLL"][i]
-
+        self.soil_params["SH2O"] = [round(w * water + self.soil_params["SLLL"][i], 3)
+                                    for i, w in enumerate(self.soil_params["SH2O"])]
