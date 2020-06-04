@@ -1,6 +1,7 @@
 from datetime import date
 from datetime import timedelta as td
 import numpy as np
+from itertools import chain
 
 from .soil import Soil
 from . import exp_functions as exp
@@ -152,6 +153,8 @@ class FileX:
                 The second element is the genotype code
         """
 
+
+        # Adicionar controles para garantir a estrutura
         self._genotype = genotype
 
     def set_irrigation(self, laminas, n_irrig="NULL", from_irrig="NULL", by_irrig="NULL",
@@ -220,14 +223,14 @@ class FileX:
 
     def set_tratmatrix(self, tnames_prefix):
         """
-        After run all necessary 'set_*' functions, this method closes the File preparation setting
+        After run all necessary 'set_*' functions, this method closes the File preparation and set
         the treatment matrix.
 
         Parameters
         ----------
 
             tnames_prefix: str
-                An user code for all treatments inside this file. Can be usefull if you run more
+                A code for all treatments inside this file. Can be usefull if you run more
                 than one file per time.
         """
 
@@ -244,6 +247,23 @@ class FileX:
 
         else:
             self._tratmatrix = exp.insert_all_rainfed(self._tratmatrix)
+
+
+        # To insert more than one genotype by file
+        genotype_list = [" ".join(str(number) * len(self._tratmatrix)).split()
+                         for number in range(1, len(self._genotype) + 1)]
+
+        genotype_list = list(chain.from_iterable(genotype_list))
+
+        self._tratmatrix = self._tratmatrix * len(self._genotype) # reference trap!
+
+        new_tratmatrix = []
+        for i, gen_id in enumerate(genotype_list):
+            trat = self._tratmatrix[i][:]           # '[:]' to avoid reference ang get the value
+            trat.insert(0, gen_id)
+            new_tratmatrix.append(trat)
+
+        print(new_tratmatrix)
 
         self._tratmatrix = exp.set_tratnames(self._tratmatrix, tnames_prefix)
 
