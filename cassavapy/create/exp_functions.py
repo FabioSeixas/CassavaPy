@@ -355,3 +355,19 @@ def set_tratnames(tratmatrix, prefix):
         new_matrix.append(trat)
 
     return new_matrix
+
+def validate_genotype_input(genotypes):
+
+    if isinstance(genotypes, list):
+        for genotype in genotypes:
+            if isinstance(genotype, tuple) and len(genotype) == 2:
+                continue
+            else:
+                raise ValueError("Correct genotype input")
+        return genotypes
+
+    if isinstance(genotypes, tuple):
+        if len(genotypes) == 2:
+            return genotypes
+        else:
+            raise ValueError("Correct genotype input")

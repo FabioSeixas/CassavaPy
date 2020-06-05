@@ -143,19 +143,20 @@ class FileX:
 
     def set_genotype(self, genotype):
         """
-        Method to define the genotype.
+        Method to define genotypes.
+        For each genotype inserted the tratment number is doubled.
 
         Parameters
         ----------
-            genotype: list of two str
-                genotype DSSAT code (found on .CUL files)
-                The first element is the ecotype code
-                The second element is the genotype code
+            genotype: list of tuples
+                each tuple must have two string elements
+                The first element is the ecotype code (ex: 'UC0007')
+                The second element is the genotype code ('MCol-1684')
         """
 
 
         # Adicionar controles para garantir a estrutura
-        self._genotype = genotype
+        self._genotype = exp.validate_genotype_input(genotype)
 
     def set_irrigation(self, laminas, n_irrig="NULL", from_irrig="NULL", by_irrig="NULL",
                        reg="NULL", trat_irrig="NULL"):
@@ -259,13 +260,11 @@ class FileX:
 
         new_tratmatrix = []
         for i, gen_id in enumerate(genotype_list):
-            trat = self._tratmatrix[i][:]           # '[:]' to avoid reference ang get the value
+            trat = self._tratmatrix[i][:]           # '[:]' get the value instead of reference
             trat.insert(0, gen_id)
             new_tratmatrix.append(trat)
 
-        print(new_tratmatrix)
-
-        self._tratmatrix = exp.set_tratnames(self._tratmatrix, tnames_prefix)
+        self._tratmatrix = exp.set_tratnames(new_tratmatrix, tnames_prefix)
 
     def _water_available(self, water):
 
