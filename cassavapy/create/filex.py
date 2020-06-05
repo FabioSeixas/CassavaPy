@@ -234,32 +234,25 @@ class FileX:
                 A code for all treatments inside this file. Can be usefull if you run more
                 than one file per time.
         """
-
         if "phf" in self._design:
-
             self._tratmatrix = exp.fix_PlantHarv(self._planting, self._harvest)
-
         else:
             self._tratmatrix = exp.not_fix_PlantHarv(self._planting, self._harvest)
 
         if "irf" in self._design or "irnf" in self._design:
-
             self._tratmatrix = exp.trat_insert_irrig(self._trat_irrig, self._tratmatrix)
-
         else:
             self._tratmatrix = exp.insert_all_rainfed(self._tratmatrix)
 
         # To insert more than one genotype by file
-        genotype_list = [" ".join(str(number) * len(self._tratmatrix)).split()
-                         for number in range(1, len(self._genotype) + 1)]
-
+        genotype_list = [[i] * len(self._tratmatrix) for i in range(1, len(self._genotype) + 1)]
         genotype_list = list(chain.from_iterable(genotype_list))
 
         self._tratmatrix = self._tratmatrix * len(self._genotype) # reference trap!
 
         new_tratmatrix = []
         for i, gen_id in enumerate(genotype_list):
-            trat = self._tratmatrix[i][:]           # '[:]' get the value instead of reference
+            trat = self._tratmatrix[i][:]      # '[:]' get the value instead of reference
             trat.insert(0, gen_id)
             new_tratmatrix.append(trat)
 
