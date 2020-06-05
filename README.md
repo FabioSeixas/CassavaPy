@@ -13,8 +13,6 @@
 ### Why CassavaPy?
 
 Apart from get hands dirty with OOP, the aim of this module is to make my life easier during my master degree.
-I did not found nothing that answer my needs, so I decided to make it myself.
-
 Since my work is with irrigation and planting dates, the focus of CassavaPy is there.
 
 ---
@@ -25,23 +23,22 @@ Since my work is with irrigation and planting dates, the focus of CassavaPy is t
 
 * Planting Dates
 * Harvest Dates
-* Irrigation
+* Irrigation Management
 * Field (Soil and Weather Station) - **One by File**
+* Soil Water Initial Conditions
 * Simulation Start Date
 * Genotype - **One by File**
 
-2. **Create Batch Files**
+2. **Create and Run Batch Files**
 
 * For Seasonal
 * For Experimental
 
-3. **Run Batch Files**
-
-4. **Get Simulation Outputs**
+3. **Get Simulation Outputs**
 
 ---
 
-### How CassavaPy should be improved in the future?
+### How CassavaPy will be improved in the near future?
 
 **1) I am working on a [Documentation](https://cassavapy.readthedocs.io/en/latest/)**
 
