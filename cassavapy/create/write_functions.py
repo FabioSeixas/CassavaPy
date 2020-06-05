@@ -73,7 +73,7 @@ def write_planting(file, planting):
 
     if len(planting) <= 9:
         for i, pdate in enumerate(planting):
-            file.write(f" {i + 1} {pdate}   -99     1   -99     H     R    80     0     5   -99   -99   -99   -99    30                        {pdate}\n")
+            file.write(f" {i + 1} {pdate} {int(pdate) + 10}  1.39   -99     H     R    80     0     5   -99   -99   -99     2    30                        {pdate}\n")
     else:
         for i, pdate in enumerate(planting[:9]):
             file.write(f" {i + 1} {pdate}   -99     1   -99     H     R    80     0     5   -99   -99   -99   -99    30                        {pdate}\n")
