@@ -27,7 +27,7 @@ Since my work is with irrigation and planting dates, the focus of CassavaPy is t
 * Field (Soil and Weather Station) - **One by File**
 * Soil Water Initial Conditions
 * Simulation Start Date
-* Genotype - **One by File**
+* Genotype
 
 2. **Create and Run Batch Files**
 
@@ -36,13 +36,8 @@ Since my work is with irrigation and planting dates, the focus of CassavaPy is t
 
 3. **Get Simulation Outputs**
 
----
+<br>
 
-### How CassavaPy will be improved in the near future?
+Check the under development [Documentation](https://cassavapy.readthedocs.io/en/latest/)
 
-**1) I am working on a [Documentation](https://cassavapy.readthedocs.io/en/latest/)**
-
-**2) Allows to put more than one *Genotype* by file** 
-
----
 
