@@ -368,6 +368,6 @@ def validate_genotype_input(genotypes):
 
     if isinstance(genotypes, tuple):
         if len(genotypes) == 2:
-            return genotypes
+            return [genotypes]
         else:
             raise ValueError("Correct genotype input")

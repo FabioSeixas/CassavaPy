@@ -43,16 +43,15 @@ def write_head(file, filename, exp_name, mode="CS"):
 
 
 def write_treatments(file, tratmatrix):
-
     for i, trat in enumerate(tratmatrix):
-        file.write(f"{space(i + 1)} 1 1 0 {trat[0]}                    {handle_empty_space(i + 1)} 1  1  0  1 {space(trat[1])} {space(trat[3])}  0  0  0  0  0 {space(trat[2])}  1\n")
+        file.write(f"{space(i + 1)} 1 1 0 {trat[0]}                    {handle_empty_space(i + 1)}{space(trat[1])}  1  0  1 {space(trat[2])} {space(trat[4])}  0  0  0  0  0 {space(trat[3])}  1\n")
 
 
-def write_cultivars(file, genotype):
-    ''' Por enquanto só está implementado para 1 genótipo por arquivo X.
-    '''
+def write_cultivars(file, genotypes):
+    print(genotypes)
     file.write("\n*CULTIVARS\n@C CR INGENO CNAME\n")
-    file.write(f" 1 CS {genotype[0]} {genotype[1]}\n")
+    for i, gen in enumerate(genotypes, start = 1):
+        file.write(f"{space(i)} CS {gen[0]} {gen[1]}\n")
 
 
 def write_field(file, field):

@@ -249,7 +249,6 @@ class FileX:
         else:
             self._tratmatrix = exp.insert_all_rainfed(self._tratmatrix)
 
-
         # To insert more than one genotype by file
         genotype_list = [" ".join(str(number) * len(self._tratmatrix)).split()
                          for number in range(1, len(self._genotype) + 1)]
