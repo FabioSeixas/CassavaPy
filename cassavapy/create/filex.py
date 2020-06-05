@@ -262,3 +262,4 @@ class FileX:
 
         self.soil_params["SH2O"] = [round(w * water + self.soil_params["SLLL"][i], 3)
                                     for i, w in enumerate(self.soil_params["SH2O"])]
+        print(self.soil_params)

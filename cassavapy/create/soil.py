@@ -51,7 +51,10 @@ class Soil(object):
         for l in self.soil_lines:
             if l[0] == "@":
 
-                if "SLB" in l.split():
+                if self.params["ICBL"]:
+                    break
+
+                if "SLLL" in l.split():
                     depth = re.search("(SLB)", l).end()
                     lower = re.search("(SLLL)", l).end()
                     upper = re.search("(SDUL)", l).end()
