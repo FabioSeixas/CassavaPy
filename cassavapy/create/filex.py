@@ -154,8 +154,6 @@ class FileX:
                 The second element is the genotype code ('MCol-1684')
         """
 
-
-        # Adicionar controles para garantir a estrutura
         self._genotype = exp.validate_genotype_input(genotype)
 
     def set_irrigation(self, laminas, n_irrig="NULL", from_irrig="NULL", by_irrig="NULL",
@@ -248,7 +246,7 @@ class FileX:
         genotype_list = [[i] * len(self._tratmatrix) for i in range(1, len(self._genotype) + 1)]
         genotype_list = list(chain.from_iterable(genotype_list))
 
-        self._tratmatrix = self._tratmatrix * len(self._genotype) # reference trap!
+        self._tratmatrix = self._tratmatrix * len(self._genotype)  # reference trap!
 
         new_tratmatrix = []
         for i, gen_id in enumerate(genotype_list):
@@ -262,4 +260,3 @@ class FileX:
 
         self.soil_params["SH2O"] = [round(w * water + self.soil_params["SLLL"][i], 3)
                                     for i, w in enumerate(self.soil_params["SH2O"])]
-        print(self.soil_params)

@@ -1,1 +1,1 @@
-from .outputs import get_outputs
+from .output import Output
