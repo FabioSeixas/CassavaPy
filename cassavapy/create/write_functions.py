@@ -48,9 +48,9 @@ def write_treatments(file, tratmatrix):
 
 
 def write_cultivars(file, genotypes):
-    print(genotypes)
+
     file.write("\n*CULTIVARS\n@C CR INGENO CNAME\n")
-    for i, gen in enumerate(genotypes, start = 1):
+    for i, gen in enumerate(genotypes, start=1):
         file.write(f"{space(i)} CS {gen[0]} {gen[1]}\n")
 
 

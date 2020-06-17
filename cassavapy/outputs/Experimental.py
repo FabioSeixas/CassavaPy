@@ -1,3 +1,4 @@
+import os
 import datetime
 import pandas as pd
 from tqdm import tqdm
@@ -34,17 +35,18 @@ class ExperimentalOut(object):
         final_df = pd.DataFrame(columns=["TRAT", "RUN", "DATE"])
 
         for file, variables in self.files.items():
-            self.change_out_file(file)
 
-            print(f' \n Preparing {file.filename} file')
+            if self.change_out_file(file):
 
-            df_list = [self.read_each_table(trat, run, file, variables)
-                       for trat, run in self.index]
+                print(f' \n Preparing {file.filename} file')
 
-            df_list = pd.concat(df_list)
+                df_list = [self.read_each_table(trat, run, file, variables)
+                           for trat, run in self.index]
 
-            final_df = pd.merge(final_df, df_list, how="outer", on=["DATE", "TRAT", "RUN"])
-            final_df.sort_values(["TRAT", "RUN", "DATE"], axis=0, inplace=True)
+                df_list = pd.concat(df_list)
+
+                final_df = pd.merge(final_df, df_list, how="outer", on=["DATE", "TRAT", "RUN"])
+                final_df.sort_values(["TRAT", "RUN", "DATE"], axis=0, inplace=True)
 
         return final_df
 
@@ -52,6 +54,9 @@ class ExperimentalOut(object):
 
         self.results._outfiles_clases = {f.filename: f for f in [file, ]}  # PlantGroOut, SoilWatOut, SoilNiOut, SoilTempOut, ETOut]}
         self.results._outfiles = {f: None for f in self.results._outfiles_clases}
+
+        # Check if the output file exists
+        return os.path.isfile(f'C:/DSSAT47/Cassava/{[*self.results._outfiles.keys()][0]}')
 
     def handle_columns(self, df, trat, run, file):
         df["TRAT"] = trat
