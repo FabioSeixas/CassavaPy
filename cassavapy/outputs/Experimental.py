@@ -12,7 +12,7 @@ class ExperimentalOut(object):
         self.trat = trat
         self.years = years
         self.results = DSSATResults("C:/DSSAT47/Cassava/")
-        self.files = {PlantGroOut: ["YEAR", "DOY", "DAS", "DAP", "L#SD", "LAID", "RWAD", "CWAD", "LWAD", "SWAD", "HWAD", "HIAD", "PARID", "PARUD", "AWAD", "TWAD", "WAVRD", "WUPRD", "WFPD", "WFGD", "TFPD", "TFGD"],
+        self.files = {PlantGroOut: ["YEAR", "DOY", "DAS", "DAP", "TMEAN", "L#SD", "LAID", "RWAD", "CWAD", "LWAD", "SWAD", "HWAD", "HIAD", "PARID", "PARUD", "AWAD", "TWAD", "WAVRD", "WUPRD", "WFPD", "WFGD", "TFPD", "TFGD"],
                       SoilWatOut: ["YEAR", "DOY", "DAS", "SWTD", "SWXD", "PREC", "IRRC", "SW1D", "SW2D", "SW3D", "SW4D"],
                       ETOut: ["YEAR", "DOY", "DAS", "SRAA", "EOAA", "EOPA", "ETAA", "EPAA"]}
 
