@@ -1,4 +1,4 @@
-import classes
+from cassavapy import FileX, Experimental, Seasonal
 import unittest
 from datetime import date
 import numpy as np
@@ -9,8 +9,8 @@ class Test_basic_FileX_phf(unittest.TestCase):
         3 datas de colheita
         design "phf", sem irrigação'''
 
-    def setUp(self):
-        self.filex = classes.FileX("cruz", "CRUZ9101", "phf")
+
+        self.filex = FileX("cruz", "CRUZ9101", "phf")
         self.filex.p_from = date.fromisoformat('1992-12-30')
 
         self.filex.set_planting(n_plant=3,
@@ -20,6 +20,8 @@ class Test_basic_FileX_phf(unittest.TestCase):
         self.filex.set_harvest(n_harvest=3,
                                h_from='1993-01-01',
                                h_by=60)
+
+        self.filex.set_genotype([("UC0002", "MCol-1684")])
 
     def test_planting(self):
         expected = ["92365", "93024", "93049"]
@@ -48,7 +50,7 @@ class Test_basic_FileX_NULL(unittest.TestCase):
 
     def setUp(self):
 
-        self.filex = classes.FileX("cruz", "CRUZ9101")
+        self.filex = FileX("cruz", "CRUZ9101")
         self.filex.p_from = date.fromisoformat('1992-12-30')
 
         self.filex.set_planting(n_plant=4,
@@ -58,6 +60,8 @@ class Test_basic_FileX_NULL(unittest.TestCase):
         self.filex.set_harvest(n_harvest=3,
                                h_from='1993-01-01',
                                h_by=60)
+
+        self.filex.set_genotype([("UC0002", "MCol-1684")])
 
     def test_tratmatrix(self):
         self.filex.set_tratmatrix("BA")
@@ -87,7 +91,7 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
        '''
 
     def setUp(self):
-        self.filex = classes.FileX("cruz", "CRUZ9101", ["phf", "irf"])
+        self.filex = FileX("cruz", "CRUZ9101", ["phf", "irf"])
 
         self.filex.set_planting(n_plant=3,
                                 p_from='1992-12-30',
@@ -96,6 +100,8 @@ class Test_basic_FileX_phf_irf(unittest.TestCase):
         self.filex.set_harvest(n_harvest=3,
                                h_from='1993-01-01',
                                h_by=60)
+
+        self.filex.set_genotype([("UC0002", "MCol-1684")])
 
     def test_irrigation_one_lamina(self):
 
@@ -247,7 +253,7 @@ class Test_basic_FileX_irf(unittest.TestCase):
        '''
 
     def setUp(self):
-        self.filex = classes.FileX("cruz", "CRUZ9101", ["irf"])
+        self.filex = FileX("cruz", "CRUZ9101", ["irf"])
 
         self.filex.set_planting(n_plant=2,
                                 p_from='1992-12-30',
@@ -256,6 +262,8 @@ class Test_basic_FileX_irf(unittest.TestCase):
         self.filex.set_harvest(n_harvest=3,
                                h_from='1993-01-01',
                                h_by=60)
+
+        self.filex.set_genotype([("UC0002", "MCol-1684")])
 
 
     def test_irrigation_one_lamina_irf(self):
@@ -330,7 +338,7 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
        '''
 
     def setUp(self):
-        self.filex = classes.FileX("cruz", "CRUZ9101", ["phf", "irnf"])
+        self.filex = FileX("cruz", "CRUZ9101", ["phf", "irnf"])
 
         self.filex.set_planting(n_plant=3,
                                 p_from='1992-12-30',
@@ -339,6 +347,8 @@ class Test_basic_FileX_phf_irnf(unittest.TestCase):
         self.filex.set_harvest(n_harvest=3,
                                h_from='1993-01-01',
                                h_by=60)
+
+        self.filex.set_genotype([("UC0002", "MCol-1684")])
 
         self.reg = [[0, 5, 10, 15, 20, 25, 30],
                     [0, 10, 20, 30, 40],
@@ -454,7 +464,7 @@ class Test_basic_FileX_irnf_no_phf(unittest.TestCase):
 
        '''
     def setUp(self):
-        self.filex = classes.FileX("cruz", "CRUZ9101", ["irnf"])
+        self.filex = FileX("cruz", "CRUZ9101", ["irnf"])
 
         self.filex.set_planting(n_plant=3,
                                     p_from='1992-12-30',
@@ -463,6 +473,8 @@ class Test_basic_FileX_irnf_no_phf(unittest.TestCase):
         self.filex.set_harvest(n_harvest=3,
                                    h_from='1993-01-01',
                                    h_by=60)
+
+        self.filex.set_genotype([("UC0002", "MCol-1684")])
 
         self.reg = [[0, 5, 10, 15, 20, 25, 30],
                     [0, 10, 20, 30, 40],
@@ -484,9 +496,7 @@ class Test_basic_FileX_irnf_no_phf(unittest.TestCase):
                                   laminas=[11, 22, 33],
                                   trat_irrig={1: 3, 2: 1, 3: 2})
 
-        expected = {1: [3],
-                        2: [1],
-                        3: [2]}
+        expected = {1: [3], 2: [1], 3: [2]}
 
         np.testing.assert_equal(self.filex._trat_irrig, expected)
 
