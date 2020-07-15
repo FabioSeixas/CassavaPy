@@ -256,8 +256,8 @@ def check_input_irnf(reg, laminas, trat_irrig, pdates, design, hdates):
 
     for i, n in enumerate(reg):
 
-        if isinstance(laminas[i], int):
-            next
+        if isinstance(laminas[i], int) or isinstance(laminas[i], float):
+            continue
 
         elif len(laminas[i]) == 1:
             laminas[i] = laminas[i][0]
@@ -288,7 +288,7 @@ def check_input_irnf(reg, laminas, trat_irrig, pdates, design, hdates):
 
 def add_laminas(irrig_dates, laminas):
 
-    if isinstance(laminas, int) or len(laminas) == 1:
+    if isinstance(laminas, int) or isinstance(laminas, float) or len(laminas) == 1:
 
         extended_laminas = np.repeat(laminas, len(irrig_dates))
         return np.column_stack((irrig_dates, extended_laminas)).tolist()
@@ -355,6 +355,7 @@ def set_tratnames(tratmatrix, prefix):
         new_matrix.append(trat)
 
     return new_matrix
+
 
 def validate_genotype_input(genotypes):
 

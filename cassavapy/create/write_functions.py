@@ -2,6 +2,7 @@
 def space(x):
     if int(x) < 10:
         return(f" {x}")
+
     return(x)
 
 
@@ -82,13 +83,24 @@ def write_planting(file, planting):
 
 
 def write_irrigation(file, irrigation):
+
+    def space_irrig(x):
+        if len(str(x)) < 2:
+            return(f"   {x}")
+        elif len(str(x)) == 2:
+            return(f"  {x}")
+        elif len(str(x)) == 3:
+            return(f' {x}')
+        elif len(str(x)) == 4:
+            return(x)
+
     file.write("\n*IRRIGATION AND WATER MANAGEMENT\n")
 
     for i, irrig_sch in irrigation.items():
-        file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n{space(i)}     1    30    50   100 GS000 IR001    10 -99\n@I IDATE  IROP IRVAL\n")
+        file.write(f"@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME\n{space(i)}   0.8    30    50   100 GS000 IR004    10 -99\n@I IDATE  IROP IRVAL\n")
 
         for date_event, water in irrig_sch:
-            file.write(f"{space(i)} {date_event} IR005    {space(water)} \n")
+            file.write(f"{space(i)} {date_event} IR005  {space_irrig(water)} \n")
 
 
 def write_harvest(file, harvest):
