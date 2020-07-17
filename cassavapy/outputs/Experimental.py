@@ -77,6 +77,4 @@ class ExperimentalOut(object):
 
         df = pd.DataFrame({var: self.get_var(var, trat, run) for var in variables})
 
-        print(f'Processing Treatment {trat} and Run {run}')
-
         return self.handle_columns(df, trat, run, file)
