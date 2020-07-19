@@ -1,22 +1,23 @@
 import os
 import datetime
 import pandas as pd
-from tqdm import tqdm
+from itertools import chain
 
 from tradssat import DSSATResults, PlantGroOut, SoilWatOut, ETOut
 
 
 class ExperimentalOut(object):
 
-    def __init__(self, trat, years):
+    def __init__(self, trat, years, files_n):
         self.trat = trat
         self.years = years
+        self.files_n = files_n
         self.results = DSSATResults("C:/DSSAT47/Cassava/")
         self.files = {PlantGroOut: ["YEAR", "DOY", "DAS", "DAP", "TMEAN", "L#SD", "LAID", "RWAD", "CWAD", "LWAD", "SWAD", "HWAD", "HIAD", "PARID", "PARUD", "AWAD", "TWAD", "WAVRD", "WUPRD", "WFPD", "WFGD", "TFPD", "TFGD", "SLAD"],
                       SoilWatOut: ["YEAR", "DOY", "DAS", "SWTD", "SWXD", "PREC", "IRRC", "SW1D", "SW2D", "SW3D", "SW4D"],
                       ETOut: ["YEAR", "DOY", "DAS", "SRAA", "EOAA", "EOPA", "ETAA", "EPAA"]}
 
-        self.index = self.make_index(self.trat, self.years)
+        self.index = self.make_index(self.trat, self.years, self.files_n)
         self.df = self.get_outputs()
 
     def get_var(self, name, trt, run):
@@ -25,10 +26,28 @@ class ExperimentalOut(object):
     def make_date(self, year, doy):
         return datetime.datetime(int(year), 1, 1) + datetime.timedelta(int(doy) - 1)
 
-    def make_index(self, trat, years):
-        return [(n + 1, self.correct_runno(n + 1, i + 1, years))
+    def make_index(self, trat, years, files_n=None):
+        '''
+        Work around for 'files' and 'years'
+        if 'files' > 1, 'years' must be 1
+        if 'years' > 1, files must be 1
+        You can't get the two together
+        '''
+
+        def correct_runno_files(trat_n, file, trat_total):
+            return file * trat_total - (trat_total - trat_n)
+
+        if files_n is not None and years == 1:
+            return [(t + 1, correct_runno_files(t + 1, f + 1, trat))
+                    for f in range(files_n + 1)
+                    for t in range(trat)]
+
+        def correct_runno_years(trat, runno, years):
+            return runno + years * (trat - 1)
+
+        return [(n + 1, correct_runno_years(n + 1, i + 1, years))
                 for n in range(trat)
-                for i in range(years)]
+                for i in range(years + 1)]
 
     def get_outputs(self):
 
@@ -68,10 +87,6 @@ class ExperimentalOut(object):
             df.drop("DAS", axis=1, inplace=True)
 
         return df
-
-    def correct_runno(self, trat, runno, years):
-        # Talvez aqui dê para usar enumerate
-        return runno + years * (trat - 1)
 
     def read_each_table(self, trat, run, file, variables):
 

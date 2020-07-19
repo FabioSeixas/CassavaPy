@@ -38,6 +38,7 @@ def str_spaces(x):
 
 
 def write_head(file, filename, exp_name, mode="CS"):
+
     exp_details = filename + mode + " " + exp_name
 
     file.write(f'*EXP.DETAILS: {exp_details}\n\n@PEOPLE\nFabio\n@ADDRESS\n-99\n@SITE\n-99\n*GENERAL\n@ PAREA  PRNO  PLEN  PLDR  PLSP  PLAY HAREA  HRNO  HLEN  HARM.........\n    -99   -99   -99   -99   -99   -99   -99   -99   -99   -99\n\n*TREATMENTS                        -------------FACTOR LEVELS------------\n@N R O C TNAME.................... CU FL SA IC MP MI MF MR MC MT ME MH SM\n')
