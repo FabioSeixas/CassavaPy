@@ -39,7 +39,7 @@ class ExperimentalOut(object):
 
         if files_n is not None and years == 1:
             return [(t + 1, correct_runno_files(t + 1, f + 1, trat))
-                    for f in range(files_n + 1)
+                    for f in range(files_n)
                     for t in range(trat)]
 
         def correct_runno_years(trat, runno, years):
@@ -47,7 +47,7 @@ class ExperimentalOut(object):
 
         return [(n + 1, correct_runno_years(n + 1, i + 1, years))
                 for n in range(trat)
-                for i in range(years + 1)]
+                for i in range(years)]
 
     def get_outputs(self):
 
@@ -91,5 +91,7 @@ class ExperimentalOut(object):
     def read_each_table(self, trat, run, file, variables):
 
         df = pd.DataFrame({var: self.get_var(var, trat, run) for var in variables})
+
+        print(f"Treatment {trat} ; Run {run}")
 
         return self.handle_columns(df, trat, run, file)
