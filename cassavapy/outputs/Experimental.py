@@ -14,7 +14,7 @@ class ExperimentalOut(object):
         self.files_n = files_n
         self.results = DSSATResults("C:/DSSAT47/Cassava/")
         self.files = {PlantGroOut: ["YEAR", "DOY", "DAS", "DAP", "TMEAN", "L#SD", "LAID", "RWAD", "CWAD", "LWAD", "SWAD", "HWAD", "HIAD", "PARID", "PARUD", "AWAD", "TWAD", "WAVRD", "WUPRD", "WFPD", "WFGD", "TFPD", "TFGD", "SLAD"],
-                      SoilWatOut: ["YEAR", "DOY", "DAS", "SWTD", "SWXD", "PREC", "IRRC", "SW1D", "SW2D", "SW3D", "SW4D"],
+                      SoilWatOut: ["YEAR", "DOY", "DAS", "SWTD", "SWXD", "PREC", "IRRC", "SW1D", "SW2D", "SW3D", "SW4D", "SW5D"],
                       ETOut: ["YEAR", "DOY", "DAS", "SRAA", "EOAA", "EOPA", "ETAA", "EPAA"]}
 
         self.index = self.make_index(self.trat, self.years, self.files_n)
