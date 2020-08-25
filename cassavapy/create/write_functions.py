@@ -61,10 +61,10 @@ def write_field(file, field):
     file.write(f"\n*FIELDS\n@L ID_FIELD WSTA....  FLSA  FLOB  FLDT  FLDD  FLDS  FLST SLTX  SLDP  ID_SOIL    FLNAME\n 1 00000001 {field[0]}       -99   -99   -99   -99   -99   -99 -99    -99  {field[1]} -99\n@L ...........XCRD ...........YCRD .....ELEV .............AREA .SLEN .FLWR .SLAS FLHST FHDUR\n 1             -99             -99       -99               -99   -99   -99   -99   -99   -99\n")
 
 
-def write_initial_conditions(file, sim_start, soil):
+def write_initial_conditions(file, date_start, soil):
 
     # Por enquanto está configurado apenas para 'Medium Silty Clay' - IB00000002
-    file.write(f'\n*INITIAL CONDITIONS\n@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME\n 1    CS {sim_start}   -99   -99     1     1   -99   -99   -99   -99   -99   -99 -99\n@C  ICBL  SH2O  SNH4  SNO3\n')
+    file.write(f'\n*INITIAL CONDITIONS\n@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME\n 1    CS {date_start}   -99   -99     1     1   -99   -99   -99   -99   -99   -99 -99\n@C  ICBL  SH2O  SNH4  SNO3\n')
 
     for depth, water in zip(soil["ICBL"], soil["SH2O"]):
         file.write(f' 1   {spaces(depth)}  {str_spaces(water)}    .1   1.1\n')
