@@ -43,7 +43,7 @@ class Experimental(FileX):
             w_file.write_harvest(file, self._harvest)
 
             # Controls
-            w_file.write_controls(file, self._sim_start, years=self.years)
+            w_file.write_controls(file, self._sim_start, self._date_start, self.years)
 
         print(f'\n "{self._filename}.CSX" file available at C:/DSSAT47/Cassava')
 
@@ -88,6 +88,6 @@ class Seasonal(FileX):
             w_file.write_harvest(file, self._harvest)
 
             # Controls
-            w_file.write_controls(file, self._sim_start, years=self.years, mode="seas")
+            w_file.write_controls(file, self._sim_start, self._date_start, self.years)
 
         print(f'\n "{self._filename}.SNX" file available at C:/DSSAT47/Seasonal')

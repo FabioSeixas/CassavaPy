@@ -101,7 +101,7 @@ class FileX:
 
         self._harvest = [date.strftime("%y%j") for date in dates]
 
-    def set_controls(self, sim_start, years=1):
+    def set_controls(self, sim_start, date_start = None, years=1):
         """
         Method to define simulation start date and soil water available at the simulation beginning.
 
@@ -111,9 +111,10 @@ class FileX:
                 Must be a 'dd-mm-yyyy' date ('01-05-2020').
 
         """
+        self._sim_start = sim_start
 
-        sim_start = date.fromisoformat(sim_start)
-        self._sim_start = sim_start.strftime("%y%j")
+        date_start = date.fromisoformat(date_start)
+        self._date_start = date_start.strftime("%y%j")
 
         self.years = years
 
