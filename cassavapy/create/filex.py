@@ -117,8 +117,9 @@ class FileX:
         """
         self._sim_start = sim_start
 
-        date_start = date.fromisoformat(date_start)
-        self._date_start = date_start.strftime("%y%j")
+        if date_start is not None:
+            date_start = date.fromisoformat(date_start)
+            self._date_start = date_start.strftime("%y%j")
 
         self.years = years
 
