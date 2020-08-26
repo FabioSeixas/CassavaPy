@@ -108,7 +108,11 @@ class FileX:
         Parameters
         ----------
             sim_start: str
-                Must be a 'dd-mm-yyyy' date ('01-05-2020').
+                Must be "P" (simulation start on planting) or "S" (simulation start on a specified date). If "S" is used, the "date_start" argument is necessary.
+
+            date_start: str
+                Obligatory if "sim_start" is "S". Must be a 'dd-mm-yyyy' date ('01-05-2020').
+            
 
         """
         self._sim_start = sim_start
