@@ -37,6 +37,10 @@ def set_experiment(json_file):
                        date_start = f'{year + int(params["controls"]["plant_rel_year"])}-{params["controls"]["date_start"]}',
                        years=int(params["controls"]["seas_years"]))
 
+        #x.set_irrigation(laminas=irrig.laminas_by_year(dados_irrig, year),
+        #                 reg=irrig.dap_by_year(dados_irrig, year),
+        #                 trat_irrig=reg_dicionario)
+
         x.set_tratmatrix("BA")
 
         x.write_file()

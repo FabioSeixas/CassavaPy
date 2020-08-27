@@ -15,4 +15,4 @@ def extract_experiment(json_file, tratmatrix):
     modo = "Experimental"
 
     x = Output(trat=trat, years=years, mode=modo, files=files)
-    x.df.to_csv("output.csv")
+    x.df.to_csv(f'{params["general"]["nome_exp"]}.csv')
