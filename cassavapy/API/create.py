@@ -28,7 +28,7 @@ def set_experiment(json_file, data_irrig = None):
             try:
                 genotype_input = [(code, name) for code, name 
                                 in zip(ast.literal_eval(params["genotype"]["genotype_code"]), 
-                                        ast.literal_eval(params["genotype"]["genotype_name"]))]
+                                       ast.literal_eval(params["genotype"]["genotype_name"]))]
             except:
                 raise ValueError("Wrong format in 'genotype' information")
         else:
@@ -64,8 +64,12 @@ def irrigation_inputs(params, year, data_irrig = None):
 
     ext_data = params.pop("ext_data")
 
-    dic = {key: ast.literal_eval(value) if value else "NULL" for key, value 
-            in params.items()}
+    try:
+        dic = {key: ast.literal_eval(value) 
+               if value else "NULL" 
+               for key, value in params.items()}
+    except:
+        raise ValueError("Check irrigation parameters")
     
     if ext_data == "N":
         return dic
