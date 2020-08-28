@@ -66,10 +66,12 @@ def irrigation_inputs(params, year, data_irrig = None):
     if ext_data == "N":
         return dic
 
-    else: 
+    if ext_data == "Y": 
         data_irrig = read_csv(data_irrig)
         dic["laminas"] = laminas_by_year(data_irrig, year=year)
         dic["reg"] = dap_by_year(data_irrig, year=year)
-    
+    else:
+        raise ValueError(f'"{ext_data}" not recognized as a valid value for "ext_data"')
+
     return dic
 
