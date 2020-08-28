@@ -1,7 +1,7 @@
 # CassavaPy
 
 <p align="center">
-  A simple module to write files, run simulations and get outputs from DSSAT-Manihot model
+  A module to write files, run simulations and get outputs from DSSAT-Manihot model
 </p>
 
 <p align="center">
