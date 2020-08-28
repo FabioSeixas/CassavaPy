@@ -58,6 +58,8 @@ def set_experiment(json_file, data_irrig = None):
 
         x.write_file()
     
+    # Only 'tratmatrix' from the last year will be returned. 
+    # It assumes that all years have the same tratmatrix.
     return x._tratmatrix
 
 def irrigation_inputs(params, year, data_irrig = None):
@@ -70,7 +72,7 @@ def irrigation_inputs(params, year, data_irrig = None):
                for key, value in params.items()}
     except:
         raise ValueError("Check irrigation parameters")
-    
+
     if ext_data == "N":
         return dic
 
