@@ -1,5 +1,6 @@
 from cassavapy import Experimental
 import json
+import ast
 
 def set_experiment(json_file):
     
@@ -37,10 +38,14 @@ def set_experiment(json_file):
                        date_start = f'{year + int(params["controls"]["plant_rel_year"])}-{params["controls"]["date_start"]}',
                        years=int(params["controls"]["seas_years"]))
 
-        irrigation_inputs(params)
-        #x.set_irrigation(laminas=irrig.laminas_by_year(dados_irrig, year),
-        #                 reg=irrig.dap_by_year(dados_irrig, year),
-        #                 trat_irrig=reg_dicionario)
+        irrig_input = irrigation_inputs(params)
+
+        x.set_irrigation(laminas=irrig_input["laminas"],
+                         n_irrig=irrig_input["n_irrig"],
+                         from_irrig=irrig_input["from_irrig"],
+                         by_irrig=irrig_input["by_irrig"],
+                         reg=irrig_input["reg"],
+                         trat_irrig=irrig_input["trat_irrig"])
 
         x.set_tratmatrix("BA")
 
@@ -50,18 +55,19 @@ def set_experiment(json_file):
 
 def irrigation_inputs(params):
 
-    dic = {
-        "laminas": "NULL", 
-        "n_irrig": "NULL", 
-        "from_irrig": "NULL", 
-        'by_irrig': "NULL",
-        "reg": "NULL", 
-        "trat_irrig": "NULL"
-    }
+    dic = {key: ast.literal_eval(value) if value else "NULL" for key, value 
+            in params["irrigation"].items()}
 
-    if "irf" in params["general"]["design"]:
-        dic = {key: value if value else "NULL" for key, value 
-               in params["irrigation"].items()}
-        
-        print(dic)
+    if "irf" in params["general"]["design"]:        
+        dic["reg"] = "NULL"
+        dic["trat_irrig"] = "NULL"
+
+    if "irnf" in params["general"]["design"]:
+        dic["n_irrig"] = "NULL"
+        dic["from_irrig"] = "NULL"
+        dic["by_irrig"] = "NULL"
+
+    print(dic)
+    
+    return dic
 
