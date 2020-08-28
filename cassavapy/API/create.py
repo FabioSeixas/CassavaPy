@@ -1,15 +1,16 @@
 from cassavapy import Experimental
+from .irrigation import laminas_by_year, dap_by_year
 import json
 import ast
 
-def set_experiment(json_file):
+def set_experiment(json_file, data_irrig = None):
     
     with open(f'{json_file}.json') as f:
         params = json.load(f)
     
     for year in range(int(params["general"]["first_year"]), 
                       int(params["general"]["last_year"]) + 1):
-
+        
         x = Experimental(filename=f'{params["general"]["file_name"]}{year}', 
                          exp_name=params["general"]["nome_exp"], 
                          design=params["general"]["design"])
@@ -38,7 +39,7 @@ def set_experiment(json_file):
                        date_start = f'{year + int(params["controls"]["plant_rel_year"])}-{params["controls"]["date_start"]}',
                        years=int(params["controls"]["seas_years"]))
 
-        irrig_input = irrigation_inputs(params)
+        irrig_input = irrigation_inputs(params, year=year)
 
         x.set_irrigation(laminas=irrig_input["laminas"],
                          n_irrig=irrig_input["n_irrig"],
@@ -53,19 +54,10 @@ def set_experiment(json_file):
     
     return x._tratmatrix
 
-def irrigation_inputs(params):
+def irrigation_inputs(params, year):
 
     dic = {key: ast.literal_eval(value) if value else "NULL" for key, value 
             in params["irrigation"].items()}
-
-    if "irf" in params["general"]["design"]:        
-        dic["reg"] = "NULL"
-        dic["trat_irrig"] = "NULL"
-
-    if "irnf" in params["general"]["design"]:
-        dic["n_irrig"] = "NULL"
-        dic["from_irrig"] = "NULL"
-        dic["by_irrig"] = "NULL"
 
     print(dic)
     
