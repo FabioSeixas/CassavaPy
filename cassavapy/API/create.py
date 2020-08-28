@@ -15,7 +15,7 @@ def set_experiment(json_file, data_irrig = None):
         x = Experimental(filename=f'{params["general"]["file_name"]}{year}', 
                          exp_name=params["general"]["nome_exp"], 
                          design=params["general"]["design"])
-
+        
         x.set_harvest(n_harvest=int(params["harvest"]["n_harvest"]), 
                       h_from=f'{str(year + int(params["harvest"]["harv_plant_year"]))}-{params["harvest"]["h_from"]}', 
                       h_by=int(params["harvest"]["h_by"]))
@@ -24,9 +24,13 @@ def set_experiment(json_file, data_irrig = None):
                        p_from=f'{str(year)}-{params["planting"]["p_from"]}',
                        p_by=int(params["planting"]["p_by"]))
         
-        if isinstance(params["genotype"]["genotype_code"], list):
-            genotype_input = [(code, name) for code, name in zip(params["genotype"]["genotype_code"], 
-                                                                 params["genotype"]["genotype_name"])]
+        if "," in params["genotype"]["genotype_code"] or "[" in params["genotype"]["genotype_code"]:
+            try:
+                genotype_input = [(code, name) for code, name 
+                                in zip(ast.literal_eval(params["genotype"]["genotype_code"]), 
+                                        ast.literal_eval(params["genotype"]["genotype_name"]))]
+            except:
+                raise ValueError("Wrong format in 'genotype' information")
         else:
             genotype_input = (params["genotype"]["genotype_code"], params["genotype"]["genotype_name"])
         
