@@ -37,6 +37,7 @@ def set_experiment(json_file):
                        date_start = f'{year + int(params["controls"]["plant_rel_year"])}-{params["controls"]["date_start"]}',
                        years=int(params["controls"]["seas_years"]))
 
+        irrigation_inputs(params)
         #x.set_irrigation(laminas=irrig.laminas_by_year(dados_irrig, year),
         #                 reg=irrig.dap_by_year(dados_irrig, year),
         #                 trat_irrig=reg_dicionario)
@@ -45,4 +46,22 @@ def set_experiment(json_file):
 
         x.write_file()
     
-    return(x._tratmatrix)
+    return x._tratmatrix
+
+def irrigation_inputs(params):
+
+    dic = {
+        "laminas": "NULL", 
+        "n_irrig": "NULL", 
+        "from_irrig": "NULL", 
+        'by_irrig': "NULL",
+        "reg": "NULL", 
+        "trat_irrig": "NULL"
+    }
+
+    if "irf" in params["general"]["design"]:
+        dic = {key: value if value else "NULL" for key, value 
+               in params["irrigation"].items()}
+        
+        print(dic)
+

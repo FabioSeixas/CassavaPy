@@ -165,9 +165,9 @@ class FileX:
                        reg="NULL", trat_irrig="NULL"):
         """
         Method to define irrigation.
-        If "irf" design is setting, parameters 'laminas', 'n_irrig', 'from_irrig' and 'by_irrig'
+        If "irf" design is set, parameters 'laminas', 'n_irrig', 'from_irrig' and 'by_irrig'
         are mandatory and a DAP (days after planting) sequence logic is used. If "irnf" design is
-        setting, parameters 'laminas', 'reg' and 'trat_irrig' are mandatory and DAP must be setted
+        set, parameters 'laminas', 'reg' and 'trat_irrig' are mandatory and DAP must be setted
         manually.
 
         Parameters
