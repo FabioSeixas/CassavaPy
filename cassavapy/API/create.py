@@ -1,5 +1,6 @@
 from cassavapy import Experimental
 from .irrigation import laminas_by_year, dap_by_year
+from pandas import read_csv
 import json
 import ast
 
@@ -38,9 +39,10 @@ def set_experiment(json_file, data_irrig = None):
         x.set_controls(sim_start = params["controls"]["sim_start"],
                        date_start = f'{year + int(params["controls"]["plant_rel_year"])}-{params["controls"]["date_start"]}',
                        years=int(params["controls"]["seas_years"]))
-
-        irrig_input = irrigation_inputs(params, year=year)
-
+        
+        
+        irrig_input = irrigation_inputs(params["irrigation"].copy(), year=year, data_irrig=data_irrig)
+        
         x.set_irrigation(laminas=irrig_input["laminas"],
                          n_irrig=irrig_input["n_irrig"],
                          from_irrig=irrig_input["from_irrig"],
@@ -54,12 +56,20 @@ def set_experiment(json_file, data_irrig = None):
     
     return x._tratmatrix
 
-def irrigation_inputs(params, year):
+def irrigation_inputs(params, year, data_irrig = None):
+
+    ext_data = params.pop("ext_data")
 
     dic = {key: ast.literal_eval(value) if value else "NULL" for key, value 
-            in params["irrigation"].items()}
+            in params.items()}
+    
+    if ext_data == "N":
+        return dic
 
-    print(dic)
+    else: 
+        data_irrig = read_csv(data_irrig)
+        dic["laminas"] = laminas_by_year(data_irrig, year=year)
+        dic["reg"] = dap_by_year(data_irrig, year=year)
     
     return dic
 
