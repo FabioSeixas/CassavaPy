@@ -8,12 +8,12 @@ class Experimental(FileX):
     Class to create Experimental files
     """
 
-    def write_file(self):
+    def write_file(self, folder = "C:/DSSAT47/Cassava"):
         """
         Method to write the Experimental file. Must be executed after all the preparation.
         """
 
-        with open(f"C:/DSSAT47/Cassava/{self._filename}.CSX", mode="w") as file:
+        with open(f"{folder}/{self._filename}.CSX", mode="w") as file:
 
             # Head
             w_file.write_head(file, self._filename, self._exp_name)
@@ -45,7 +45,7 @@ class Experimental(FileX):
             # Controls
             w_file.write_controls(file, self._sim_start, self._date_start, self.years)
 
-        print(f'\n "{self._filename}.CSX" file available at C:/DSSAT47/Cassava')
+        print(f'\n "{self._filename}.CSX" file available at {folder}')
 
 
 class Seasonal(FileX):
