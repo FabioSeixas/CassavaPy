@@ -4,7 +4,7 @@ from pandas import read_csv
 import json
 import ast
 
-def set_experiment(json_file, data_irrig = None):
+def set_experiment(json_file, data_irrig = None, folder = "C:/DSSAT47/Cassava"):
     
     with open(f'{json_file}.json') as f:
         params = json.load(f)
@@ -56,7 +56,7 @@ def set_experiment(json_file, data_irrig = None):
 
         x.set_tratmatrix("BA")
 
-        x.write_file()
+        x.write_file(folder = folder)
     
     # Only 'tratmatrix' from the last year will be returned. 
     # It assumes that all years have the same tratmatrix.
