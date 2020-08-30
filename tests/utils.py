@@ -42,26 +42,6 @@ def test_read(inp_class, folder, testcase):
             _test_dicts_equal(tc=testcase, act=dict_vars, ref=ref, f=f)
 
 
-def test_write(inp_class, folder, testcase):
-    ext = inp_class.ext
-    files = find_files(inp_class, folder)
-    
-    for f in files:
-        with testcase.subTest(os.path.split(f)[1]):
-            if isinstance(ext, list):
-                ext = ext[0]
-
-            name = os.path.split(f)[1]
-            
-            temp_file = NamedTemporaryFile(prefix=name, suffix=ext).name
-            inp_file_obj = inp_class(f)
-            inp_file_obj.write(temp_file)
-
-            new_file_obj = inp_class(temp_file)
-
-            _test_dicts_equal(testcase, act=new_file_obj.to_dict(), ref=inp_file_obj.to_dict(), f=f)
-
-
 def _test_dicts_equal(tc, act, ref, f, keys=None):
     if keys is None:
         keys = []

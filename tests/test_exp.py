@@ -9,17 +9,18 @@ class Test_basic_FileX_phf(unittest.TestCase):
         3 datas de colheita
         design "phf", sem irrigação'''
 
-
+    def setUp(self):
+            
         self.filex = FileX("cruz", "CRUZ9101", "phf")
         self.filex.p_from = date.fromisoformat('1992-12-30')
-
+    
         self.filex.set_planting(n_plant=3,
                                 p_from='1992-12-30',
                                 p_by=25)
 
         self.filex.set_harvest(n_harvest=3,
-                               h_from='1993-01-01',
-                               h_by=60)
+                                h_from='1993-01-01',
+                                h_by=60)
 
         self.filex.set_genotype([("UC0002", "MCol-1684")])
 

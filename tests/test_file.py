@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from tests.utils import test_write, test_read
+from tests.utils import test_read
 from tradssat import ExpFile
 from cassavapy import set_experiment
 
@@ -22,10 +22,8 @@ class TestInputs(unittest.TestCase):
                 test_read(inp_class, folder=rsrcs, testcase=self)
 
     def tearDown(self):
-        os.remove("tests/mock/TEST1980.CSX")
-        os.remove("tests/mock/TEST1981.CSX")
-        os.remove("tests/mock/TEST1982.CSX")
-        os.remove("tests/mock/TEST1983.CSX")
+        [os.remove(f"tests/mock/TEST198{n}.CSX") for n in [0, 1, 2, 3]]
+        
 
 if __name__ == "__main__":
     unittest.main()
