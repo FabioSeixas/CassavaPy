@@ -73,9 +73,15 @@ def write_initial_conditions(file, date_start, soil):
 def write_planting(file, planting):
     file.write("\n*PLANTING DETAILS\n@P PDATE EDATE  PPOP  PPOE  PLME  PLDS  PLRS  PLRD  PLDP  PLWT  PAGE  PENV  PLPH  SPRL                        PLNAME\n")
 
+    def emergence_date(pdate):
+        e_date = str(int(pdate) + 10)
+        while len(e_date) < 5:
+            e_date = f'0{e_date}'
+        return e_date
+
     if len(planting) <= 9:
         for i, pdate in enumerate(planting):
-            file.write(f" {i + 1} {pdate} {int(pdate) + 10}  1.39   -99     H     R    80     0     5   -99   -99   -99     2    30                        {pdate}\n")
+            file.write(f" {i + 1} {pdate} {emergence_date(pdate)}  1.39   -99     H     R    80     0     5   -99   -99   -99     2    30                        {pdate}\n")
     else:
         for i, pdate in enumerate(planting[:9]):
             file.write(f" {i + 1} {pdate}   -99  1.39   -99     H     R    80     0     5   -99   -99   -99   -99    30                        {pdate}\n")
