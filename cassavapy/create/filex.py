@@ -60,9 +60,9 @@ class FileX:
 
         """
         if method == "seq":
-            self.p_from = date.fromisoformat(p_from)
+            self.p_from_original = date.fromisoformat(p_from)
 
-            self.p_from = self.p_from.replace(year = year)
+            self.p_from = self.p_from_original.replace(year = year)
 
             dates = []
             for i in range(n_plant):
@@ -82,7 +82,7 @@ class FileX:
         elif method == "list":
 
             self._planting = [date.fromisoformat(item) for item in p_list]
-            
+
             planting_list_years = [item.year for item in self._planting]
             unique_years = list(set(planting_list_years))
 
@@ -109,7 +109,7 @@ class FileX:
 
 
 
-    def set_harvest(self, n_harvest, h_from, h_by):
+    def set_harvest(self, n_harvest, h_from, h_by, year, h_list=None, method="seq"):
         """
         Method to define harvest dates. It uses date sequence logic.
 
@@ -124,14 +124,46 @@ class FileX:
             h_by: int
                 Interval between one date and the next of the sequence
         """
+        if method == "seq":
+            h_from = date.fromisoformat(h_from)
 
-        h_from = date.fromisoformat(h_from)
+            planting_harvest_difference = h_from.year - self.p_from_original.year
+            h_from = h_from.replace(year = year + planting_harvest_difference)
 
-        dates = []
-        for i in range(n_harvest):
-            dates.append(h_from + td(days=h_by * i))
+            dates = []
+            for i in range(n_harvest):
+                dates.append(h_from + td(days=h_by * i))
 
-        self._harvest = [date.strftime("%y%j") for date in dates]
+            self._harvest = [date.strftime("%y%j") for date in dates]
+        
+        elif method == "list":
+
+            self._harvest = [date.fromisoformat(item) for item in h_list]
+
+            harvest_list_years = [item.year for item in self._harvest]
+            original_unique_years = list(set(harvest_list_years))
+            current_unique_years = [year + n for n in range(len(original_unique_years))]
+                        
+            planting_harvest_difference = original_unique_years[0] - self.p_from_original.year
+            
+            if not ((original_unique_years[0] - current_unique_years[0]) >= planting_harvest_difference):
+                dic = {key: value + planting_harvest_difference for key, value 
+                       in zip(original_unique_years, current_unique_years)}
+
+                self._harvest = [item.replace(year = dic[item.year]) for item in self._harvest]
+
+            # Workaround for 'december 31' (subtract one day).
+            # Julian convertion sometimes fails and simulation crashes.
+            self._harvest = [(my_date - td(days=1))
+                            if (my_date.month == 12 and my_date.day == 31)
+                            else my_date
+                            for my_date in self._harvest]
+
+            self._harvest = [date.strftime("%y%j") for date in self._harvest]
+
+        else:
+            raise AttributeError(f"\n\n Valor '{method}' não reconhecido para o argumento 'method' \n")
+
 
     def set_controls(self, sim_start, date_start = None, years=1):
         """
