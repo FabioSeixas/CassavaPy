@@ -80,7 +80,8 @@ class FileX:
             self._planting_julian = [date.strftime("%y%j") for date in self._planting]
 
         elif method == "list":
-
+            
+            self.p_from_original = date.fromisoformat(p_list[0])
             self._planting = [date.fromisoformat(item) for item in p_list]
 
             planting_list_years = [item.year for item in self._planting]
@@ -128,6 +129,7 @@ class FileX:
             h_from = date.fromisoformat(h_from)
 
             planting_harvest_difference = h_from.year - self.p_from_original.year
+
             h_from = h_from.replace(year = year + planting_harvest_difference)
 
             dates = []
@@ -143,9 +145,9 @@ class FileX:
             harvest_list_years = [item.year for item in self._harvest]
             original_unique_years = list(set(harvest_list_years))
             current_unique_years = [year + n for n in range(len(original_unique_years))]
-                        
-            planting_harvest_difference = original_unique_years[0] - self.p_from_original.year
             
+            planting_harvest_difference = original_unique_years[0] - self.p_from_original.year
+
             if not ((original_unique_years[0] - current_unique_years[0]) >= planting_harvest_difference):
                 dic = {key: value + planting_harvest_difference for key, value 
                        in zip(original_unique_years, current_unique_years)}
