@@ -144,7 +144,7 @@ def set_one_file(params, folder, data_irrig = None):
 
     x.set_controls(sim_start = params["controls"]["sim_start"],
                     date_start = params["controls"]["date_start"],
-                    years= int(params["general"]["last_year"]) - int(params["general"]["first_year"]))
+                    years= int(params["general"]["last_year"]) - int(params["general"]["first_year"]) + 1)
     
     
     irrig_input = irrigation_inputs(params["irrigation"].copy(), year=year, data_irrig=data_irrig)
