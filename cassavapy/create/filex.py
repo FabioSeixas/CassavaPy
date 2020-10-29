@@ -43,7 +43,7 @@ class FileX:
         if "irf" in self._design and "irnf" in self._design:
             raise AttributeError("\n\n Não é possível definir 'design' como 'irf' e 'irnf' ao mesmo tempo \n")
 
-    def set_planting(self, n_plant, p_from, p_by):
+    def set_planting(self, n_plant, p_from, p_by, year, p_list=None, method="seq"):
         """
         Method to define planting dates. It uses date sequence logic.
 
@@ -59,23 +59,55 @@ class FileX:
                 Interval between one date and the next of the sequence
 
         """
+        if method == "seq":
+            self.p_from = date.fromisoformat(p_from)
 
-        self.p_from = date.fromisoformat(p_from)
+            self.p_from = self.p_from.replace(year = year)
 
-        dates = []
-        for i in range(n_plant):
-            dates.append(self.p_from + td(days=p_by * i))
+            dates = []
+            for i in range(n_plant):
+                dates.append(self.p_from + td(days=p_by * i))
 
-        self._planting = dates
+            self._planting = dates
 
-        # Little modification for 'december 31' (subtract one day).
-        # Julian convertion sometimes fails and simulation crashes.
-        self._planting = [(my_date - td(days=1))
-                          if (my_date.month == 12 and my_date.day == 31)
-                          else my_date
-                          for my_date in self._planting]
+            # Workaround for 'december 31' (subtract one day).
+            # Julian convertion sometimes fails and simulation crashes.
+            self._planting = [(my_date - td(days=1))
+                            if (my_date.month == 12 and my_date.day == 31)
+                            else my_date
+                            for my_date in self._planting]
 
-        self._planting_julian = [date.strftime("%y%j") for date in self._planting]
+            self._planting_julian = [date.strftime("%y%j") for date in self._planting]
+
+        elif method == "list":
+
+            self._planting = [date.fromisoformat(item) for item in p_list]
+            
+            planting_list_years = [item.year for item in self._planting]
+            unique_years = list(set(planting_list_years))
+
+            if len(unique_years) > 1:
+
+                new_unique_years = [year + n for n in range(len(unique_years))]
+
+                self._planting = [my_date.replace(year = new_unique_years[0])
+                                  if my_date.year == unique_years[0]
+                                  else my_date.replace(year = new_unique_years[1])
+                                  for my_date in self._planting]
+
+            # Workaround for 'december 31' (subtract one day).
+            # Julian convertion sometimes fails and simulation crashes.
+            self._planting = [(my_date - td(days=1))
+                            if (my_date.month == 12 and my_date.day == 31)
+                            else my_date
+                            for my_date in self._planting]
+
+            self._planting_julian = [date.strftime("%y%j") for date in self._planting]
+
+        else:
+            raise AttributeError(f"\n\n Valor '{method}' não reconhecido para o argumento 'method' \n")
+
+
 
     def set_harvest(self, n_harvest, h_from, h_by):
         """

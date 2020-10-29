@@ -21,8 +21,11 @@ def set_experiment(json_file, data_irrig = None, folder = "C:/DSSAT47/Cassava"):
                       h_by=int(params["harvest"]["h_by"]))
 
         x.set_planting(n_plant=int(params["planting"]["n_plant"]),
-                       p_from=f'{str(year)}-{params["planting"]["p_from"]}',
-                       p_by=int(params["planting"]["p_by"]))
+                       p_from=f'{params["planting"]["p_from"]}',
+                       p_by=int(params["planting"]["p_by"]),
+                       p_list=params["planting"]["p_list"],
+                       method=params["planting"]["method"],
+                       year=year)
         
         if "," in params["genotype"]["genotype_code"] or "[" in params["genotype"]["genotype_code"]:
             try:
