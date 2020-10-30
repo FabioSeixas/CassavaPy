@@ -64,6 +64,7 @@ def set_one_by_year(params, folder, data_irrig = None):
                       h_by=int(params["harvest"]["h_by"]),
                       method=params["harvest"]["method"],
                       h_list=params["harvest"]["h_list"],
+                      h_dap=params["harvest"]["h_dap"],
                       year=year)
         
         if "," in params["genotype"]["genotype_code"] or "[" in params["genotype"]["genotype_code"]:
@@ -124,6 +125,7 @@ def set_one_file(params, folder, data_irrig = None):
                     h_by=int(params["harvest"]["h_by"]),
                     method=params["harvest"]["method"],
                     h_list=params["harvest"]["h_list"],
+                    h_dap=params["harvest"]["h_dap"],
                     year=year)
     
     if "," in params["genotype"]["genotype_code"] or "[" in params["genotype"]["genotype_code"]:

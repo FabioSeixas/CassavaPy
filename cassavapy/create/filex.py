@@ -91,6 +91,7 @@ class FileX:
 
                 new_unique_years = [year + n for n in range(len(unique_years))]
 
+                # The way It is written, It allows only two years consecutively
                 self._planting = [my_date.replace(year = new_unique_years[0])
                                   if my_date.year == unique_years[0]
                                   else my_date.replace(year = new_unique_years[1])
@@ -110,7 +111,7 @@ class FileX:
 
 
 
-    def set_harvest(self, n_harvest, h_from, h_by, year, h_list=None, method="seq"):
+    def set_harvest(self, n_harvest, h_from, h_by, year, h_list=None, h_dap=None, method="seq"):
         """
         Method to define harvest dates. It uses date sequence logic.
 
@@ -161,6 +162,14 @@ class FileX:
                             else my_date
                             for my_date in self._harvest]
 
+            self._harvest = [date.strftime("%y%j") for date in self._harvest]
+
+        elif method == "dap":
+            
+            if "phf" not in self._design:
+                raise ValueError("havest method 'dap' must be used with 'phf' design.")
+
+            self._harvest = [p_date + td(days=int(h_dap)) for p_date in self._planting]
             self._harvest = [date.strftime("%y%j") for date in self._harvest]
 
         else:
