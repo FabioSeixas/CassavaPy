@@ -20,6 +20,15 @@ def set_experiment(json_file, data_irrig = None, folder = "C:/DSSAT47/Cassava"):
         raise ValueError(f"Value '{params['general']['n_files']}' not recognized for 'n_files' parameter.")
 
 
+def auto_irrigation(dic):
+    if dic['status'] == 'on':
+        return dic
+    elif dic['status'] == 'off':
+        return None
+    else:
+        raise ValueError(f"Value {dic['status']} not recognized for auto irrigation 'status' parameter.")
+
+
 def irrigation_inputs(params, year, data_irrig = None):
 
     ext_data = params.pop("ext_data")
@@ -84,7 +93,8 @@ def set_one_by_year(params, folder, data_irrig = None):
                     water=float(params["field"]["water"]))
 
         x.set_controls(sim_start = params["controls"]["sim_start"],
-                       date_start = params["controls"]["date_start"])
+                       date_start = params["controls"]["date_start"],
+                       auto_irrigation=auto_irrigation(params["auto_irrigation"]))
         
         
         irrig_input = irrigation_inputs(params["irrigation"].copy(), year=year, data_irrig=data_irrig)
@@ -146,7 +156,8 @@ def set_one_file(params, folder, data_irrig = None):
 
     x.set_controls(sim_start = params["controls"]["sim_start"],
                     date_start = params["controls"]["date_start"],
-                    years= int(params["general"]["last_year"]) - int(params["general"]["first_year"]) + 1)
+                    years= int(params["general"]["last_year"]) - int(params["general"]["first_year"]) + 1,
+                    auto_irrigation=auto_irrigation(params["auto_irrigation"]))
     
     
     irrig_input = irrigation_inputs(params["irrigation"].copy(), year=year, data_irrig=data_irrig)

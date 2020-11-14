@@ -43,7 +43,9 @@ class Experimental(FileX):
             w_file.write_harvest(file, self._harvest)
 
             # Controls
-            w_file.write_controls(file, self._sim_start, self._date_start, self.years)
+            w_file.write_controls(file, self._sim_start, self._date_start, self.years, self.auto_irrig,
+                                  self.auto_irrig_method, self.auto_irrig_depth, self.auto_irrig_threshold, 
+                                  self.auto_irrig_endpoint, self.auto_irrig_effic)
 
         print(f'\n "{self._filename}.CSX" file available at {folder}')
 

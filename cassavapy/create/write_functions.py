@@ -30,11 +30,19 @@ def spaces(x):
 def str_spaces(x):
     x = str(x)[1:]
 
-    if len(x) == 4:
-        return x
-    if len(x) == 3:
-        return f' {x}'
-    raise ValueError("Checar espaçamento de 'water' nas condições iniciais")
+    # if len(x) == 4:
+    #     return x
+    # if len(x) == 3:
+    #     return f' {x}'
+    # if len(x) == 2:
+    #     return f'  {x}'
+
+    while len(x) < 4:
+        x = f' {x}'
+    
+    return x
+
+    # raise ValueError("Checar espaçamento de 'water' nas condições iniciais")
 
 
 def write_head(file, filename, exp_name, mode="CS"):
@@ -124,6 +132,19 @@ def write_harvest(file, harvest):
             file.write(f"{i + 10} {hdate} GS000   -99   -99   -99   -99 {i + 10}\n")
 
 
-def write_controls(file, sim_start, date_start, years=1):
+def write_controls(file, sim_start, date_start, years=1, auto_irrig="R", auto_irrig_method="04", auto_irrig_depth=60,
+                   auto_irrig_threshold=60, auto_irrig_endpoint=100, auto_irrig_effic=0.8):
 
-    file.write(f"\n*SIMULATION CONTROLS\n@N GENERAL     NYERS NREPS START SDATE RSEED SNAME.................... SMODEL\n 1 GE             {space(years)}     1     {sim_start} {controls_space(date_start)}  2150 DEFAULT SIMULATION CONTR  CSYCA\n@N OPTIONS     WATER NITRO SYMBI PHOSP POTAS DISES  CHEM  TILL   CO2\n 1 OP              Y     N     N     N     N     N     N     N     M\n@N METHODS     WTHER INCON LIGHT EVAPO INFIL PHOTO HYDRO NSWIT MESOM MESEV MESOL\n 1 ME              M     M     E     R     S     L     R     1     G     S     2\n@N MANAGEMENT  PLANT IRRIG FERTI RESID HARVS\n 1 MA              R     R     N     N     R\n@N OUTPUTS     FNAME OVVEW SUMRY FROPT GROUT CAOUT WAOUT NIOUT MIOUT DIOUT VBOSE CHOUT OPOUT FMOPT\n 1 OU              N     Y     Y     1     Y     Y     Y     Y     Y     N     Y     N     Y     A\n\n@  AUTOMATIC MANAGEMENT\n@N PLANTING    PFRST PLAST PH2OL PH2OU PH2OD PSTMX PSTMN\n 1 PL            001   001    40   100    30    40    10\n@N IRRIGATION  IMDEP ITHRL ITHRU IROFF IMETH IRAMT IREFF\n 1 IR             60    60   100 GS000 IR004    10   0.8\n@N NITROGEN    NMDEP NMTHR NAMNT NCODE NAOFF\n 1 NI             30    50    25 FE001 GS000\n@N RESIDUES    RIPCN RTIME RIDEP\n 1 RE            100     1    20\n@N HARVEST     HFRST HLAST HPCNP HPCNR\n 1 HA              0   001   100     0")
+    
+    def str_spaces(x, length = 4):
+        x = str(x)
+
+        while len(x) < length:
+            x = f' {x}'
+        
+        return x
+
+
+    file.write(f"\n*SIMULATION CONTROLS\n@N GENERAL     NYERS NREPS START SDATE RSEED SNAME.................... SMODEL\n 1 GE             {space(years)}     1     {sim_start} {controls_space(date_start)}  2150 DEFAULT SIMULATION CONTR  CSYCA\n@N OPTIONS     WATER NITRO SYMBI PHOSP POTAS DISES  CHEM  TILL   CO2\n 1 OP              Y     N     N     N     N     N     N     N     M\n@N METHODS     WTHER INCON LIGHT EVAPO INFIL PHOTO HYDRO NSWIT MESOM MESEV MESOL\n 1 ME              M     M     E     R     S     L     R     1     G     S     2\n@N MANAGEMENT  PLANT IRRIG FERTI RESID HARVS\n 1 MA              R     {auto_irrig}     N     N     R\n@N OUTPUTS     FNAME OVVEW SUMRY FROPT GROUT CAOUT WAOUT NIOUT MIOUT DIOUT VBOSE CHOUT OPOUT FMOPT\n 1 OU              N     Y     Y     1     Y     N     Y     N     N     N     Y     N     N     A\n")
+    
+    file.write(f"\n@  AUTOMATIC MANAGEMENT\n@N PLANTING    PFRST PLAST PH2OL PH2OU PH2OD PSTMX PSTMN\n 1 PL            001   001    40   100    30    40    10\n@N IRRIGATION  IMDEP ITHRL ITHRU IROFF IMETH IRAMT IREFF\n 1 IR           {str_spaces(auto_irrig_depth)}  {str_spaces(auto_irrig_threshold)}  {str_spaces(auto_irrig_endpoint)} GS000 IR0{auto_irrig_method}    10  {str_spaces(auto_irrig_effic)}\n@N NITROGEN    NMDEP NMTHR NAMNT NCODE NAOFF\n 1 NI             30    50    25 FE001 GS000\n@N RESIDUES    RIPCN RTIME RIDEP\n 1 RE            100     1    20\n@N HARVEST     HFRST HLAST HPCNP HPCNR\n 1 HA              0   001   100     0")

@@ -176,7 +176,7 @@ class FileX:
             raise AttributeError(f"\n\n Valor '{method}' não reconhecido para o argumento 'method' \n")
 
 
-    def set_controls(self, sim_start, date_start = None, years=1):
+    def set_controls(self, sim_start, date_start = None, years=1, auto_irrigation=None):
         """
         Method to define simulation start date and soil water available at the simulation beginning.
 
@@ -197,6 +197,22 @@ class FileX:
             self._date_start = date_start.strftime("%y%j")
 
         self.years = years
+
+        if auto_irrigation:
+            self.auto_irrig = "A"
+            self.auto_irrig_method = auto_irrigation["method"]
+            self.auto_irrig_depth = auto_irrigation["management_depth"]
+            self.auto_irrig_threshold = auto_irrigation["threshold"]
+            self.auto_irrig_endpoint = auto_irrigation["end_point"]
+            self.auto_irrig_effic = auto_irrigation["efficiency"]
+        else: 
+            self.auto_irrig = "R"
+            self.auto_irrig_method = "04"
+            self.auto_irrig_depth = 60
+            self.auto_irrig_threshold = 60
+            self.auto_irrig_endpoint = 100
+            self.auto_irrig_effic = 0.8
+
 
     def set_field(self, code_id, soil_id, water=1):
         """
